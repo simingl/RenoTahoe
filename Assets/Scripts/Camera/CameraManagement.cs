@@ -1,20 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CameraManagement : MonoBehaviour
 {
 	public float smooth = 1.5f;         // The relative speed at which the camera will catch up.
-	
 	
 	private Transform player;           // Reference to the player's transform.
 	private Vector3 relCameraPos;       // The relative position of the camera from the player.
 	private float relCameraPosMag;      // The distance of the camera from the player.
 	private Vector3 newPos;             // The position the camera is trying to reach.
 
-	//for selection rendering
+	//For selection rendering
 	public Texture2D selectionHighlight = null;
 	public static Rect selection = new Rect(0,0,0,0);
 	private Vector3 startClick = -Vector3.one;
+
+	//For movement
+	private static Vector3 moveToDestination = Vector3.zero;
+	private static List<string> passables = new List<string>(){"Ground"};
 
 	void Awake ()
 	{
@@ -26,6 +30,7 @@ public class CameraManagement : MonoBehaviour
 	
 	void Update () {
 		CheckCamera ();
+		CleanUp ();
 	}
 
 	void FixedUpdate ()
@@ -128,6 +133,31 @@ public class CameraManagement : MonoBehaviour
 		return Screen.height - y;
 	}
 
+	private void CleanUp(){
+		if (!Input.GetMouseButtonUp (1)) {
+			moveToDestination = Vector3.zero;
+		}
+	}
 
+	public static Vector3 GetDestination(){
+		if (moveToDestination == Vector3.zero) {
+			RaycastHit hit;
+			Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+			if(Physics.Raycast(r, out hit)){
+				while(!passables.Contains(hit.transform.gameObject.tag)){
+					if(!Physics.Raycast(hit.point+r.direction*0.1f, r.direction, out hit)){
+						break;
+					}
+				}
+
+			}
+
+			if(hit.transform != null){
+				moveToDestination = hit.point;
+			}
+		}
+		return moveToDestination;
+	}
 
 }
