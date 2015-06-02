@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraMovement : MonoBehaviour
+public class CameraManagement : MonoBehaviour
 {
 	public float smooth = 1.5f;         // The relative speed at which the camera will catch up.
 	
@@ -10,19 +10,24 @@ public class CameraMovement : MonoBehaviour
 	private Vector3 relCameraPos;       // The relative position of the camera from the player.
 	private float relCameraPosMag;      // The distance of the camera from the player.
 	private Vector3 newPos;             // The position the camera is trying to reach.
-	
-	
+
+	//for selection rendering
+	public Texture2D selectionHighlight = null;
+	public static Rect selection = new Rect(0,0,0,0);
+	private Vector3 startClick = -Vector3.one;
+
 	void Awake ()
 	{
-		// Setting up the reference.
 		player = GameObject.FindGameObjectWithTag("Player").transform;
 		
-		// Setting the relative position as the initial relative position of the camera in the scene.
 		relCameraPos = transform.position - player.position;
 		relCameraPosMag = relCameraPos.magnitude - 0.5f;
 	}
 	
-	
+	void Update () {
+		CheckCamera ();
+	}
+
 	void FixedUpdate ()
 	{
 		// The standard position of the camera is the relative position of the camera from the player.
@@ -90,4 +95,39 @@ public class CameraMovement : MonoBehaviour
 		// Lerp the camera's rotation between it's current rotation and the rotation that looks at the player.
 		transform.rotation = Quaternion.Lerp(transform.rotation, lookAtRotation, smooth * Time.deltaTime);
 	}
+
+	//Render Selection
+	private void CheckCamera(){
+		if (Input.GetMouseButtonDown (0)) {
+			startClick = Input.mousePosition;
+		} else if(Input.GetMouseButtonUp(0)){
+			startClick = -Vector3.one;
+		}
+		
+		if (Input.GetMouseButton (0)) {
+			selection = new Rect(startClick.x, InvertMouseY(startClick.y), Input.mousePosition.x - startClick.x, InvertMouseY(Input.mousePosition.y) - InvertMouseY(startClick.y));
+			if(selection.width<0){
+				selection.x += selection.width;
+				selection.width = -selection.width;
+			}
+			if(selection.height<0){
+				selection.y += selection.height;
+				selection.height = -selection.height;
+			}
+		}
+	}
+	
+	private void OnGUI(){
+		if (startClick != -Vector3.one) {
+			GUI.color = new Color(1,1,1,0.5f);
+			GUI.DrawTexture(selection,selectionHighlight);
+		}
+	}
+	
+	public static float InvertMouseY(float y){
+		return Screen.height - y;
+	}
+
+
+
 }
