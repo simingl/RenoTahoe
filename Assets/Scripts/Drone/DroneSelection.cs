@@ -8,6 +8,8 @@ public class DroneSelection : MonoBehaviour {
 	public float stopDistanceOffset = 0.5f;
 
 	public GameObject unit;
+	public GameObject selectionGlow = null;
+	private GameObject glow = null;
 	private Renderer rend;
 
 	private Vector3 moveToDest = Vector3.zero;
@@ -30,10 +32,18 @@ public class DroneSelection : MonoBehaviour {
 				selected = CameraManagement.selection.Contains(camPos);
 			}
 
-			if (selected) { 
-				rend.material.color = Color.red;
-			} else {
-				rend.material.color = Color.white;
+			if (selected && glow==null) { 
+				glow = (GameObject)GameObject.Instantiate(selectionGlow);
+				glow.transform.parent = transform;
+				//glow.transform.localPosition = new Vector3(0,-GetComponent<MeshFilter>().mesh.bounds.extents.y,0);
+				glow.transform.localPosition = new Vector3(0,0,-10);
+				glow.transform.localRotation = new Quaternion(0,180,0,0);
+
+				//rend.material.color = Color.red;
+			} else if(!selected && glow !=null){
+				GameObject.Destroy(glow);
+				glow = null;
+				//rend.material.color = Color.white;
 			}
 		}
 

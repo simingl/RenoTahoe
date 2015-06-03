@@ -20,6 +20,13 @@ public class CameraManagement : MonoBehaviour
 	private static Vector3 moveToDestination = Vector3.zero;
 	private static List<string> passables = new List<string>(){"Ground"};
 
+	//For Zoom in and out
+	public float zoomMaxY = 90f;
+	public float zoomMinY = 30f;
+	public float zoomSpeed = 15f;
+	public float zoomTime = 0.25f;
+	public Vector3 zoomDest = Vector3.zero;
+
 	void Awake ()
 	{
 		player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -30,11 +37,37 @@ public class CameraManagement : MonoBehaviour
 	
 	void Update () {
 		CheckCamera ();
+		ZoomCamera ();
 		CleanUp ();
 	}
 
+	private void ZoomCamera(){
+		float moveY = Input.GetAxis("Mouse ScrollWheel");
+		transform.position += new Vector3 (0, moveY*zoomSpeed, 0);
+
+		if (moveY != 0) {
+			zoomDest = transform.position+new Vector3(0, moveY*zoomSpeed , 0);
+		}
+
+		if (zoomDest != Vector3.zero) {
+			transform.position = Vector3.Lerp(transform.position, zoomDest, zoomTime);
+			if(transform.position==zoomDest){
+				zoomDest = Vector3.zero;
+			}
+		}
+
+		//transform.position = Vector3.Lerp (transform.position, zoomDest, zoomTime);
+
+		if (transform.position.y > zoomMaxY) {
+			transform.position = new Vector3(transform.position.x, zoomMaxY, transform.position.z);
+		}
+		if (transform.position.y < zoomMinY) {
+			transform.position = new Vector3(transform.position.x, zoomMinY, transform.position.z);
+		}
+	}
 	void FixedUpdate ()
 	{
+		return;
 		// The standard position of the camera is the relative position of the camera from the player.
 		Vector3 standardPos = player.position + relCameraPos;
 		
