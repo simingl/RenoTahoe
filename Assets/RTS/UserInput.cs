@@ -5,9 +5,12 @@ using RTS;
 public class UserInput : MonoBehaviour {
 	private Player player;
 
+	private GameObject dayNightToggle;
+
 	// Use this for initialization
 	void Start () {
 		player = transform.root.GetComponent< Player >();
+		dayNightToggle = GameObject.FindGameObjectWithTag ("DayNightToggle");
 	}
 	
 	// Update is called once per frame

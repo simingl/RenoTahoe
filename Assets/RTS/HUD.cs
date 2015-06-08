@@ -10,15 +10,20 @@ public class HUD : MonoBehaviour {
 	private const int ORDERS_BAR_HEIGHT = 200, RESOURCE_BAR_HEIGHT = 40;
 	private Player player;
 
+	public bool dayNightToggle = true;
 
 	public Texture2D activeCursor;
 	public Texture2D selectCursor, leftCursor, rightCursor, upCursor, downCursor, moveCursor;
 
 	private CursorState activeCursorState;
 
+	private GameObject sun;
+
 	// Use this for initialization
 	void Start () {
 		player = transform.root.GetComponent< Player >();
+		sun = GameObject.FindGameObjectWithTag ("Sun");
+
 		ResourceManager.StoreSelectBoxItems(selectBoxSkin);
 
 		SetCursorState(CursorState.Select);
@@ -29,6 +34,7 @@ public class HUD : MonoBehaviour {
 			DrawOrdersBar();
 			DrawResourceBar();
 			DrawMouseCursor();
+			SwitchDayNight();
 		}
 	}
 
@@ -38,7 +44,8 @@ public class HUD : MonoBehaviour {
 	private void DrawResourceBar() {
 		GUI.skin = resourceSkin;
 		GUI.BeginGroup(new Rect(0,0,Screen.width,RESOURCE_BAR_HEIGHT));
-		GUI.Box(new Rect(0,0,Screen.width,RESOURCE_BAR_HEIGHT),"");
+		//GUI.Box(new Rect(0,0,Screen.width,RESOURCE_BAR_HEIGHT),"");
+		dayNightToggle = GUI.Toggle(new Rect(5, 5, 100, 30), dayNightToggle, "Day/Night");
 		GUI.EndGroup();
 	}
 
@@ -46,8 +53,8 @@ public class HUD : MonoBehaviour {
 		GUI.skin = ordersSkin;
 		GUI.BeginGroup(new Rect(0, Screen.height - ORDERS_BAR_HEIGHT, Screen.width, ORDERS_BAR_HEIGHT));
 		GUI.Box(new Rect(0,0,Screen.width,ORDERS_BAR_HEIGHT),"");
-		GUI.EndGroup();
 
+		GUI.EndGroup();
 		string selectionName = "";
 		if(player.SelectedObject) {
 			selectionName = player.SelectedObject.objectName;
@@ -145,4 +152,9 @@ public class HUD : MonoBehaviour {
 		default: break;
 		}
 	}
+
+	private void SwitchDayNight(){
+		sun.SetActive(this.dayNightToggle);
+	}
+
 }

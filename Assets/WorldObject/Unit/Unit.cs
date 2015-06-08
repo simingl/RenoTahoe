@@ -116,7 +116,7 @@ public class Unit : WorldObject {
 
 		if (rotating || moving) {
 			lineMove.enabled = true;
-			Vector3 targetGroundHit = new Vector3 (destination.x, 0.5f, destination.z);
+			Vector3 targetGroundHit = new Vector3 (destination.x, 1, destination.z);
 			lineMove.SetPosition (0, transform.position);
 			lineMove.SetPosition (1, targetGroundHit);
 
