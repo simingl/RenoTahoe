@@ -67,7 +67,6 @@ public class CameraManagement : MonoBehaviour
 	}
 	void FixedUpdate ()
 	{
-		return;
 		// The standard position of the camera is the relative position of the camera from the player.
 		Vector3 standardPos = player.position + relCameraPos;
 		
