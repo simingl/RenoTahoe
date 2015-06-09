@@ -78,7 +78,7 @@ public class UserInput : MonoBehaviour {
 		}
 		//if a change in position is detected perform the necessary update
 		if(destination != origin) {
-			//Camera.main.transform.position = Vector3.MoveTowards(origin, destination, Time.deltaTime * ResourceManager.ScrollSpeed);
+			Camera.main.transform.position = Vector3.MoveTowards(origin, destination, Time.deltaTime * ResourceManager.ScrollSpeed);
 		}
 	}
 	

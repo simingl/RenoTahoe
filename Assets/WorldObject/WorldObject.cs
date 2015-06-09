@@ -27,7 +27,7 @@ public class WorldObject : MonoBehaviour {
 	
 	protected virtual void Update () {
 
-		Debug.DrawLine(transform.position, transform.position+new Vector3(0f, 50f, 5f), Color.red);
+
 	}
 	
 	protected virtual void OnGUI() {
@@ -74,8 +74,12 @@ public class WorldObject : MonoBehaviour {
 
 	public void CalculateBounds() {
 		selectionBounds = new Bounds(transform.position, Vector3.zero);
+		Renderer x = GetComponent<MeshRenderer> ();
+
 		foreach(Renderer r in GetComponentsInChildren< Renderer >()) {
-			selectionBounds.Encapsulate(r.bounds);
+			if(r.GetType().Name == "MeshRenderer" && r.ToString().IndexOf("group_top")>=0){
+				selectionBounds.Encapsulate(r.bounds);
+			}
 		}
 	}
 

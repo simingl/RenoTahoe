@@ -7,7 +7,7 @@ public class HUD : MonoBehaviour {
 	public GUISkin resourceSkin, ordersSkin, selectBoxSkin;
 	public GUISkin mouseCursorSkin;
 	private const int SELECTION_NAME_HEIGHT = 15;
-	private const int ORDERS_BAR_HEIGHT = 200, RESOURCE_BAR_HEIGHT = 40;
+	private const int ORDERS_BAR_HEIGHT = 100, ORDERS_BAR_OFFSET=190, RESOURCE_BAR_HEIGHT = 40;
 	private Player player;
 
 	public bool dayNightToggle = true;
@@ -52,7 +52,7 @@ public class HUD : MonoBehaviour {
 	private void DrawOrdersBar() {
 		GUI.skin = ordersSkin;
 		GUI.BeginGroup(new Rect(0, Screen.height - ORDERS_BAR_HEIGHT, Screen.width, ORDERS_BAR_HEIGHT));
-		GUI.Box(new Rect(0,0,Screen.width,ORDERS_BAR_HEIGHT),"");
+		GUI.Box(new Rect(ORDERS_BAR_OFFSET,0,Screen.width,ORDERS_BAR_HEIGHT),"");
 
 		GUI.EndGroup();
 		string selectionName = "";
