@@ -5,6 +5,8 @@ using RTS;
 
 public class Unit : WorldObject {
 	public Image batteryBarImage;
+	public Canvas canvas;
+	private Image battery;
 
 	protected bool moving, rotating;
 	public float moveSpeed, rotateSpeed;
@@ -16,9 +18,7 @@ public class Unit : WorldObject {
 	private GameObject lineMoveContainer;
 	private LineRenderer lineMove;
 
-	private GameObject destinationMark;
-
-	/*** Game Engine methods, all can be overridden by subclass ***/
+	private Transform destinationMark;
 
 	public Unit(){
 		type = WorldObjectType.Unit;
@@ -26,12 +26,20 @@ public class Unit : WorldObject {
 
 	protected override void Awake() {
 		base.Awake();
+
+		//Create a battery bar from the prefab
+		battery = (Image)GameObject.Instantiate(batteryBarImage, transform.position, transform.localRotation);
+		battery.transform.SetParent (canvas.transform);
+		battery.transform.localScale = Vector3.one;
+		battery.enabled = false;
 	}
-	
+
 	protected override void Start () {
 		base.Start();
 
-		destinationMark = GameObject.FindGameObjectWithTag ("DestinationMark");
+		Rigidbody[] xxx = this.transform.GetComponentsInChildren<Rigidbody> ();
+
+		destinationMark = this.transform.FindChild("DestinationMark");
 		//destinationMark.SetActive (false);
 		//setup the line from object to the ground
 		lineRaycast = this.GetComponent<LineRenderer> ();
@@ -60,7 +68,7 @@ public class Unit : WorldObject {
 	
 	protected override void OnGUI() {
 		base.OnGUI();
-		Debug.DrawLine(Vector3.zero, new Vector3(0f, 50f, 5f), Color.red);
+		battery.enabled = currentlySelected;
 	}
 
 	public override void SetHoverState(GameObject hoverObject) {
@@ -97,6 +105,7 @@ public class Unit : WorldObject {
 		base.DrawSelectionBox (rect);
 		this.drawBatteryBar (rect);
 	}
+
 	private void TurnToTarget() {
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed);
 		//sometimes it gets stuck exactly 180 degrees out in the calculation and does nothing, this check fixes that
@@ -125,17 +134,18 @@ public class Unit : WorldObject {
 			lineMove.SetPosition (0, transform.position);
 			lineMove.SetPosition (1, targetGroundHit);
 
-			destinationMark.SetActive(true);
-			destinationMark.transform.position = targetGroundHit;
+			destinationMark.gameObject.SetActive(true);
+			destinationMark.position = targetGroundHit;
+
 		} else {
 			lineMove.enabled = false;
-			destinationMark.SetActive(false);
+			destinationMark.gameObject.SetActive(false);
 
 		}
 	}
 
 	private void drawBatteryBar(Rect rect){
 		Vector3 pos = Camera.main.WorldToScreenPoint (transform.position);
-		batteryBarImage.transform.position = new Vector3(pos.x,pos.y+rect.height/2,0);
+		battery.transform.position = new Vector3(pos.x,pos.y+rect.height/2,0);
 	}
 }

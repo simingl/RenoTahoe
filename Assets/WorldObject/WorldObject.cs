@@ -31,12 +31,16 @@ public class WorldObject : MonoBehaviour {
 	}
 	
 	protected virtual void OnGUI() {
-		if(currentlySelected) DrawSelection();
+		if (currentlySelected) {
+			DrawSelection ();
+		}
 	}
 
 	public void SetSelection(bool selected, Rect playingArea) {
 		currentlySelected = selected;
-		if(selected) this.playingArea = playingArea;
+		if (selected) {
+			this.playingArea = playingArea;
+		}
 	}
 
 	public string[] GetActions() {
@@ -57,7 +61,6 @@ public class WorldObject : MonoBehaviour {
 	}
 
 	private void ChangeSelection(WorldObject worldObject, Player controller) {
-		//this should be called by the following line, but there is an outside chance it will not
 		SetSelection(false, playingArea);
 		if(controller.SelectedObject) controller.SelectedObject.SetSelection(false, playingArea);
 		controller.SelectedObject = worldObject;
