@@ -20,9 +20,15 @@ public class Unit : WorldObject {
 
 	private Transform destinationMark;
 
+	public float startBattery = 100;
+	public float currentBattery = 100;
+	public float batteryUsage = 0.1f;
+
 	public Unit(){
 		type = WorldObjectType.Unit;
 	}
+
+
 
 	protected override void Awake() {
 		base.Awake();
@@ -37,10 +43,8 @@ public class Unit : WorldObject {
 	protected override void Start () {
 		base.Start();
 
-		Rigidbody[] xxx = this.transform.GetComponentsInChildren<Rigidbody> ();
-
+		//setup the destination mark
 		destinationMark = this.transform.FindChild("DestinationMark");
-		//destinationMark.SetActive (false);
 		//setup the line from object to the ground
 		lineRaycast = this.GetComponent<LineRenderer> ();
 		lineRaycast.useWorldSpace = true;
@@ -63,7 +67,7 @@ public class Unit : WorldObject {
 		if(rotating) TurnToTarget();
 		else if(moving) MakeMove();
 
-
+		this.CalculateBattery ();
 	}
 	
 	protected override void OnGUI() {
@@ -147,5 +151,12 @@ public class Unit : WorldObject {
 	private void drawBatteryBar(Rect rect){
 		Vector3 pos = Camera.main.WorldToScreenPoint (transform.position);
 		battery.transform.position = new Vector3(pos.x,pos.y+rect.height/2,0);
+	}
+
+	private void CalculateBattery(){
+		if (this.currentBattery > 0) {
+			this.currentBattery -= Time.deltaTime * this.batteryUsage;
+		}
+		this.battery.rectTransform.sizeDelta=new Vector2(this.currentBattery, 10);
 	}
 }
