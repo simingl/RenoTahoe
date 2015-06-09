@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using RTS;
 
 public class Unit : WorldObject {
+	public Image batteryBarImage;
+
 	protected bool moving, rotating;
 	public float moveSpeed, rotateSpeed;
 
@@ -49,8 +52,6 @@ public class Unit : WorldObject {
 
 		this.drawRaycastLine ();
 
-
-
 		if(rotating) TurnToTarget();
 		else if(moving) MakeMove();
 
@@ -92,6 +93,10 @@ public class Unit : WorldObject {
 		moving = false;
 	}
 
+	protected override void DrawSelectionBox(Rect rect){
+		base.DrawSelectionBox (rect);
+		this.drawBatteryBar (rect);
+	}
 	private void TurnToTarget() {
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed);
 		//sometimes it gets stuck exactly 180 degrees out in the calculation and does nothing, this check fixes that
@@ -127,5 +132,10 @@ public class Unit : WorldObject {
 			destinationMark.SetActive(false);
 
 		}
+	}
+
+	private void drawBatteryBar(Rect rect){
+		Vector3 pos = Camera.main.WorldToScreenPoint (transform.position);
+		batteryBarImage.transform.position = new Vector3(pos.x,pos.y+rect.height/2,0);
 	}
 }
