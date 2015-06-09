@@ -19,6 +19,11 @@ public class HUD : MonoBehaviour {
 
 	private GameObject sun;
 
+	//For selection rendering
+	public Texture2D selectionHighlight = null;
+	public static Rect selection = new Rect(0,0,0,0);
+	private Vector3 startClick = -Vector3.one;
+
 	// Use this for initialization
 	void Start () {
 		player = transform.root.GetComponent< Player >();
@@ -36,11 +41,16 @@ public class HUD : MonoBehaviour {
 			DrawMouseCursor();
 			SwitchDayNight();
 		}
+
+		DrawMouseDragSelectionBox ();
+
+
 	}
 
 	void Update(){
-		//Cursor.visible = false;
+		MouseDragSelection();
 	}
+
 	private void DrawResourceBar() {
 		GUI.skin = resourceSkin;
 		GUI.BeginGroup(new Rect(0,0,Screen.width,RESOURCE_BAR_HEIGHT));
@@ -56,9 +66,9 @@ public class HUD : MonoBehaviour {
 
 		GUI.EndGroup();
 		string selectionName = "";
-		if(player.SelectedObject) {
-			selectionName = player.SelectedObject.objectName;
-		}
+//		if(player.SelectedObject) {
+//			selectionName = player.SelectedObject.objectName;
+//		}
 		if(!selectionName.Equals("")) {
 			GUI.Label(new Rect(Screen.width/2,Screen.height - ORDERS_BAR_HEIGHT,Screen.width,ORDERS_BAR_HEIGHT), selectionName);
 		}
@@ -157,4 +167,35 @@ public class HUD : MonoBehaviour {
 		sun.SetActive(this.dayNightToggle);
 	}
 
+	//Render Selection
+	private void DrawMouseDragSelectionBox(){
+		if (startClick != -Vector3.one) {
+			GUI.color = new Color(1,1,1,0.5f);
+			GUI.DrawTexture(selection,selectionHighlight);
+		}
+	}
+
+	private void MouseDragSelection(){
+		if (Input.GetMouseButtonDown (0)) {
+			startClick = Input.mousePosition;
+		} else if(Input.GetMouseButtonUp(0)){
+			startClick = -Vector3.one;
+		}
+		
+		if (Input.GetMouseButton (0)) {
+			selection = new Rect(startClick.x, InvertMouseY(startClick.y), Input.mousePosition.x - startClick.x, InvertMouseY(Input.mousePosition.y) - InvertMouseY(startClick.y));
+			if(selection.width<0){
+				selection.x += selection.width;
+				selection.width = -selection.width;
+			}
+			if(selection.height<0){
+				selection.y += selection.height;
+				selection.height = -selection.height;
+			}
+		}
+	}
+
+	public static float InvertMouseY(float y){
+		return Screen.height - y;
+	}
 }

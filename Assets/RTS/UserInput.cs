@@ -93,37 +93,33 @@ public class UserInput : MonoBehaviour {
 	}
 
 	private void LeftMouseClick() {
-
 		if(player.hud.MouseInBounds()) {
 			GameObject hitObject = FindHitObject();
 			Vector3 hitPoint = FindHitPoint();
 			if(hitObject && hitPoint != ResourceManager.InvalidPosition) {
-				if(player.SelectedObject) player.SelectedObject.MouseClick(hitObject, hitPoint, player);
+				if(player.getSelectedObjects().Count > 0){
+					foreach(WorldObject obj in player.getSelectedObjects()){
+						obj.MouseClick(hitObject, hitPoint, player);
+					}
+				}
 				else if(hitObject.name!="Ground") {
-					//WorldObject worldObject = hitObject.transform.root.GetComponent< WorldObject >();
 					WorldObject worldObject = hitObject.GetComponent< WorldObject >();
 					if(worldObject) {
-						//we already know the player has no selected object
-						player.SelectedObject = worldObject;
-
-						Rect area = player.hud.GetPlayingArea ();
-						worldObject.SetSelection(true, area);
+						player.addSelectedObject(worldObject);
 					}
 				}
 			}
 		}
 	}
 	private void RightMouseClick() {
-		player.hud.GetPlayingArea ();
-		if(player.hud.MouseInBounds() && !Input.GetKey(KeyCode.LeftAlt) && player.SelectedObject) {
-			if(player.SelectedObject.type == WorldObjectType.Building){
-				Rect area = player.hud.GetPlayingArea ();
-				player.SelectedObject.SetSelection(false, area);
-				player.SelectedObject = null;
-			}else if(player.SelectedObject.type == WorldObjectType.Unit){
-				GameObject hitObject = FindHitObject();
-				Vector3 hitPoint = FindHitPoint();
-				player.SelectedObject.MouseClick(hitObject, hitPoint, player);
+		if(player.hud.MouseInBounds() && !Input.GetKey(KeyCode.LeftAlt) && player.getSelectedObjects().Count>0) {
+			GameObject hitObject = FindHitObject();
+			Vector3 hitPoint = FindHitPoint();
+
+			if(player.getSelectedObjects().Count > 0){
+				foreach(WorldObject obj in player.getSelectedObjects()){
+					obj.MouseClick(hitObject, hitPoint, player);
+				}
 			}
 		}
 	}
@@ -145,8 +141,9 @@ public class UserInput : MonoBehaviour {
 		if(player.hud.MouseInBounds()) {
 			GameObject hoverObject = FindHitObject();
 			if(hoverObject) {
-				if(player.SelectedObject) player.SelectedObject.SetHoverState(hoverObject);
-				else if(hoverObject.name != "Ground") {
+				//if(player.SelectedObject) player.SelectedObject.SetHoverState(hoverObject);
+				//else 
+				if(hoverObject.name != "Ground") {
 					Player owner = hoverObject.transform.root.GetComponent< Player >();
 					if(owner) {
 						Unit unit = hoverObject.transform.parent.GetComponent< Unit >();

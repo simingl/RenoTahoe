@@ -24,6 +24,8 @@ public class Unit : WorldObject {
 	public float currentBattery = 100;
 	public float batteryUsage = 0.1f;
 
+	private bool selectedByClick = false;
+
 	public Unit(){
 		type = WorldObjectType.Unit;
 	}
@@ -68,6 +70,19 @@ public class Unit : WorldObject {
 		else if(moving) MakeMove();
 
 		this.CalculateBattery ();
+
+
+
+		if (Input.GetMouseButton (0)) {
+			if(!selectedByClick){
+				Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
+				camPos.y = CameraManagement.InvertMouseY(camPos.y);
+				//this.currentlySelected = HUD.selection.Contains(camPos);
+				if(HUD.selection.Contains(camPos)){
+					this.player.addSelectedObject(this);
+				}
+			}
+		}
 	}
 	
 	protected override void OnGUI() {
@@ -90,7 +105,7 @@ public class Unit : WorldObject {
 			if(hitObject.name == "Ground" && hitPoint != ResourceManager.InvalidPosition) {
 				float x = hitPoint.x;
 				//makes sure that the unit stays on top of the surface it is on
-				float y = hitPoint.y + player.SelectedObject.transform.position.y;
+				float y = transform.position.y;
 				float z = hitPoint.z;
 				Vector3 destination = new Vector3(x, y, z);
 				StartMove(destination);
@@ -158,5 +173,23 @@ public class Unit : WorldObject {
 			this.currentBattery -= Time.deltaTime * this.batteryUsage;
 		}
 		this.battery.rectTransform.sizeDelta=new Vector2(this.currentBattery, 10);
+	}
+
+	private void OnMouseDown(){
+		selectedByClick = true;
+
+		if (!this.currentlySelected) {
+			player.addSelectedObject(this);
+		}
+		 
+	}
+	
+	private void OnMouseUp(){
+		if (selectedByClick) {
+			if(!this.currentlySelected){
+				player.addSelectedObject(this);
+			}
+		}
+		selectedByClick = false;
 	}
 }

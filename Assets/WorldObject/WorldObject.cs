@@ -23,6 +23,7 @@ public class WorldObject : MonoBehaviour {
 	
 	protected virtual void Start () {
 		player = transform.root.GetComponentInChildren< Player >();
+		this.playingArea = player.hud.GetPlayingArea ();
 	}
 	
 	protected virtual void Update () {
@@ -36,11 +37,8 @@ public class WorldObject : MonoBehaviour {
 		}
 	}
 
-	public void SetSelection(bool selected, Rect playingArea) {
+	public void SetSelection(bool selected) {
 		currentlySelected = selected;
-		if (selected) {
-			this.playingArea = playingArea;
-		}
 	}
 
 	public string[] GetActions() {
@@ -48,7 +46,6 @@ public class WorldObject : MonoBehaviour {
 	}
 	
 	public virtual void PerformAction(string actionToPerform) {
-		//it is up to children with specific actions to determine what to do with each of those actions
 	}
 
 	public virtual void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller) {
@@ -61,10 +58,8 @@ public class WorldObject : MonoBehaviour {
 	}
 
 	private void ChangeSelection(WorldObject worldObject, Player controller) {
-		SetSelection(false, playingArea);
-		if(controller.SelectedObject) controller.SelectedObject.SetSelection(false, playingArea);
-		controller.SelectedObject = worldObject;
-		worldObject.SetSelection(true, controller.hud.GetPlayingArea());
+		controller.cleanSelectedObject();
+		controller.addSelectedObject(worldObject);
 	}
 	private void DrawSelection() {
 		GUI.skin = ResourceManager.SelectBoxSkin;
@@ -76,7 +71,6 @@ public class WorldObject : MonoBehaviour {
 
 	public void CalculateBounds() {
 		selectionBounds = new Bounds(transform.position, Vector3.zero);
-		Renderer x = GetComponent<MeshRenderer> ();
 
 		foreach(Renderer r in GetComponentsInChildren< Renderer >()) {
 			if(r.GetType().Name == "MeshRenderer" && r.ToString().IndexOf("group_top")>=0){
