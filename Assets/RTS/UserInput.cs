@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using RTS;
 
 public class UserInput : MonoBehaviour {
@@ -98,7 +99,7 @@ public class UserInput : MonoBehaviour {
 			Vector3 hitPoint = FindHitPoint();
 			if(hitObject && hitPoint != ResourceManager.InvalidPosition) {
 				if(player.getSelectedObjects().Count > 0){
-					foreach(WorldObject obj in player.getSelectedObjects()){
+					foreach(WorldObject obj in player.getSelectedObjects().ToArray()){
 						obj.MouseClick(hitObject, hitPoint, player);
 					}
 				}

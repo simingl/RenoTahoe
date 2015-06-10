@@ -1,13 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using RTS;
 
 public class HUD : MonoBehaviour {
-	public GUISkin resourceSkin, ordersSkin, selectBoxSkin;
+	public GUISkin resourceSkin, ordersSkin, selectBoxSkin, selectionBarSkin;
 	public GUISkin mouseCursorSkin;
 	private const int SELECTION_NAME_HEIGHT = 15;
-	private const int ORDERS_BAR_HEIGHT = 100, ORDERS_BAR_OFFSET=190, RESOURCE_BAR_HEIGHT = 40;
+	private const int ORDERS_BAR_HEIGHT = 100, ORDERS_BAR_OFFSET=280, RESOURCE_BAR_HEIGHT = 40;
+	private const int LINE_HEIGHT = 20;
 	private Player player;
 
 	public bool dayNightToggle = true;
@@ -24,6 +26,8 @@ public class HUD : MonoBehaviour {
 	public static Rect selection = new Rect(0,0,0,0);
 	private Vector3 startClick = -Vector3.one;
 
+	public Texture drone_2d;
+
 	// Use this for initialization
 	void Start () {
 		player = transform.root.GetComponent< Player >();
@@ -36,6 +40,7 @@ public class HUD : MonoBehaviour {
 	
 	void OnGUI () {
 		if(player && player.human) {
+			DrawSelectionBar();
 			DrawOrdersBar();
 			DrawResourceBar();
 			DrawMouseCursor();
@@ -59,18 +64,39 @@ public class HUD : MonoBehaviour {
 		GUI.EndGroup();
 	}
 
+	private void DrawSelectionBar() {
+		GUI.skin = this.selectionBarSkin;
+		GUI.BeginGroup(new Rect(0, Screen.height - ORDERS_BAR_HEIGHT, Screen.width, ORDERS_BAR_HEIGHT));
+		GUI.Box(new Rect(ORDERS_BAR_OFFSET,0,Screen.width/2-ORDERS_BAR_OFFSET,ORDERS_BAR_HEIGHT),"");
+
+		GUI.EndGroup();
+		if(player.getSelectedObjects().Count>0) {
+			List<WorldObject> objs = player.getSelectedObjects();
+			for(int i =0;i<objs.Count;i++){
+				GUI.DrawTexture(new Rect(ORDERS_BAR_OFFSET+ i*64,Screen.height - ORDERS_BAR_HEIGHT  ,64,32),drone_2d);
+			}
+		}
+	}
+
 	private void DrawOrdersBar() {
 		GUI.skin = ordersSkin;
 		GUI.BeginGroup(new Rect(0, Screen.height - ORDERS_BAR_HEIGHT, Screen.width, ORDERS_BAR_HEIGHT));
-		GUI.Box(new Rect(ORDERS_BAR_OFFSET,0,Screen.width,ORDERS_BAR_HEIGHT),"");
-
+		GUI.Box(new Rect(Screen.width/2,0,Screen.width,ORDERS_BAR_HEIGHT),"");
+		
 		GUI.EndGroup();
-		string selectionName = "";
-//		if(player.SelectedObject) {
-//			selectionName = player.SelectedObject.objectName;
-//		}
-		if(!selectionName.Equals("")) {
-			GUI.Label(new Rect(Screen.width/2,Screen.height - ORDERS_BAR_HEIGHT,Screen.width,ORDERS_BAR_HEIGHT), selectionName);
+		if(player.getSelectedObjects().Count>0) {
+			List<WorldObject> objs = player.getSelectedObjects();
+			for(int i =0;i<objs.Count;i++){
+				WorldObject obj = objs[i];
+
+				string text = obj.objectName; 
+				text += "  - position: "+obj.transform.position;
+				if(obj is Unit){
+					Unit unit = (Unit)obj;
+					text += " - battery: "+unit.currentBattery;
+				}
+				GUI.Label(new Rect(Screen.width/2,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT ,Screen.width,ORDERS_BAR_HEIGHT), text);
+			}
 		}
 	}
 
@@ -138,7 +164,6 @@ public class HUD : MonoBehaviour {
 	}
 
 	public void SetCursorState(CursorState newState) {
-		Debug.Log ("SetNewState: "+newState);
 		activeCursorState = newState;
 		switch(newState) {
 		case CursorState.Select:

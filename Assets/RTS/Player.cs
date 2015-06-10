@@ -12,14 +12,14 @@ public class Player : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		hud = GetComponentInChildren< HUD >();
-
 		selectedObjects = new List<WorldObject> ();
 	}
 
 
 	public void addSelectedObject(WorldObject obj){
 		obj.SetSelection(true);
-		selectedObjects.Add (obj);
+		if(!selectedObjects.Contains(obj))
+			selectedObjects.Add (obj);
 	}
 
 	public void removeSelectedObject(WorldObject obj){
