@@ -32,7 +32,7 @@ public class WorldObject : MonoBehaviour {
 	}
 	
 	protected virtual void OnGUI() {
-		if (currentlySelected) {
+		if (currentlySelected && Camera.main) {
 			DrawSelection ();
 		}
 	}
@@ -67,6 +67,8 @@ public class WorldObject : MonoBehaviour {
 		GUI.BeginGroup(playingArea);
 		DrawSelectionBox(selectBox);
 		GUI.EndGroup();
+
+
 	}
 
 	public void CalculateBounds() {
@@ -90,6 +92,7 @@ public class WorldObject : MonoBehaviour {
 			if(hoverObject.name != "Ground") player.hud.SetCursorState(CursorState.Select);
 		}
 	}
+
 
 
 }

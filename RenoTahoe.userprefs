@@ -1,32 +1,18 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\WorldObject\Unit\Unit.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\RTS\UserInput.cs">
     <Files>
-      <File FileName="..\RTS-Tutorial\Assets\RTS\HUD.cs" Line="1" Column="1" />
-      <File FileName="..\RTS-Tutorial\Assets\Script\UserInput.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Camera\ChangePOV.cs" Line="48" Column="1" />
+      <File FileName="Assets\WorldObject\Unit\Unit.cs" Line="124" Column="32" />
+      <File FileName="Assets\RTS\HUD.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Camera\CameraManagement.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Drone\DroneSelection.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Drone\DroneController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Camera\ChangePOV.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Drone\GlowRotator.cs" Line="1" Column="1" />
-      <File FileName="..\RTS-Tutorial\Assets\Script\Player.cs" Line="1" Column="1" />
-      <File FileName="..\RTS-Tutorial\Assets\RTS\ResourceManager.cs" Line="1" Column="1" />
-      <File FileName="..\RTS-Tutorial\Assets\WorldObject\Building\Building.cs" Line="1" Column="1" />
-      <File FileName="..\RTS-Tutorial\Assets\WorldObject\WorldObject.cs" Line="1" Column="1" />
-      <File FileName="..\RTS-Tutorial\Assets\WorldObject\Unit\Unit.cs" Line="1" Column="1" />
-      <File FileName="..\RTS-Tutorial\Assets\RTS\WorkManager.cs.cs" Line="1" Column="1" />
-      <File FileName="..\RTS-Tutorial\Assets\RTS\Enums.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\WorldObject.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\WorkManager.cs.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\UserInput.cs" Line="110" Column="67" />
+      <File FileName="Assets\WorldObject\WorldObject.cs" Line="11" Column="2" />
       <File FileName="Assets\RTS\Player.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\Unit\Unit.cs" Line="10" Column="2" />
-      <File FileName="Assets\RTS\HUD.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\UserInput.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\ResourceManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Shared\Scripts\Showcase\DemoSwitcher.cs" Line="1" Column="1" />
-      <File FileName="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Shared\Scripts\flicker.cs" Line="1" Column="1" />
-      <File FileName="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Shared\Scripts\HideMouse.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\SceneManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\SceneManager.cs" Line="31" Column="1" />
+      <File FileName="Assets\RTS\WorkManager.cs.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\Enums.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

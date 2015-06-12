@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
 	void Start () {
 		hud = GetComponentInChildren< HUD >();
 		selectedObjects = new List<WorldObject> ();
+		WorldObject[] ooo = this.getAllEntities ();
 	}
 
 
@@ -40,6 +41,10 @@ public class Player : MonoBehaviour {
 
 	public bool isSelected(WorldObject obj){
 		return selectedObjects.Contains (obj);
+	}
+
+	public WorldObject[] getAllEntities(){
+		return this.GetComponentsInChildren<WorldObject> ();
 	}
 	// Update is called once per frame
 	void Update () {

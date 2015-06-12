@@ -5,7 +5,7 @@ public class SceneManager : MonoBehaviour {
 	public GameObject tree;
 	public GameObject fire;
 
-	private int number = 10;
+	private int number = 2;
 
 	private Vector3[] treePoints;
 	private Vector3[] firePoints;
@@ -28,9 +28,6 @@ public class SceneManager : MonoBehaviour {
 
 	void InitialScene ()
 	{
-
-		//int spawnPointIndex = Random.Range (0, spawnPoints.Length);
-		
 		// Create an instance of the enemy prefab at the randomly selected spawn point's position and rotation.
 		for (int i = 0; i< number;i++) {
 			//Instantiate (tree, treePoints[i], new Quaternion(0,0,0,0));

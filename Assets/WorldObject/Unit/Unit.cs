@@ -74,7 +74,7 @@ public class Unit : WorldObject {
 
 
 		if (Input.GetMouseButton (0)) {
-			if(!selectedByClick){
+			if(!selectedByClick && Camera.main){
 				Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
 				camPos.y = CameraManagement.InvertMouseY(camPos.y);
 				//this.currentlySelected = HUD.selection.Contains(camPos);
@@ -176,12 +176,7 @@ public class Unit : WorldObject {
 	}
 
 	private void OnMouseDown(){
-		selectedByClick = true;
-
-		if (!this.currentlySelected) {
-			player.addSelectedObject(this);
-		}
-		 
+		selectedByClick = true;		 
 	}
 	
 	private void OnMouseUp(){

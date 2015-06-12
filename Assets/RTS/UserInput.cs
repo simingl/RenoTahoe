@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using RTS;
 
 public class UserInput : MonoBehaviour {
+
+	public AudioClip selectSound;
+
 	private Player player;
 
 	private GameObject dayNightToggle;
@@ -16,9 +19,10 @@ public class UserInput : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (player.human) {
+		if (player.human && Camera.main) {
 			MoveCameraByMouse ();
-			RotateCamera ();
+			//RotateCamera ();
+
 			MouseActivity();
 		}
 	}
@@ -107,6 +111,7 @@ public class UserInput : MonoBehaviour {
 					WorldObject worldObject = hitObject.GetComponent< WorldObject >();
 					if(worldObject) {
 						player.addSelectedObject(worldObject);
+						AudioSource.PlayClipAtPoint(selectSound, transform.position);
 					}
 				}
 			}
