@@ -4,11 +4,7 @@ using System.Collections.Generic;
 using RTS;
 
 public class UserInput : MonoBehaviour {
-
-	public AudioClip selectSound;
-
 	private Player player;
-
 	private GameObject dayNightToggle;
 
 	// Use this for initialization
@@ -111,7 +107,6 @@ public class UserInput : MonoBehaviour {
 					WorldObject worldObject = hitObject.GetComponent< WorldObject >();
 					if(worldObject) {
 						player.addSelectedObject(worldObject);
-						AudioSource.PlayClipAtPoint(selectSound, transform.position);
 					}
 				}
 			}
@@ -126,6 +121,7 @@ public class UserInput : MonoBehaviour {
 				foreach(WorldObject obj in player.getSelectedObjects()){
 					obj.MouseClick(hitObject, hitPoint, player);
 				}
+				this.player.audioManager.playUnitMoveToSound();
 			}
 		}
 	}

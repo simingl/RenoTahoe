@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\RTS\AudioManager.cs" />
      <Compile Include="Assets\RTS\Enums.cs" />
      <Compile Include="Assets\RTS\HUD.cs" />
      <Compile Include="Assets\RTS\Player.cs" />

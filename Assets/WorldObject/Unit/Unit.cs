@@ -71,13 +71,10 @@ public class Unit : WorldObject {
 
 		this.CalculateBattery ();
 
-
-
 		if (Input.GetMouseButton (0)) {
-			if(!selectedByClick && Camera.main){
+			if(!selectedByClick){
 				Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
 				camPos.y = CameraManagement.InvertMouseY(camPos.y);
-				//this.currentlySelected = HUD.selection.Contains(camPos);
 				if(HUD.selection.Contains(camPos)){
 					this.player.addSelectedObject(this);
 				}

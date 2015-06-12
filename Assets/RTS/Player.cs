@@ -9,18 +9,23 @@ public class Player : MonoBehaviour {
 
 	public List <WorldObject> selectedObjects;
 
+	public AudioManager audioManager;
+
 	// Use this for initialization
 	void Start () {
 		hud = GetComponentInChildren< HUD >();
 		selectedObjects = new List<WorldObject> ();
 		WorldObject[] ooo = this.getAllEntities ();
+		audioManager = this.GetComponent<AudioManager> ();
 	}
 
 
 	public void addSelectedObject(WorldObject obj){
 		obj.SetSelection(true);
-		if(!selectedObjects.Contains(obj))
+		if (!selectedObjects.Contains (obj)) {
 			selectedObjects.Add (obj);
+			this.audioManager.playUnitSelectSound();
+		}
 	}
 
 	public void removeSelectedObject(WorldObject obj){
