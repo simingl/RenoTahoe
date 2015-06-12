@@ -27,6 +27,7 @@ public class HUD : MonoBehaviour {
 	private Vector3 startClick = -Vector3.one;
 
 	public Texture drone_2d;
+	public Texture drone_2d_h;
 
 	// Use this for initialization
 	void Start () {
@@ -48,8 +49,6 @@ public class HUD : MonoBehaviour {
 		}
 
 		DrawMouseDragSelectionBox ();
-
-
 	}
 
 	void Update(){
@@ -59,7 +58,6 @@ public class HUD : MonoBehaviour {
 	private void DrawResourceBar() {
 		GUI.skin = resourceSkin;
 		GUI.BeginGroup(new Rect(0,0,Screen.width,RESOURCE_BAR_HEIGHT));
-		//GUI.Box(new Rect(0,0,Screen.width,RESOURCE_BAR_HEIGHT),"");
 		dayNightToggle = GUI.Toggle(new Rect(5, 5, 100, 30), dayNightToggle, "Day/Night");
 		GUI.EndGroup();
 	}
@@ -68,13 +66,20 @@ public class HUD : MonoBehaviour {
 		GUI.skin = this.selectionBarSkin;
 		GUI.BeginGroup(new Rect(0, Screen.height - ORDERS_BAR_HEIGHT, Screen.width, ORDERS_BAR_HEIGHT));
 		GUI.Box(new Rect(ORDERS_BAR_OFFSET,0,Screen.width/2-ORDERS_BAR_OFFSET,ORDERS_BAR_HEIGHT),"");
-
+		
 		GUI.EndGroup();
-		if(player.getSelectedObjects().Count>0) {
-			List<WorldObject> objs = player.getSelectedObjects();
-			for(int i =0;i<objs.Count;i++){
-				GUI.DrawTexture(new Rect(ORDERS_BAR_OFFSET+ i*64,Screen.height - ORDERS_BAR_HEIGHT  ,64,32),drone_2d);
+		WorldObject[] allEntities = player.getAllEntities ();
+		if(allEntities.Length>0) {
+			for(int i =0;i<allEntities.Length;i++){
+				if(allEntities[i].currentlySelected)
+					GUI.DrawTexture(new Rect(ORDERS_BAR_OFFSET+ i*64,Screen.height - ORDERS_BAR_HEIGHT  ,64,32),drone_2d_h);
+				else
+					GUI.DrawTexture(new Rect(ORDERS_BAR_OFFSET+ i*64,Screen.height - ORDERS_BAR_HEIGHT  ,64,32),drone_2d);
+
+
 			}
+
+			GUI.Button(new Rect(ORDERS_BAR_OFFSET+ allEntities.Length*64,Screen.height - ORDERS_BAR_HEIGHT  ,64,32), drone_2d);
 		}
 	}
 

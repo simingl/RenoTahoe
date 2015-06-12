@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using RTS;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UserInput : MonoBehaviour {
 	private Player player;
@@ -94,6 +96,11 @@ public class UserInput : MonoBehaviour {
 	}
 
 	private void LeftMouseClick() {
+
+		if (EventSystem.current.IsPointerOverGameObject ()) {
+			Debug.Log ("left-click over a GUI element!");
+		}
+
 		if(player.hud.MouseInBounds()) {
 			GameObject hitObject = FindHitObject();
 			Vector3 hitPoint = FindHitPoint();
@@ -103,7 +110,7 @@ public class UserInput : MonoBehaviour {
 						obj.MouseClick(hitObject, hitPoint, player);
 					}
 				}
-				else if(hitObject.name!="Ground") {
+				if(hitObject.name!="Ground") {
 					WorldObject worldObject = hitObject.GetComponent< WorldObject >();
 					if(worldObject) {
 						player.addSelectedObject(worldObject);
@@ -137,6 +144,10 @@ public class UserInput : MonoBehaviour {
 		RaycastHit hit;
 		if(Physics.Raycast(ray, out hit)) return hit.point;
 		return ResourceManager.InvalidPosition;
+	}
+
+	private void FindHit2DPoint(){
+
 	}
 
 	private void MouseHover() {

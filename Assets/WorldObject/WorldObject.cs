@@ -10,7 +10,7 @@ public class WorldObject : MonoBehaviour {
 
 	protected Player player;
 	protected string[] actions = {};
-	protected bool currentlySelected = false;
+	public bool currentlySelected = false;
 
 	protected Bounds selectionBounds;
 
