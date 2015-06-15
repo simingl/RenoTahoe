@@ -26,6 +26,9 @@ public class Unit : WorldObject {
 	private Image battery;
 	private Canvas canvas;
 
+	public Slider batterySliderfabs;
+	private Slider batterySlider;
+
 	public Unit(){
 		type = WorldObjectType.Unit;
 	}
@@ -35,10 +38,10 @@ public class Unit : WorldObject {
 
 		this.canvas = GameObject.FindObjectOfType<Canvas> ();
 		//Create a battery bar from the prefab
-		battery = (Image)GameObject.Instantiate(batteryBarImage, transform.position, transform.localRotation);
-		battery.transform.SetParent (canvas.transform);
-		battery.transform.localScale = Vector3.one;
-		battery.enabled = false;
+		batterySlider = (Slider)GameObject.Instantiate (batterySliderfabs, new Vector3(-10000f, -10000f, -10000f), transform.localRotation);
+		batterySlider.transform.SetParent (canvas.transform);
+		batterySlider.transform.localScale = Vector3.one;
+		batterySlider.enabled = false;
 	}
 
 	protected override void Start () {
@@ -62,6 +65,8 @@ public class Unit : WorldObject {
 		lineMove.materials = lineRaycast.materials;
 		lineMove.SetColors (Color.green, Color.green);
 		lineMove.SetWidth (0.3f,0.3f);
+
+		batterySlider.enabled = false;
 	}
 	
 	protected override void Update () {
@@ -89,7 +94,9 @@ public class Unit : WorldObject {
 	
 	protected override void OnGUI() {
 		base.OnGUI();
-		battery.enabled = currentlySelected;
+		this.batterySlider.value = this.currentBattery;
+
+		batterySlider.gameObject.SetActive(currentlySelected);
 	}
 
 	public override void SetHoverState(GameObject hoverObject) {
@@ -166,14 +173,13 @@ public class Unit : WorldObject {
 
 	private void drawBatteryBar(Rect rect){
 		Vector3 pos = Camera.main.WorldToScreenPoint (transform.position);
-		battery.transform.position = new Vector3(pos.x,pos.y+rect.height/2,0);
+		batterySlider.transform.position = new Vector3 (pos.x,pos.y+rect.height/2,0);
 	}
 
 	private void CalculateBattery(){
 		if (this.currentBattery > 0) {
 			this.currentBattery -= Time.deltaTime * this.batteryUsage;
 		}
-		this.battery.rectTransform.sizeDelta=new Vector2(this.currentBattery, 10);
 	}
 
 }

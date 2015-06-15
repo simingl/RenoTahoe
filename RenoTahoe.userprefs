@@ -1,23 +1,25 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\RTS\SceneManager.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\WorldObject\Unit\Unit.cs">
     <Files>
-      <File FileName="Assets\RTS\HUD.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Camera\ChangePOV.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\Unit\Unit.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\HUD.cs" Line="74" Column="31" />
+      <File FileName="Assets\Scripts\Camera\ChangePOV.cs" Line="54" Column="44" />
+      <File FileName="Assets\WorldObject\Unit\Unit.cs" Line="172" Column="2" />
       <File FileName="Assets\Scripts\Camera\CameraManagement.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Drone\DroneSelection.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\UserInput.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\WorldObject.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\Player.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\UserInput.cs" Line="99" Column="1" />
+      <File FileName="Assets\WorldObject\WorldObject.cs" Line="95" Column="1" />
+      <File FileName="Assets\RTS\Player.cs" Line="51" Column="3" />
       <File FileName="Assets\RTS\SceneManager.cs" Line="16" Column="19" />
       <File FileName="Assets\RTS\WorkManager.cs.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\Enums.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\Enums.cs" Line="7" Column="95" />
       <File FileName="Assets\RTS\AudioManager.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\RTS\UserInput.cs" line="99" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="Assets\RTS\UserInput.cs" line="24" offsetX="373" offsetY="391" expression="dayNightToggle" liveUpdate="False" />

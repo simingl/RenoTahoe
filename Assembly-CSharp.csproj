@@ -61,6 +61,7 @@
      <Compile Include="Assets\Scripts\Drone\DroneSelection.cs" />
      <Compile Include="Assets\Scripts\Drone\GlowRotator.cs" />
      <Compile Include="Assets\WorldObject\Building\Building.cs" />
+     <Compile Include="Assets\WorldObject\Unit\BatteryBar.cs" />
      <Compile Include="Assets\WorldObject\Unit\Unit.cs" />
      <Compile Include="Assets\WorldObject\WorldObject.cs" />
      <Compile Include="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Shared\Scripts\HideMouse.cs" />
