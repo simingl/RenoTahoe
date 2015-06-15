@@ -5,7 +5,7 @@ public class SceneManager : MonoBehaviour {
 	public GameObject tree;
 	public GameObject fire;
 
-	private int number = 2;
+	private int number = 0;
 
 	private Vector3[] treePoints;
 	private Vector3[] firePoints;

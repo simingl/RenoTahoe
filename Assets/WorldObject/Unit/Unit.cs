@@ -4,37 +4,36 @@ using System.Collections;
 using RTS;
 
 public class Unit : WorldObject {
+	public Color color;
 	public Image batteryBarImage;
-	public Canvas canvas;
-	private Image battery;
+
 
 	protected bool moving, rotating;
 	public float moveSpeed, rotateSpeed;
-
-	private Vector3 destination;
-	private Quaternion targetRotation;
-
-	private LineRenderer lineRaycast;
-	private GameObject lineMoveContainer;
-	private LineRenderer lineMove;
-
-	private Transform destinationMark;
 
 	public float startBattery = 100;
 	public float currentBattery = 100;
 	public float batteryUsage = 0.1f;
 
-	private bool selectedByClick = false;
+	private Vector3 destination;
+	private Quaternion targetRotation;
+	
+	private LineRenderer lineRaycast;
+	private GameObject lineMoveContainer;
+	private LineRenderer lineMove;
+	
+	private Transform destinationMark;
+	private Image battery;
+	private Canvas canvas;
 
 	public Unit(){
 		type = WorldObjectType.Unit;
 	}
 
-
-
 	protected override void Awake() {
 		base.Awake();
 
+		this.canvas = GameObject.FindObjectOfType<Canvas> ();
 		//Create a battery bar from the prefab
 		battery = (Image)GameObject.Instantiate(batteryBarImage, transform.position, transform.localRotation);
 		battery.transform.SetParent (canvas.transform);
@@ -44,6 +43,10 @@ public class Unit : WorldObject {
 
 	protected override void Start () {
 		base.Start();
+		//Initialize to random color
+		color = new Color(Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f));  
+		//find the top mesh and render it
+		transform.FindChild ("mesh").FindChild ("group_top").GetComponent<Renderer>().material.color = this.color;
 
 		//setup the destination mark
 		destinationMark = this.transform.FindChild("DestinationMark");
@@ -64,6 +67,17 @@ public class Unit : WorldObject {
 	protected override void Update () {
 		base.Update();
 
+		if (Input.GetMouseButtonUp (0) && player.hud.MouseInBounds()) {
+			Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
+			camPos.y = CameraManagement.InvertMouseY(camPos.y);
+			if(HUD.selection.Contains(camPos)){
+				this.player.addSelectedObject(this);
+			}
+			else {
+				this.player.removeSelectedObject(this);
+			}
+		}
+
 		this.drawRaycastLine ();
 
 		if(rotating) TurnToTarget();
@@ -71,15 +85,6 @@ public class Unit : WorldObject {
 
 		this.CalculateBattery ();
 
-		if (Input.GetMouseButton (0)) {
-			if(!selectedByClick){
-				Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
-				camPos.y = CameraManagement.InvertMouseY(camPos.y);
-				if(HUD.selection.Contains(camPos)){
-					this.player.addSelectedObject(this);
-				}
-			}
-		}
 	}
 	
 	protected override void OnGUI() {
@@ -156,7 +161,6 @@ public class Unit : WorldObject {
 		} else {
 			lineMove.enabled = false;
 			destinationMark.gameObject.SetActive(false);
-
 		}
 	}
 
@@ -172,16 +176,4 @@ public class Unit : WorldObject {
 		this.battery.rectTransform.sizeDelta=new Vector2(this.currentBattery, 10);
 	}
 
-	private void OnMouseDown(){
-		selectedByClick = true;		 
-	}
-	
-	private void OnMouseUp(){
-		if (selectedByClick) {
-			if(!this.currentlySelected){
-				player.addSelectedObject(this);
-			}
-		}
-		selectedByClick = false;
-	}
 }

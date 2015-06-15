@@ -92,7 +92,4 @@ public class WorldObject : MonoBehaviour {
 			if(hoverObject.name != "Ground") player.hud.SetCursorState(CursorState.Select);
 		}
 	}
-
-
-
 }

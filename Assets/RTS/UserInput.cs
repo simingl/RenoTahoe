@@ -89,31 +89,25 @@ public class UserInput : MonoBehaviour {
 		
 	}
 	private void MouseActivity() {
-		if(Input.GetMouseButtonDown(0)) LeftMouseClick();
+		if(Input.GetMouseButtonUp(0)) LeftMouseClick();
 		else if(Input.GetMouseButtonDown(1)) RightMouseClick();
 
 		this.MouseHover ();
 	}
 
 	private void LeftMouseClick() {
-
-		if (EventSystem.current.IsPointerOverGameObject ()) {
-			Debug.Log ("left-click over a GUI element!");
-		}
-
 		if(player.hud.MouseInBounds()) {
 			GameObject hitObject = FindHitObject();
 			Vector3 hitPoint = FindHitPoint();
 			if(hitObject && hitPoint != ResourceManager.InvalidPosition) {
-				if(player.getSelectedObjects().Count > 0){
-					foreach(WorldObject obj in player.getSelectedObjects().ToArray()){
-						obj.MouseClick(hitObject, hitPoint, player);
-					}
-				}
 				if(hitObject.name!="Ground") {
 					WorldObject worldObject = hitObject.GetComponent< WorldObject >();
 					if(worldObject) {
-						player.addSelectedObject(worldObject);
+						if(Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)){
+							player.addSelectedObject(worldObject);
+						}else{
+							player.setSelectedObject(worldObject);
+						}
 					}
 				}
 			}
@@ -144,10 +138,6 @@ public class UserInput : MonoBehaviour {
 		RaycastHit hit;
 		if(Physics.Raycast(ray, out hit)) return hit.point;
 		return ResourceManager.InvalidPosition;
-	}
-
-	private void FindHit2DPoint(){
-
 	}
 
 	private void MouseHover() {

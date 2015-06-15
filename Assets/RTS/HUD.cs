@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using RTS;
 
 public class HUD : MonoBehaviour {
-	public GUISkin resourceSkin, ordersSkin, selectBoxSkin, selectionBarSkin;
+	public GUISkin resourceSkin, ordersSkin, selectBoxSkin, selectionBarSkin,selectBtnSkin;
 	public GUISkin mouseCursorSkin;
 	private const int SELECTION_NAME_HEIGHT = 15;
 	private const int ORDERS_BAR_HEIGHT = 100, ORDERS_BAR_OFFSET=280, RESOURCE_BAR_HEIGHT = 40;
+	private const int SELECT_BTN_HEIGHT = 42, SELECT_BTN_WIDTH = 86;
 	private const int LINE_HEIGHT = 20;
 	private Player player;
 
@@ -29,6 +30,10 @@ public class HUD : MonoBehaviour {
 	public Texture drone_2d;
 	public Texture drone_2d_h;
 
+	private Canvas canvas;
+
+	public Button droneBtn;
+
 	// Use this for initialization
 	void Start () {
 		player = transform.root.GetComponent< Player >();
@@ -37,6 +42,8 @@ public class HUD : MonoBehaviour {
 		ResourceManager.StoreSelectBoxItems(selectBoxSkin);
 
 		SetCursorState(CursorState.Select);
+		this.canvas = GameObject.FindObjectOfType<Canvas> ();
+
 	}
 	
 	void OnGUI () {
@@ -44,7 +51,7 @@ public class HUD : MonoBehaviour {
 			DrawSelectionBar();
 			DrawOrdersBar();
 			DrawResourceBar();
-			DrawMouseCursor();
+			//DrawMouseCursor();
 			SwitchDayNight();
 		}
 
@@ -62,28 +69,48 @@ public class HUD : MonoBehaviour {
 		GUI.EndGroup();
 	}
 
+	Button btn = null;
+
 	private void DrawSelectionBar() {
 		GUI.skin = this.selectionBarSkin;
 		GUI.BeginGroup(new Rect(0, Screen.height - ORDERS_BAR_HEIGHT, Screen.width, ORDERS_BAR_HEIGHT));
 		GUI.Box(new Rect(ORDERS_BAR_OFFSET,0,Screen.width/2-ORDERS_BAR_OFFSET,ORDERS_BAR_HEIGHT),"");
-		
 		GUI.EndGroup();
+
 		WorldObject[] allEntities = player.getAllEntities ();
 		if(allEntities.Length>0) {
 			for(int i =0;i<allEntities.Length;i++){
-				if(allEntities[i].currentlySelected)
-					GUI.DrawTexture(new Rect(ORDERS_BAR_OFFSET+ i*64,Screen.height - ORDERS_BAR_HEIGHT  ,64,32),drone_2d_h);
-				else
-					GUI.DrawTexture(new Rect(ORDERS_BAR_OFFSET+ i*64,Screen.height - ORDERS_BAR_HEIGHT  ,64,32),drone_2d);
+				GUI.skin = selectBtnSkin;
+				WorldObject obj = allEntities[i];
 
+				GUI.color = obj.GetComponent<Unit>().color;
 
+				if(obj.currentlySelected){
+					if(GUI.Button(new Rect(ORDERS_BAR_OFFSET+ i*SELECT_BTN_WIDTH,Screen.height - ORDERS_BAR_HEIGHT  ,SELECT_BTN_WIDTH,SELECT_BTN_HEIGHT), drone_2d_h)){
+						if(Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)){
+							this.player.toggleSelectObject(obj);
+						}else{
+							this.player.setSelectedObject(obj);
+							this.player.GetComponent<ChangePOV>().switchCamera(CameraType.Camera_Third_View);
+						}
+					}
+				}
+				else{
+					if(GUI.Button(new Rect(ORDERS_BAR_OFFSET+ i*SELECT_BTN_WIDTH,Screen.height - ORDERS_BAR_HEIGHT  ,SELECT_BTN_WIDTH,SELECT_BTN_HEIGHT), drone_2d)){
+						if(Input.GetKey(KeyCode.LeftControl)){
+							this.player.toggleSelectObject(obj);
+						}else{
+							this.player.setSelectedObject(obj);
+							this.player.GetComponent<ChangePOV>().switchCamera(CameraType.Camera_Third_View);
+						}
+					}
+				}
 			}
-
-			GUI.Button(new Rect(ORDERS_BAR_OFFSET+ allEntities.Length*64,Screen.height - ORDERS_BAR_HEIGHT  ,64,32), drone_2d);
 		}
 	}
 
 	private void DrawOrdersBar() {
+		GUI.color = Color.white;
 		GUI.skin = ordersSkin;
 		GUI.BeginGroup(new Rect(0, Screen.height - ORDERS_BAR_HEIGHT, Screen.width, ORDERS_BAR_HEIGHT));
 		GUI.Box(new Rect(Screen.width/2,0,Screen.width,ORDERS_BAR_HEIGHT),"");
@@ -110,8 +137,8 @@ public class HUD : MonoBehaviour {
 		//not the top-left of the screen like the drawing coordinates do
 		Vector3 mousePos = Input.mousePosition;
 		bool insideWidth = mousePos.x >= 0 && mousePos.x <= Screen.width;
-		//bool insideHeight = mousePos.y >= ORDERS_BAR_HEIGHT && mousePos.y <= Screen.height - RESOURCE_BAR_HEIGHT;
-		bool insideHeight = mousePos.y >= 0 && mousePos.y <= Screen.height;
+		bool insideHeight = mousePos.y >= ORDERS_BAR_HEIGHT && mousePos.y <= Screen.height - RESOURCE_BAR_HEIGHT;
+		//bool insideHeight = mousePos.y >= 0 && mousePos.y <= Screen.height;
 		return insideWidth && insideHeight;
 	}
 

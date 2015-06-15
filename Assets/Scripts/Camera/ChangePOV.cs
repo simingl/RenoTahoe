@@ -27,26 +27,31 @@ public class ChangePOV : MonoBehaviour {
 	void Awake(){
 	}
 
-	// Update is called once per frame
-	void Update () {
-		if (Input.GetKeyDown (KeyCode.F1)) {
-			this.backupMainCameraPosition();
-			this.activeCamera = this.getActiveCamera(CameraType.Camera_First_View);
-		} else if (Input.GetKeyDown (KeyCode.F2)) {
-			this.backupMainCameraPosition();			
-			this.activeCamera = this.getActiveCamera(CameraType.Camera_Third_View);
-		} else if (Input.GetKeyDown (KeyCode.F3)) {
-			this.backupMainCameraPosition();
-			this.activeCamera = this.getActiveCamera(CameraType.Camera_Hover_View);
-		} else if (Input.GetKeyDown (KeyCode.F4)) {
-			//Current camera is already the Main Camera
-			if(activeCamera != null) {
+	public void switchCamera(CameraType type){
+		if (type == CameraType.Camera_Main) {
+			if (activeCamera != null) {
 				this.activeCamera = null;
 				this.camMain.transform.position = this.camMainPosition;
 				this.camMain.transform.rotation = this.camMainRotation;
-				this.camMainPosition=Vector3.zero;
-				this.camMainRotation=this.inValidQuaternion;
+				this.camMainPosition = Vector3.zero;
+				this.camMainRotation = this.inValidQuaternion;
 			}
+		} else {
+			this.backupMainCameraPosition();
+			this.activeCamera = this.getActiveCamera(type);
+		}
+	}
+
+	// Update is called once per frame
+	void Update () {
+		if (Input.GetKeyDown (KeyCode.F1)) {
+			this.switchCamera(CameraType.Camera_First_View);
+		} else if (Input.GetKeyDown (KeyCode.F2)) {
+			this.switchCamera(CameraType.Camera_Third_View);
+		} else if (Input.GetKeyDown (KeyCode.F3)) {
+			this.switchCamera(CameraType.Camera_Hover_View);
+		} else if (Input.GetKeyDown (KeyCode.F4)) {
+			this.switchCamera(CameraType.Camera_Main);
 		}
 
 		if (this.activeCamera)

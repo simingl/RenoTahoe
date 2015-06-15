@@ -28,6 +28,23 @@ public class Player : MonoBehaviour {
 		}
 	}
 
+	public void setSelectedObject(WorldObject obj){
+		this.cleanSelectedObject ();
+
+		obj.SetSelection(true);
+		if (!selectedObjects.Contains (obj)) {
+			selectedObjects.Add (obj);
+			this.audioManager.playUnitSelectSound();
+		}
+	}
+
+	public void toggleSelectObject(WorldObject obj){
+		if (selectedObjects.Contains (obj)) {
+			this.removeSelectedObject (obj);
+		} else {
+			this.addSelectedObject(obj);
+		}
+	}
 	public void removeSelectedObject(WorldObject obj){
 		obj.SetSelection(false);
 		selectedObjects.Remove (obj);
