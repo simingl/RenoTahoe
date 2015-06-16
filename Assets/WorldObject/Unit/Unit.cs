@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 using RTS;
 
-public class Unit : WorldObject {
+public class Drone : WorldObject {
 	public Color color;
 	public Image batteryBarImage;
 
@@ -14,6 +15,8 @@ public class Unit : WorldObject {
 	public float startBattery = 100;
 	public float currentBattery = 100;
 	public float batteryUsage = 0.1f;
+
+	public int sensingRange = 100;
 
 	private Vector3 destination;
 	private Quaternion targetRotation;
@@ -29,14 +32,20 @@ public class Unit : WorldObject {
 	public Slider batterySliderfabs;
 	private Slider batterySlider;
 
+	private Stack<Cellphone> cellphones;
+
+
+
 	public Unit(){
 		type = WorldObjectType.Unit;
+		cellphones = new Stack<Cellphone>();
 	}
 
 	protected override void Awake() {
 		base.Awake();
 
 		this.canvas = GameObject.FindObjectOfType<Canvas> ();
+
 		//Create a battery bar from the prefab
 		batterySlider = (Slider)GameObject.Instantiate (batterySliderfabs, new Vector3(-10000f, -10000f, -10000f), transform.localRotation);
 		batterySlider.transform.SetParent (canvas.transform);
@@ -65,8 +74,6 @@ public class Unit : WorldObject {
 		lineMove.materials = lineRaycast.materials;
 		lineMove.SetColors (Color.green, Color.green);
 		lineMove.SetWidth (0.3f,0.3f);
-
-
 	}
 	
 	protected override void Update () {
@@ -89,7 +96,6 @@ public class Unit : WorldObject {
 		else if(moving) MakeMove();
 
 		this.CalculateBattery ();
-
 	}
 	
 	protected override void OnGUI() {
@@ -188,5 +194,35 @@ public class Unit : WorldObject {
 			this.currentBattery -= Time.deltaTime * this.batteryUsage;
 		}
 	}
+
+	public void DropCell(){
+		if (this.cellphones.Count == 0)
+			return;
+
+		Cellphone cell = this.cellphones.Pop ();
+		if (cell != null) {
+			cell.parent = null;
+			cell.transform.SetParent(null);
+			cell.transform.GetComponent<Rigidbody>().useGravity = true;
+		}
+	}
+
+	public void LoadCell(){
+		Cellphone obj =  this.player.sceneManager.getFreeCellphone (this.transform.position, this.sensingRange);
+		if (obj!=null) {
+			this.cellphones.Push (obj);
+			obj.parent = this;
+			obj.gameObject.transform.SetParent(this.gameObject.transform);
+			obj.gameObject.transform.localPosition = new Vector3(15f,0f,0f);
+			obj.gameObject.transform.localRotation = new Quaternion(0,0,0,1);
+
+			Rigidbody rb = obj.gameObject.GetComponent<Rigidbody>();
+
+			rb.useGravity = false;
+			rb.velocity = Vector3.zero;
+			rb.freezeRotation = true;
+		}
+	}
+
 
 }

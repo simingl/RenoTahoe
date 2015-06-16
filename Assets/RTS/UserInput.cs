@@ -149,7 +149,7 @@ public class UserInput : MonoBehaviour {
 				if(hoverObject.name != "Ground") {
 					Player owner = hoverObject.transform.root.GetComponent< Player >();
 					if(owner) {
-						Unit unit = hoverObject.transform.parent.GetComponent< Unit >();
+						Drone unit = hoverObject.transform.parent.GetComponent< Drone >();
 						Building building = hoverObject.transform.parent.GetComponent< Building >();
 						if(owner.username == player.username && (unit || building)) player.hud.SetCursorState(CursorState.Select);
 					}

@@ -6,7 +6,6 @@ public class WorldObject : MonoBehaviour {
 	public WorldObjectType type;
 
 	public string objectName;
-	public int cost, hitPoints, maxHitPoints;
 
 	protected Player player;
 	protected string[] actions = {};
@@ -22,7 +21,8 @@ public class WorldObject : MonoBehaviour {
 	}
 	
 	protected virtual void Start () {
-		player = transform.root.GetComponentInChildren< Player >();
+		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
+//		player = transform.root.GetComponentInChildren< Player >();
 		this.playingArea = player.hud.GetPlayingArea ();
 	}
 	
@@ -32,7 +32,7 @@ public class WorldObject : MonoBehaviour {
 	}
 	
 	protected virtual void OnGUI() {
-		if (currentlySelected && Camera.main) {
+		if (currentlySelected && this.player.changePOV.activeCamera == null) {
 			DrawSelection ();
 		}
 	}
@@ -82,7 +82,6 @@ public class WorldObject : MonoBehaviour {
 	}
 
 	protected virtual void DrawSelectionBox(Rect selectBox) {
-
 		GUI.Box(selectBox, "");
 	}
 

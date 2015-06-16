@@ -97,8 +97,8 @@ public class CameraManagement : MonoBehaviour
 		}
 		
 		// Lerp the camera's position between it's current position and it's new position.
-		transform.position = Vector3.Lerp(transform.position, newPos, smooth * Time.deltaTime);
-		
+		transform.position = Vector3.Lerp(transform.position, abovePos, smooth * Time.deltaTime);
+		//transform.position = newPos;
 		// Make sure the camera is looking at the player.
 		SmoothLookAt();
 	}
@@ -123,6 +123,7 @@ public class CameraManagement : MonoBehaviour
 	
 	void SmoothLookAt ()
 	{
+		return;
 		// Create a vector from the camera towards the player.
 		Vector3 relPlayerPosition = player.position - transform.position;
 		
@@ -154,13 +155,7 @@ public class CameraManagement : MonoBehaviour
 		}
 	}
 	
-	private void OnGUI(){
-		if (startClick != -Vector3.one) {
-			GUI.color = new Color(1,1,1,0.5f);
-			GUI.DrawTexture(selection,selectionHighlight);
-		}
-	}
-	
+
 	public static float InvertMouseY(float y){
 		return Screen.height - y;
 	}

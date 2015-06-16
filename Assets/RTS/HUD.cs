@@ -32,7 +32,7 @@ public class HUD : MonoBehaviour {
 
 	private Canvas canvas;
 
-	public Button droneBtn;
+	public Button cellBtn;
 
 	// Use this for initialization
 	void Start () {
@@ -77,13 +77,13 @@ public class HUD : MonoBehaviour {
 		GUI.Box(new Rect(ORDERS_BAR_OFFSET,0,Screen.width/2-ORDERS_BAR_OFFSET,ORDERS_BAR_HEIGHT),"");
 		GUI.EndGroup();
 
-		WorldObject[] allEntities = player.getAllEntities ();
+		Drone[] allEntities = this.player.sceneManager.getAllDrones ();
 		if(allEntities.Length>0) {
 			for(int i =0;i<allEntities.Length;i++){
 				GUI.skin = selectBtnSkin;
-				WorldObject obj = allEntities[i];
+				Drone obj = allEntities[i];
 
-				GUI.color = obj.GetComponent<Unit>().color;
+				GUI.color = obj.color;
 
 				if(obj.currentlySelected){
 					if(GUI.Button(new Rect(ORDERS_BAR_OFFSET+ i*SELECT_BTN_WIDTH,Screen.height - ORDERS_BAR_HEIGHT  ,SELECT_BTN_WIDTH,SELECT_BTN_HEIGHT), drone_2d_h)){
@@ -91,7 +91,7 @@ public class HUD : MonoBehaviour {
 							this.player.toggleSelectObject(obj);
 						}else{
 							this.player.setSelectedObject(obj);
-							this.player.GetComponent<ChangePOV>().switchCamera(CameraType.Camera_Third_View);
+							this.player.changePOV.switchCamera(CameraType.Camera_Third_View);
 						}
 					}
 				}
@@ -101,7 +101,7 @@ public class HUD : MonoBehaviour {
 							this.player.toggleSelectObject(obj);
 						}else{
 							this.player.setSelectedObject(obj);
-							this.player.GetComponent<ChangePOV>().switchCamera(CameraType.Camera_Third_View);
+							this.player.changePOV.switchCamera(CameraType.Camera_Third_View);
 						}
 					}
 				}
@@ -113,21 +113,31 @@ public class HUD : MonoBehaviour {
 		GUI.color = Color.white;
 		GUI.skin = ordersSkin;
 		GUI.BeginGroup(new Rect(0, Screen.height - ORDERS_BAR_HEIGHT, Screen.width, ORDERS_BAR_HEIGHT));
-		GUI.Box(new Rect(Screen.width/2,0,Screen.width,ORDERS_BAR_HEIGHT),"");
-		
+		GUI.Box(new Rect(Screen.width/2+10,0,Screen.width,ORDERS_BAR_HEIGHT),"");
 		GUI.EndGroup();
+
 		if(player.getSelectedObjects().Count>0) {
 			List<WorldObject> objs = player.getSelectedObjects();
 			for(int i =0;i<objs.Count;i++){
 				WorldObject obj = objs[i];
-
 				string text = obj.objectName; 
-				text += "  - position: "+obj.transform.position;
-				if(obj is Unit){
-					Unit unit = (Unit)obj;
+				text += "  - loc: ("+obj.transform.position.x +", "+obj.transform.position.z+"), H: " + obj.transform.position.y;
+				if(obj is Drone){
+					Drone unit = (Drone)obj;
 					text += " - battery: "+unit.currentBattery;
 				}
-				GUI.Label(new Rect(Screen.width/2,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT ,Screen.width,ORDERS_BAR_HEIGHT), text);
+				if(GUI.Button (new Rect(Screen.width/2 +10,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT ,50,50), "Drop")){
+					Drone unit = (Drone)obj;
+					unit.DropCell();
+				}
+
+				if(GUI.Button (new Rect(Screen.width/2 +10 +55,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT ,50,50), "Load")){
+					Drone unit = (Drone)obj;
+					unit.LoadCell();
+				}
+
+				GUI.DrawTexture(new Rect(Screen.width*2/3-45,i*LINE_HEIGHT ,40,20), this.drone_2d);
+				GUI.Label(new Rect(Screen.width*2/3,i*LINE_HEIGHT ,Screen.width,ORDERS_BAR_HEIGHT), text);
 			}
 		}
 	}

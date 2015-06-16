@@ -10,13 +10,16 @@ public class Player : MonoBehaviour {
 	public List <WorldObject> selectedObjects;
 
 	public AudioManager audioManager;
+	public ChangePOV changePOV;
+	public SceneManager sceneManager;
 
 	// Use this for initialization
 	void Start () {
 		hud = GetComponentInChildren< HUD >();
 		selectedObjects = new List<WorldObject> ();
-		WorldObject[] ooo = this.getAllEntities ();
 		audioManager = this.GetComponent<AudioManager> ();
+		changePOV = this.GetComponent<ChangePOV> ();
+		sceneManager = GameObject.FindObjectOfType<SceneManager> ();
 	}
 
 
@@ -65,9 +68,6 @@ public class Player : MonoBehaviour {
 		return selectedObjects.Contains (obj);
 	}
 
-	public WorldObject[] getAllEntities(){
-		return this.GetComponentsInChildren<WorldObject> ();
-	}
 	// Update is called once per frame
 	void Update () {
 		
