@@ -33,12 +33,16 @@ public class Drone : WorldObject {
 	private Slider batterySlider;
 
 	private Stack<Cellphone> cellphones;
+	private Stack<WaterBottle> waters;
+	private int MAX_CELL = 8;
+	private int MAX_WATER = 5;
 
 	private Projector projector;
 
 	public Drone(){
 		type = WorldObjectType.Unit;
 		cellphones = new Stack<Cellphone>();
+		waters = new Stack<WaterBottle>();
 	}
 
 	protected override void Awake() {
@@ -205,25 +209,72 @@ public class Drone : WorldObject {
 			cell.parent = null;
 			cell.transform.SetParent(null);
 			cell.transform.GetComponent<Rigidbody>().useGravity = true;
+			cell.gameObject.GetComponent<Collider>().enabled = true;
 		}
 	}
 
 	public void LoadCell(){
-		Cellphone obj =  this.player.sceneManager.getFreeCellphone (this.transform.position, this.sensingRange);
-		if (obj!=null) {
-			this.cellphones.Push (obj);
-			obj.parent = this;
-			obj.gameObject.transform.SetParent(this.gameObject.transform);
-			obj.gameObject.transform.localPosition = new Vector3(15f,0f,0f);
-			obj.gameObject.transform.localRotation = new Quaternion(0,0,0,1);
+		if (this.cellphones.Count >= MAX_CELL)
+			return;
 
-			Rigidbody rb = obj.gameObject.GetComponent<Rigidbody>();
+		Cellphone cell =  this.player.sceneManager.getFreeCellphone (this.transform.position, this.sensingRange);
+		if (cell!=null) {
+			this.cellphones.Push (cell);
+			cell.parent = this;
+			cell.gameObject.transform.SetParent(this.gameObject.transform);
+			cell.gameObject.transform.localRotation = new Quaternion(0,0,0,1);
+
+			cell.gameObject.transform.localPosition = new Vector3(12f,0f,-10f+2f*this.cellphones.Count);
+
+			Rigidbody rb = cell.gameObject.GetComponent<Rigidbody>();
 
 			rb.useGravity = false;
 			rb.velocity = Vector3.zero;
 			rb.freezeRotation = true;
+			cell.gameObject.GetComponent<Collider>().enabled = false;
 		}
 	}
 
+	public int GetCellCount(){
+		return cellphones.Count;
+	}
 
+	public void DropWater(){
+		if (this.waters.Count == 0)
+			return;
+		
+		WaterBottle water = this.waters.Pop ();
+		if (water != null) {
+			water.parent = null;
+			water.transform.SetParent(null);
+			water.transform.GetComponent<Rigidbody>().useGravity = true;
+			water.gameObject.GetComponent<Collider>().enabled = true;
+		}
+	}
+	
+	public void LoadWater(){
+		if (this.waters.Count >= MAX_WATER)
+			return;
+		
+		WaterBottle water =  this.player.sceneManager.getFreeWaterBottle (this.transform.position, this.sensingRange);
+		if (water!=null) {
+			this.waters.Push (water);
+			water.parent = this;
+			water.gameObject.transform.SetParent(this.gameObject.transform);
+			water.gameObject.transform.localRotation = new Quaternion(0,0,0,1);
+			
+			water.gameObject.transform.localPosition = new Vector3(-12f,0f,-10f+3f*this.waters.Count);
+			
+			Rigidbody rb = water.gameObject.GetComponent<Rigidbody>();
+			
+			rb.useGravity = false;
+			rb.velocity = Vector3.zero;
+			rb.freezeRotation = true;
+			water.gameObject.GetComponent<Collider>().enabled = false;
+		}
+	}
+	
+	public int GetWaterCount(){
+		return waters.Count;
+	}
 }

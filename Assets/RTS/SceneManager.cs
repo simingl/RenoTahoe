@@ -6,14 +6,16 @@ public class SceneManager : MonoBehaviour {
 	public GameObject tree;
 	public GameObject fire;
 	public GameObject cellphone;
+	public GameObject water;
 
 	private List<WorldObject> allEntities = new List<WorldObject> ();
 
-	private int number = 3;
+	private int number = 10;
 
 	private Vector3[] treePoints;
 	private Vector3[] firePoints;
 	private Vector3[] cellPoints;
+	private Vector3[] waterPoints;
 
 	private int width = 10, height = 10;
 
@@ -23,11 +25,13 @@ public class SceneManager : MonoBehaviour {
 		treePoints = new Vector3[number];
 		firePoints = new Vector3[number];
 		cellPoints = new Vector3[number];
+		waterPoints = new Vector3[number];
 
 		for (int i= 0;i<number;i++) {
 			//treePoints[i] = generateRandomPosition(width, height);
 			firePoints[i] = generateRandomPosition(width, height);
 			cellPoints[i] = generateRandomPosition(width, height);
+			waterPoints[i]= generateRandomPosition(width, height);
 		}
 
 		InitialScene ();
@@ -43,7 +47,19 @@ public class SceneManager : MonoBehaviour {
 			WorldObject newcell = newcellgo.GetComponent<WorldObject>();
 			this.allEntities.Add(newcell);
 		}
+
+		for (int i = 0; i< number;i++) {
+			//Instantiate (tree, treePoints[i], new Quaternion(0,0,0,0));
+			//GameObject newfire = (GameObject)Instantiate (fire, firePoints[i], new Quaternion(1,1,0,1));
+			GameObject newwatergo = (GameObject)Instantiate (water, waterPoints[i], new Quaternion(0,0,0,1));
+			Renderer r = newwatergo.GetComponent<Renderer>();
+			r.material.color = Color.yellow;
+			WorldObject newwater = newwatergo.GetComponent<WorldObject>();
+			this.allEntities.Add(newwater);
+		}
+
 	}
+
 
 	private Vector3 generateRandomPosition(int w, int h){
 		float scale = 1.5f;
@@ -87,6 +103,24 @@ public class SceneManager : MonoBehaviour {
 				if(dist <= range && dist < minDist){
 					minDist = dist;
 					minObj = (Cellphone)obj;
+				}
+			}
+		}
+		return minObj;
+	}
+
+	public WaterBottle getFreeWaterBottle(Vector3 position, float range){
+		WaterBottle minObj = null;
+		float minDist = 100000;
+		foreach (WorldObject obj in allEntities) {
+			if(obj is WaterBottle){
+				WaterBottle cell = (WaterBottle)obj;
+				if(cell.parent != null) continue;
+				
+				float dist = Vector3.Distance(position, obj.gameObject.transform.position);
+				if(dist <= range && dist < minDist){
+					minDist = dist;
+					minObj = (WaterBottle)obj;
 				}
 			}
 		}
