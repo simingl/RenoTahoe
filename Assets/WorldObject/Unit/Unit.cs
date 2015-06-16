@@ -41,7 +41,7 @@ public class Unit : WorldObject {
 		batterySlider = (Slider)GameObject.Instantiate (batterySliderfabs, new Vector3(-10000f, -10000f, -10000f), transform.localRotation);
 		batterySlider.transform.SetParent (canvas.transform);
 		batterySlider.transform.localScale = Vector3.one;
-		batterySlider.enabled = false;
+		batterySlider.gameObject.SetActive(false);
 	}
 
 	protected override void Start () {
@@ -66,7 +66,7 @@ public class Unit : WorldObject {
 		lineMove.SetColors (Color.green, Color.green);
 		lineMove.SetWidth (0.3f,0.3f);
 
-		batterySlider.enabled = false;
+
 	}
 	
 	protected override void Update () {
@@ -96,7 +96,14 @@ public class Unit : WorldObject {
 		base.OnGUI();
 		this.batterySlider.value = this.currentBattery;
 
-		batterySlider.gameObject.SetActive(currentlySelected);
+		batterySlider.gameObject.SetActive (currentlySelected);
+		ChangePOV pov = player.GetComponent<ChangePOV> ();
+
+		if (currentlySelected && player.GetComponent<ChangePOV> ().activeCamera == null) {
+			batterySlider.gameObject.SetActive (true);
+		} else {
+			batterySlider.gameObject.SetActive (false);
+		}
 	}
 
 	public override void SetHoverState(GameObject hoverObject) {

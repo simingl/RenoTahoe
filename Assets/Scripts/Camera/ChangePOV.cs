@@ -3,14 +3,10 @@ using System.Collections;
 using RTS;
 
 public class ChangePOV : MonoBehaviour {
-
-	private Camera activeCamera;
-
-	private Camera camMain;
-
+	
+	public Camera activeCamera;
+	public Camera camMain;
 	private Player player;
-
-	private CameraType activeCameraType;
 	private Vector3 camMainPosition;
 	private Quaternion camMainRotation;
 	private Quaternion inValidQuaternion = new Quaternion(0f, 0f, 0f, 1f);
@@ -19,7 +15,6 @@ public class ChangePOV : MonoBehaviour {
 	void Start () {
 		player = GetComponent<Player> ();
 		camMain = Camera.main;
-
 		this.camMainPosition=Vector3.zero;
 		this.camMainRotation=this.inValidQuaternion;
 	}
@@ -66,7 +61,6 @@ public class ChangePOV : MonoBehaviour {
 	private Camera getActiveCamera(CameraType ct){
 		if (player.getSelectedObjects ().Count > 0) {
 			WorldObject obj = player.getSelectedObjects () [0];
-
 			Camera[] cameras = obj.gameObject.GetComponentsInChildren<Camera> ();
 			foreach (Camera cam in cameras) {
 				if (ct == CameraType.Camera_First_View && cam.tag == RTS.Tags.CAM_FIRST_VIEW) { 
@@ -77,7 +71,6 @@ public class ChangePOV : MonoBehaviour {
 					return cam;
 				}
 			}
-
 		}
 		return null;
 	}
@@ -91,4 +84,5 @@ public class ChangePOV : MonoBehaviour {
 			this.camMainRotation = camMain.transform.rotation;
 		}
 	}
+	
 }
