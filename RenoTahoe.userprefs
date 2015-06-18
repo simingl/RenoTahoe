@@ -1,14 +1,14 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\RTS\HUD.cs">
     <Files>
       <File FileName="Assets\Scripts\Camera\MinimapManagement.cs" Line="25" Column="1" />
-      <File FileName="Assets\RTS\HUD.cs" Line="13" Column="2" />
+      <File FileName="Assets\RTS\HUD.cs" Line="208" Column="57" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\RTS\HUD.cs" line="14" />
+      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\RTS\HUD.cs" line="58" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
