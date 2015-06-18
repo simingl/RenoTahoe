@@ -8,17 +8,20 @@ public class HUD : MonoBehaviour {
 	public GUISkin resourceSkin, ordersSkin, selectBoxSkin, selectionBarSkin,selectBtnSkin;
 	public GUISkin mouseCursorSkin;
 
+	private const int WIDTH = 1920;
+	private const int HEIGHT = 1024;
+
 	private const int RESOURCE_BAR_HEIGHT = 10;
 	private const int LINE_HEIGHT = 20;
+
+	private static int SELECT_BAR_BTN_HEIGHT = 42, SELECT_BAR_BTN_WIDTH = 86;
+	private static int ACTION_BTN_WIDTH = 80, ACTION_BTN_HEIGHT = 50;
+	private static int MARGIN = 50;
 
 	private static int MINIMAP_WIDTH=(int)(0.2*Screen.width);
 	private static int SELECTION_BAR_HEIGHT = (int)(0.2*Screen.height), SELECTION_BAR_WIDTH = (int)(0.5*Screen.width);
 	private static int ORDERS_BAR_HEIGHT = (int)(0.3*Screen.height);
 	private static int INFO_BAR_HEIGHT = SELECTION_BAR_HEIGHT, INFO_BAR_WIDHT = (int)(0.45*Screen.width) ;
-
-	private static int SELECT_BAR_BTN_HEIGHT = 42, SELECT_BAR_BTN_WIDTH = 86;
-	private static int ACTION_BTN_WIDTH = 80, ACTION_BTN_HEIGHT = 50;
-	private static int MARGIN = 50;
 
 	private Player player;
 
@@ -43,8 +46,18 @@ public class HUD : MonoBehaviour {
 
 	public Button cellBtn;
 
+	private Camera camera_minimap;
+
 	// Use this for initialization
 	void Start () {
+
+		MINIMAP_WIDTH=(int)(0.16*WIDTH);
+		SELECTION_BAR_HEIGHT = (int)(0.2 * HEIGHT);
+		SELECTION_BAR_WIDTH = (int)(0.3*WIDTH);
+		ORDERS_BAR_HEIGHT = (int)(0.3*HEIGHT);
+		INFO_BAR_HEIGHT = SELECTION_BAR_HEIGHT;
+		INFO_BAR_WIDHT = (int)(0.3*WIDTH) ;
+
 		player = transform.root.GetComponent< Player >();
 		sun = GameObject.FindGameObjectWithTag ("Sun");
 
@@ -52,7 +65,6 @@ public class HUD : MonoBehaviour {
 
 		SetCursorState(CursorState.Select);
 		this.canvas = GameObject.FindObjectOfType<Canvas> ();
-
 	}
 	
 	void OnGUI () {
@@ -63,11 +75,11 @@ public class HUD : MonoBehaviour {
 			DrawInfoBar();
 			//DrawMouseCursor();
 			SwitchDayNight();
+			DrawMouseDragSelectionBox ();
 		}
 
-		DrawMouseDragSelectionBox ();
-	}
 
+	}
 	void Update(){
 		MouseDragSelection();
 	}
@@ -193,7 +205,7 @@ public class HUD : MonoBehaviour {
 		//not the top-left of the screen like the drawing coordinates do
 		Vector3 mousePos = Input.mousePosition;
 		bool insideWidth = mousePos.x >= 0 && mousePos.x <= Screen.width;
-		bool insideHeight = mousePos.y >= ORDERS_BAR_HEIGHT && mousePos.y <= Screen.height - RESOURCE_BAR_HEIGHT;
+		bool insideHeight = mousePos.y >= SELECTION_BAR_HEIGHT && mousePos.y <= Screen.height - RESOURCE_BAR_HEIGHT;
 		//bool insideHeight = mousePos.y >= 0 && mousePos.y <= Screen.height;
 		return insideWidth && insideHeight;
 	}

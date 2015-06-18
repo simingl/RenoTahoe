@@ -1,25 +1,15 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\WorldObject\Unit\Drone.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\RTS\HUD.cs">
     <Files>
-      <File FileName="Assets\RTS\HUD.cs" Line="184" Column="30" />
-      <File FileName="Assets\Scripts\Camera\ChangePOV.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Camera\CameraManagement.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Drone\DroneSelection.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\UserInput.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\WorldObject.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\Player.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\SceneManager.cs" Line="99" Column="1" />
-      <File FileName="Assets\WorldObject\Resource\WaterBottle.cs" Line="4" Column="25" />
-      <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="212" Column="8" />
-      <File FileName="Assets\WorldObject\Resource\Cellphone.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Camera\MinimapManagement.cs" Line="25" Column="1" />
+      <File FileName="Assets\RTS\HUD.cs" Line="13" Column="2" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\RTS\HUD.cs" line="14" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
-    <Watch file="Assets\RTS\UserInput.cs" line="24" offsetX="373" offsetY="391" expression="dayNightToggle" liveUpdate="False" />
-    <Watch file="Assets\WorldObject\Unit\Unit.cs" line="99" offsetX="517" offsetY="1666" expression="batterySlider" liveUpdate="False" />
-  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
