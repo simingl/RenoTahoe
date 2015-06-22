@@ -42,8 +42,6 @@ public class HUD : MonoBehaviour {
 	public Texture drone_2d;
 	public Texture drone_2d_h;
 
-	private Canvas canvas;
-
 	public Button cellBtn;
 
 	private Camera camera_minimap;
@@ -67,7 +65,6 @@ public class HUD : MonoBehaviour {
 		ResourceManager.StoreSelectBoxItems(selectBoxSkin);
 
 		SetCursorState(CursorState.Select);
-		this.canvas = GameObject.FindObjectOfType<Canvas> ();
 	}
 	
 	void OnGUI () {
@@ -93,8 +90,6 @@ public class HUD : MonoBehaviour {
 		dayNightToggle = GUI.Toggle(new Rect(5, 5, 100, 30), dayNightToggle, "Day/Night");
 		GUI.EndGroup();
 	}
-
-	Button btn = null;
 
 	private void DrawSelectionBar() {
 		GUI.skin = this.selectionBarSkin;

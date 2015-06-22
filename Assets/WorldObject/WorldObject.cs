@@ -73,7 +73,6 @@ public class WorldObject : MonoBehaviour {
 
 	public void CalculateBounds() {
 		selectionBounds = new Bounds(transform.position, Vector3.zero);
-
 		foreach(Renderer r in GetComponentsInChildren< Renderer >()) {
 			if(r.GetType().Name == "MeshRenderer" && r.ToString().IndexOf("group_top")>=0){
 				selectionBounds.Encapsulate(r.bounds);

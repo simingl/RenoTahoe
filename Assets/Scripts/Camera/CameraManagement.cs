@@ -9,7 +9,6 @@ public class CameraManagement : MonoBehaviour
 	private Transform player;           // Reference to the player's transform.
 	private Vector3 relCameraPos;       // The relative position of the camera from the player.
 	private float relCameraPosMag;      // The distance of the camera from the player.
-	private Vector3 newPos;             // The position the camera is trying to reach.
 
 	//For selection rendering
 	public Texture2D selectionHighlight = null;
@@ -100,7 +99,8 @@ public class CameraManagement : MonoBehaviour
 		transform.position = Vector3.Lerp(transform.position, abovePos, smooth * Time.deltaTime);
 		//transform.position = newPos;
 		// Make sure the camera is looking at the player.
-		SmoothLookAt();
+
+		//SmoothLookAt();
 	}
 	
 	
@@ -116,14 +116,12 @@ public class CameraManagement : MonoBehaviour
 				return false;
 		
 		// If we haven't hit anything or we've hit the player, this is an appropriate position.
-		newPos = checkPos;
 		return true;
 	}
 	
 	
 	void SmoothLookAt ()
 	{
-		return;
 		// Create a vector from the camera towards the player.
 		Vector3 relPlayerPosition = player.position - transform.position;
 		

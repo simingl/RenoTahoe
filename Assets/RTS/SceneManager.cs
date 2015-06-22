@@ -28,7 +28,7 @@ public class SceneManager : MonoBehaviour {
 		waterPoints = new Vector3[number];
 
 		for (int i= 0;i<number;i++) {
-			//treePoints[i] = generateRandomPosition(width, height);
+			treePoints[i] = generateRandomPosition(width, height);
 			firePoints[i] = generateRandomPosition(width, height);
 			cellPoints[i] = generateRandomPosition(width, height);
 			waterPoints[i]= generateRandomPosition(width, height);
@@ -62,7 +62,6 @@ public class SceneManager : MonoBehaviour {
 
 
 	private Vector3 generateRandomPosition(int w, int h){
-		float scale = 1.5f;
 		float x = Random.Range(-1*width, height);
 		float z = Random.Range(-1*width, height);
 

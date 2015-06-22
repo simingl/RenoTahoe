@@ -21,13 +21,7 @@ public class UserInput : MonoBehaviour {
 			MoveCameraByMouse ();
 			//RotateCamera ();
 			MouseActivity();
-
-
 		}
-	}
-
-	void OnGUI(){
-
 	}
 
 	void FixedUpdate(){
@@ -56,7 +50,6 @@ public class UserInput : MonoBehaviour {
 	}
 	
 	void MovingObject(Rigidbody rb, float jump, float vertical){
-		Vector3 oldPos = rb.position;
 		Vector3 newPos = rb.transform.forward * vertical*0.1f;
 		rb.transform.position += newPos;
 	}
