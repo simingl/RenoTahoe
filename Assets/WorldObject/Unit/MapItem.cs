@@ -20,8 +20,13 @@ public class MapItem : MonoBehaviour {
 		mapBounds.transform.parent = transform;
 		mapBounds.transform.localScale = Vector3.one*20;
 		mapBounds.transform.rotation = transform.rotation;
-		mapBounds.transform.RotateAround(mapBounds.transform.position, Vector3.forward, 90);
-		mapBounds.transform.RotateAround(mapBounds.transform.position, Vector3.left, 90);
+
+		Vector3 forwardaxis = transform.TransformDirection(Vector3.forward);
+		Vector3 leftaxis = transform.TransformDirection(Vector3.left);
+
+		mapBounds.transform.RotateAround(mapBounds.transform.position, forwardaxis, 90);
+		mapBounds.transform.RotateAround(mapBounds.transform.position, leftaxis, 90);
+
 		//mapBounds.transform.localRotation = new Quaternion (0,0,0,1);
 		mapBounds.transform.localPosition = new Vector3(0,0,0);
 		Renderer rend_mapBounds = mapBounds.GetComponent<Renderer>();

@@ -8,8 +8,7 @@ public class HUD : MonoBehaviour {
 	public GUISkin resourceSkin, ordersSkin, selectBoxSkin, selectionBarSkin,selectBtnSkin;
 	public GUISkin mouseCursorSkin;
 
-	private const int WIDTH = 1920;
-	private const int HEIGHT = 1024;
+
 
 	private const int RESOURCE_BAR_HEIGHT = 10;
 	private const int LINE_HEIGHT = 20;
@@ -18,10 +17,10 @@ public class HUD : MonoBehaviour {
 	private static int ACTION_BTN_WIDTH = 80, ACTION_BTN_HEIGHT = 50;
 	private static int MARGIN = 50;
 
-	private static int MINIMAP_WIDTH=(int)(0.2*Screen.width);
-	private static int SELECTION_BAR_HEIGHT = (int)(0.2*Screen.height), SELECTION_BAR_WIDTH = (int)(0.5*Screen.width);
-	private static int ORDERS_BAR_HEIGHT = (int)(0.3*Screen.height);
-	private static int INFO_BAR_HEIGHT = SELECTION_BAR_HEIGHT, INFO_BAR_WIDHT = (int)(0.45*Screen.width) ;
+	private static int MINIMAP_WIDTH, MINIMAP_HEIGHT;
+	private static int SELECTION_BAR_HEIGHT, SELECTION_BAR_WIDTH;
+	private static int ORDERS_BAR_HEIGHT;
+	private static int INFO_BAR_HEIGHT = SELECTION_BAR_HEIGHT, INFO_BAR_WIDHT ;
 
 	private Player player;
 
@@ -50,9 +49,12 @@ public class HUD : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		int WIDTH = Screen.width;
+		int HEIGHT = Screen.height;
 
 		MINIMAP_WIDTH=(int)(0.16*WIDTH);
-		SELECTION_BAR_HEIGHT = (int)(0.2 * HEIGHT);
+		MINIMAP_HEIGHT = (int)(0.33 * HEIGHT);
+		SELECTION_BAR_HEIGHT = (int)(0.16 * HEIGHT);
 		SELECTION_BAR_WIDTH = (int)(0.3*WIDTH);
 		ORDERS_BAR_HEIGHT = (int)(0.3*HEIGHT);
 		INFO_BAR_HEIGHT = SELECTION_BAR_HEIGHT;
@@ -207,6 +209,22 @@ public class HUD : MonoBehaviour {
 		bool insideWidth = mousePos.x >= 0 && mousePos.x <= Screen.width;
 		bool insideHeight = mousePos.y >= SELECTION_BAR_HEIGHT && mousePos.y <= Screen.height - RESOURCE_BAR_HEIGHT;
 		//bool insideHeight = mousePos.y >= 0 && mousePos.y <= Screen.height;
+		bool insideMinimap = this.MouseInBoundsMinimap ();
+		bool insideOrderBar = this.MouseInBoundsOrderBar ();
+		return insideWidth && insideHeight && !insideMinimap && !insideOrderBar;
+	}
+
+	private bool MouseInBoundsMinimap(){
+		Vector3 mousePos = Input.mousePosition;
+		bool insideWidth = mousePos.x >= 0 && mousePos.x <= MINIMAP_WIDTH;
+		bool insideHeight = mousePos.y >= 0 && mousePos.y < MINIMAP_HEIGHT;
+		return insideWidth && insideHeight;
+	}
+
+	private bool MouseInBoundsOrderBar(){
+		Vector3 mousePos = Input.mousePosition;
+		bool insideWidth = (mousePos.x >= Screen.width - MINIMAP_WIDTH- SELECTION_BAR_WIDTH - INFO_BAR_WIDHT) && mousePos.x <= Screen.width;
+		bool insideHeight = mousePos.y >= 0 && mousePos.y <ORDERS_BAR_HEIGHT;
 		return insideWidth && insideHeight;
 	}
 
