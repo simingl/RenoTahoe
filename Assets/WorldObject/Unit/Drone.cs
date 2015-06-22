@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using RTS;
 
 public class Drone : WorldObject {
-	public Color color;
+
+	public Color color;  
 	public Image batteryBarImage;
 
 
@@ -49,7 +50,8 @@ public class Drone : WorldObject {
 		base.Awake();
 
 		this.canvas = GameObject.FindObjectOfType<Canvas> ();
-
+		//Initialize to random color
+		color = new Color(Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f));  
 		//Create a battery bar from the prefab
 		batterySlider = (Slider)GameObject.Instantiate (batterySliderfabs, new Vector3(-10000f, -10000f, -10000f), transform.localRotation);
 		batterySlider.transform.SetParent (canvas.transform);
@@ -60,8 +62,7 @@ public class Drone : WorldObject {
 
 	protected override void Start () {
 		base.Start();
-		//Initialize to random color
-		color = new Color(Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f));  
+
 		//find the top mesh and render it
 		transform.FindChild ("mesh").FindChild ("group_top").GetComponent<Renderer>().material.color = this.color;
 

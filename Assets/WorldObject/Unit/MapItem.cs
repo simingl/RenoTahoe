@@ -4,12 +4,13 @@ using System.Collections;
 public class MapItem : MonoBehaviour {
 	public GameObject drone_map;
 
-	Renderer rend;
+	private Drone drone;
+	private GameObject mapBounds;
 	// Use this for initialization
 	void Start () {
-		rend = this.GetComponent<Renderer> ();
+		drone = this.GetComponent<Drone> ();
 
-		GameObject mapBounds = GameObject.Instantiate (drone_map);
+		mapBounds = GameObject.Instantiate (drone_map);
 
 		//GameObject mapBounds = GameObject.CreatePrimitive (PrimitiveType.Cube);
 		mapBounds.name = "MapBounds";
@@ -27,12 +28,17 @@ public class MapItem : MonoBehaviour {
 		mapBounds.transform.RotateAround(mapBounds.transform.position, forwardaxis, 90);
 		mapBounds.transform.RotateAround(mapBounds.transform.position, leftaxis, 90);
 
-		//mapBounds.transform.localRotation = new Quaternion (0,0,0,1);
 		mapBounds.transform.localPosition = new Vector3(0,0,0);
-		Renderer rend_mapBounds = mapBounds.GetComponent<Renderer>();
-		rend_mapBounds.material.color = Color.red;
+
+		Transform childtr = mapBounds.transform.GetChild(0);
+		MeshRenderer rend_mapBounds = childtr.gameObject.GetComponent<MeshRenderer>();
+		
+		rend_mapBounds.material.color = drone.color;
 	}
 
+	void Awake(){
+
+	}
 	private void SetLayerRecursively(GameObject obj,  int newLayer )
 	{
 		obj.layer = newLayer;
