@@ -27,12 +27,9 @@ public class UserInput : MonoBehaviour {
 	}
 
 	void OnGUI(){
-		if (player.getSelectedObjects ().Count > 0) {
-			foreach(WorldObject wo in player.getSelectedObjects ()){
-				wo.CalculateBounds();
-			}
-		}
+
 	}
+
 	void FixedUpdate(){
 		float h = Input.GetAxis ("Horizontal");
 		float v = Input.GetAxis ("Vertical");
@@ -45,6 +42,7 @@ public class UserInput : MonoBehaviour {
 		if (horizontal != 0f || vertical != 0f || jump != 0f) {
 			if(player.getSelectedObjects().Count > 0){
 				WorldObject wo = player.getSelectedObjects()[0];
+				wo.CalculateBounds();
 				Rigidbody rb = wo.gameObject.GetComponent<Rigidbody> ();
 				this.RotatingObject(rb, horizontal);
 				this.MovingObject(rb,jump, vertical);

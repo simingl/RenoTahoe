@@ -64,7 +64,6 @@ public class WorldObject : MonoBehaviour {
 	public void DrawSelection() {
 		GUI.skin = ResourceManager.SelectBoxSkin;
 		Rect selectBox = WorkManager.CalculateSelectionBox(selectionBounds, playingArea);
-		Debug.Log (selectBox.ToString() + playingArea.ToString() + selectionBounds.ToString());
 		GUI.BeginGroup(playingArea);
 		DrawSelectionBox(selectBox);
 		GUI.EndGroup();
