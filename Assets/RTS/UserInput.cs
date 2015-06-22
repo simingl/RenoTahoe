@@ -21,9 +21,47 @@ public class UserInput : MonoBehaviour {
 			MoveCameraByMouse ();
 			//RotateCamera ();
 			MouseActivity();
+
+
 		}
 	}
 
+	void OnGUI(){
+		if (player.getSelectedObjects ().Count > 0) {
+			foreach(WorldObject wo in player.getSelectedObjects ()){
+				wo.CalculateBounds();
+			}
+		}
+	}
+	void FixedUpdate(){
+		float h = Input.GetAxis ("Horizontal");
+		float v = Input.GetAxis ("Vertical");
+		float j = Input.GetAxis ("Jump");
+
+		MoveByInputAxis (h,j,v);
+	}
+	
+	void MoveByInputAxis(float horizontal, float jump, float vertical){
+		if (horizontal != 0f || vertical != 0f || jump != 0f) {
+			if(player.getSelectedObjects().Count > 0){
+				WorldObject wo = player.getSelectedObjects()[0];
+				Rigidbody rb = wo.gameObject.GetComponent<Rigidbody> ();
+				this.RotatingObject(rb, horizontal);
+				this.MovingObject(rb,jump, vertical);
+			}
+		}
+	}
+	
+	void RotatingObject(Rigidbody rb, float horizontal){
+		Vector3 leftaxis = rb.transform.TransformDirection(Vector3.up);
+		rb.transform.RotateAround(rb.transform.position, leftaxis, horizontal);
+	}
+	
+	void MovingObject(Rigidbody rb, float jump, float vertical){
+		Vector3 oldPos = rb.position;
+		Vector3 newPos = rb.transform.forward * vertical*0.1f;
+		rb.transform.position += newPos;
+	}
 	private void MoveCameraByMouse() {
 		float xpos = Input.mousePosition.x;
 		float ypos = Input.mousePosition.y;

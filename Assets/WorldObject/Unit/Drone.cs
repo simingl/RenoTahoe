@@ -34,8 +34,8 @@ public class Drone : WorldObject {
 	private GameObject toggleBatterySlider;
 	private Toggle firstViewCameraToggle;
 
-	public Slider batterySliderfabs;
-	private Slider batterySlider;
+//	public Slider batterySliderfabs;
+//	private Slider batterySlider;
 
 	private Stack<Cellphone> cellphones;
 	private Stack<WaterBottle> waters;
@@ -58,12 +58,12 @@ public class Drone : WorldObject {
 		//Initialize to random color
 		color = new Color(Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f));  
 		//Create a battery bar from the prefab
-		batterySlider = (Slider)GameObject.Instantiate (batterySliderfabs, new Vector3(-10000f, -10000f, -10000f), transform.localRotation);
-		batterySlider.transform.SetParent (canvas.transform);
-		batterySlider.transform.localScale = Vector3.one;
-		batterySlider.gameObject.SetActive(false);
+//		batterySlider = (Slider)GameObject.Instantiate (batterySliderfabs, new Vector3(-10000f, -10000f, -10000f), transform.localRotation);
+//		batterySlider.transform.SetParent (canvas.transform);
+//		batterySlider.transform.localScale = Vector3.one;
+//		batterySlider.gameObject.SetActive(false);
 
-		toggleBatterySlider = (GameObject)GameObject.Instantiate (toggleBatterySliderfabs, new Vector3(-10000f, -10000f, -10000f), transform.localRotation);
+		toggleBatterySlider = (GameObject)GameObject.Instantiate (toggleBatterySliderfabs, new Vector3(-10000f, -10000f, -10000f), new Quaternion(0,0,0,1));
 		toggleBatterySlider.transform.SetParent (canvas.transform);
 		toggleBatterySlider.transform.localScale = Vector3.one;
 
@@ -124,7 +124,7 @@ public class Drone : WorldObject {
 	
 	protected override void OnGUI() {
 		base.OnGUI();
-		batterySlider.value = this.currentBattery;
+//		batterySlider.value = this.currentBattery;
 		//batterySlider.gameObject.SetActive (currentlySelected);
 
 		Slider bs = toggleBatterySlider.transform.FindChild ("BatterySlider").gameObject.GetComponent<Slider>();
@@ -218,7 +218,7 @@ public class Drone : WorldObject {
 
 	private void drawBatteryBar(Rect rect){
 		Vector3 pos = Camera.main.WorldToScreenPoint (transform.position);
-		batterySlider.transform.position = new Vector3 (pos.x,pos.y+rect.height/2,0);
+//		batterySlider.transform.position = new Vector3 (pos.x,pos.y+rect.height/2,0);
 
 		toggleBatterySlider.transform.position = new Vector3 (pos.x,pos.y+rect.height/2+10,0);
 	}
