@@ -30,7 +30,7 @@ public class MapItem : MonoBehaviour {
 		//mapBounds.transform.localRotation = new Quaternion (0,0,0,1);
 		mapBounds.transform.localPosition = new Vector3(0,0,0);
 		Renderer rend_mapBounds = mapBounds.GetComponent<Renderer>();
-		//rend_mapBounds.material.color = rend.material.color;
+		rend_mapBounds.material.color = Color.red;
 	}
 
 	private void SetLayerRecursively(GameObject obj,  int newLayer )

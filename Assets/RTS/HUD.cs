@@ -211,7 +211,10 @@ public class HUD : MonoBehaviour {
 		//bool insideHeight = mousePos.y >= 0 && mousePos.y <= Screen.height;
 		bool insideMinimap = this.MouseInBoundsMinimap ();
 		bool insideOrderBar = this.MouseInBoundsOrderBar ();
-		return insideWidth && insideHeight && !insideMinimap && !insideOrderBar;
+
+		bool inBounds = insideWidth && insideHeight && !insideMinimap && !insideOrderBar;
+
+		return inBounds;
 	}
 
 	private bool MouseInBoundsMinimap(){
@@ -223,7 +226,7 @@ public class HUD : MonoBehaviour {
 
 	private bool MouseInBoundsOrderBar(){
 		Vector3 mousePos = Input.mousePosition;
-		bool insideWidth = (mousePos.x >= Screen.width - MINIMAP_WIDTH- SELECTION_BAR_WIDTH - INFO_BAR_WIDHT) && mousePos.x <= Screen.width;
+		bool insideWidth = (mousePos.x >= MINIMAP_WIDTH+ SELECTION_BAR_WIDTH + INFO_BAR_WIDHT) && mousePos.x <= Screen.width;
 		bool insideHeight = mousePos.y >= 0 && mousePos.y <ORDERS_BAR_HEIGHT;
 		return insideWidth && insideHeight;
 	}
