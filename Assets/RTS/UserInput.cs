@@ -20,7 +20,6 @@ public class UserInput : MonoBehaviour {
 		if (player.human && Camera.main) {
 			MoveCameraByMouse ();
 			//RotateCamera ();
-
 			MouseActivity();
 		}
 	}
@@ -89,6 +88,9 @@ public class UserInput : MonoBehaviour {
 		
 	}
 	private void MouseActivity() {
+		if (EventSystem.current.IsPointerOverGameObject ())
+			return;
+
 		if(Input.GetMouseButtonUp(0)) LeftMouseClick();
 		else if(Input.GetMouseButtonDown(1)) RightMouseClick();
 
