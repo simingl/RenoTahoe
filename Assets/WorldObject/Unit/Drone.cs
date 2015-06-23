@@ -76,6 +76,8 @@ public class Drone : WorldObject {
 		this.camera_hover_view = (Camera)(this.transform.FindChild ("camera_hover_view").gameObject).GetComponent<Camera>();
 
 		this.camera_1st_view.depth = -1;
+		this.camera_3rd_view.depth = -1;
+		this.camera_hover_view.depth = -1;
 	}
 
 	protected override void Start () {
@@ -134,13 +136,15 @@ public class Drone : WorldObject {
 		if (currentlySelected && player.GetComponent<ChangePOV> ().activeCamera == null) {
 			//batterySlider.gameObject.SetActive (true);
 			toggleBatterySlider.gameObject.SetActive (true);
-			if(this.firstViewCameraToggle.isOn){
-				this.camera_1st_view.depth = 2;
-			}
+			this.camera_1st_view.depth = 2;
+			this.camera_3rd_view.depth = 2;
+			this.camera_hover_view.depth = 2;
 		} else {
 			//batterySlider.gameObject.SetActive (false);
 			toggleBatterySlider.gameObject.SetActive (false);
 			this.camera_1st_view.depth = -1;
+			this.camera_3rd_view.depth = -1;
+			this.camera_hover_view.depth = -1;
 		}
 	}
 

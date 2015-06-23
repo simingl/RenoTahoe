@@ -15,12 +15,12 @@ public class HUD : MonoBehaviour {
 	private const int LINE_HEIGHT = 20;
 
 	private static int SELECT_BAR_BTN_HEIGHT = 42, SELECT_BAR_BTN_WIDTH = 86;
-	private static int ACTION_BTN_WIDTH = 80, ACTION_BTN_HEIGHT = 50;
+	private static int ACTION_BTN_WIDTH = 80, ACTION_BTN_HEIGHT = 30;
 	private static int MARGIN = 50;
 
 	private static int MINIMAP_WIDTH, MINIMAP_HEIGHT;
 	private static int SELECTION_BAR_HEIGHT, SELECTION_BAR_WIDTH;
-	private static int ORDERS_BAR_HEIGHT;
+	private static int ORDERS_BAR_WIDTH, ORDERS_BAR_HEIGHT;
 	private static int INFO_BAR_HEIGHT = SELECTION_BAR_HEIGHT, INFO_BAR_WIDHT ;
 
 	private Player player;
@@ -54,10 +54,12 @@ public class HUD : MonoBehaviour {
 		MINIMAP_WIDTH=(int)(0.16*WIDTH);
 		MINIMAP_HEIGHT = (int)(0.33 * HEIGHT);
 		SELECTION_BAR_HEIGHT = (int)(0.16 * HEIGHT);
-		SELECTION_BAR_WIDTH = (int)(0.3*WIDTH);
-		ORDERS_BAR_HEIGHT = (int)(0.3*HEIGHT);
+		SELECTION_BAR_WIDTH = (int)(0.25*WIDTH);
+		ORDERS_BAR_WIDTH = (int)(0.142*WIDTH);
+		ORDERS_BAR_HEIGHT = (int)(0.16*HEIGHT);
 		INFO_BAR_HEIGHT = SELECTION_BAR_HEIGHT;
-		INFO_BAR_WIDHT = (int)(0.3*WIDTH) ;
+		INFO_BAR_WIDHT = (int)(0.2*WIDTH) ;
+
 
 		player = transform.root.GetComponent< Player >();
 		sun = GameObject.FindGameObjectWithTag ("Sun");
@@ -164,7 +166,7 @@ public class HUD : MonoBehaviour {
 		GUI.color = Color.white;
 		GUI.skin = ordersSkin;
 		GUI.BeginGroup(new Rect(0, Screen.height - ORDERS_BAR_HEIGHT, Screen.width, ORDERS_BAR_HEIGHT));
-		GUI.Box(new Rect(offset,0,Screen.width,ORDERS_BAR_HEIGHT),"");
+		GUI.Box(new Rect(offset,0,ORDERS_BAR_WIDTH,ORDERS_BAR_HEIGHT),"");
 		GUI.EndGroup();
 
 		if(player.getSelectedObjects().Count>0) {

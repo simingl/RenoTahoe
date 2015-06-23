@@ -50,8 +50,15 @@ public class UserInput : MonoBehaviour {
 	}
 	
 	void MovingObject(Rigidbody rb, float jump, float vertical){
-		Vector3 newPos = rb.transform.forward * vertical*0.1f;
-		rb.transform.position += newPos;
+		if (vertical != 0) {
+			Vector3 newPos = rb.transform.forward * vertical * 0.1f;
+			rb.transform.position += newPos;
+		}
+
+		if (jump != 0) {
+			Vector3 newPos = rb.transform.up * jump * 0.1f;
+			rb.transform.position += newPos;
+		}
 	}
 	private void MoveCameraByMouse() {
 		float xpos = Input.mousePosition.x;
