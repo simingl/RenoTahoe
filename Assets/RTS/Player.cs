@@ -22,23 +22,26 @@ public class Player : MonoBehaviour {
 		sceneManager = GameObject.FindObjectOfType<SceneManager> ();
 	}
 
-
 	public void addSelectedObject(WorldObject obj){
-		obj.SetSelection(true);
 		if (!selectedObjects.Contains (obj)) {
 			selectedObjects.Add (obj);
 			this.audioManager.playUnitSelectSound();
+		}
+
+		if (obj == this.selectedObjects [0] && obj is Drone) {
+			Drone drone = (Drone)obj;
+			drone.SetPIPCameraActive(true);
 		}
 	}
 
 	public void setSelectedObject(WorldObject obj){
-		this.cleanSelectedObject ();
-
-		obj.SetSelection(true);
-		if (!selectedObjects.Contains (obj)) {
-			selectedObjects.Add (obj);
-			this.audioManager.playUnitSelectSound();
+		foreach(WorldObject selectedObj in selectedObjects){
+			if(selectedObj is Drone){
+				((Drone)selectedObj).SetPIPCameraActive(false);
+			}
 		}
+		this.cleanSelectedObject ();
+		this.addSelectedObject (obj);
 	}
 
 	public void toggleSelectObject(WorldObject obj){
@@ -49,14 +52,13 @@ public class Player : MonoBehaviour {
 		}
 	}
 	public void removeSelectedObject(WorldObject obj){
-		obj.SetSelection(false);
 		selectedObjects.Remove (obj);
+		if (obj is Drone) {
+			((Drone)obj).SetPIPCameraActive(false);
+		}
 	}
 
 	public void cleanSelectedObject(){
-		foreach (WorldObject obj in selectedObjects) {
-			obj.SetSelection(false);
-		}
 		selectedObjects.Clear ();
 	}
 
@@ -68,8 +70,7 @@ public class Player : MonoBehaviour {
 		return selectedObjects.Contains (obj);
 	}
 
-	// Update is called once per frame
-	void Update () {
-		
+	public bool isPIPActive(){
+		return this.changePOV.activeCamera == null && this.getSelectedObjects ().Count > 0;
 	}
 }

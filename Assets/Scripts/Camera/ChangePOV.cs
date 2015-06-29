@@ -19,9 +19,6 @@ public class ChangePOV : MonoBehaviour {
 		this.camMainRotation=this.inValidQuaternion;
 	}
 
-	void Awake(){
-	}
-
 	public void switchCamera(CameraType type){
 		if (type == CameraType.Camera_Main) {
 			if (activeCamera != null) {

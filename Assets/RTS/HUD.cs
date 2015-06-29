@@ -7,15 +7,12 @@ using RTS;
 
 public class HUD : MonoBehaviour {
 	public GUISkin resourceSkin, ordersSkin, selectBoxSkin, selectionBarSkin,selectBtnSkin;
-	public GUISkin mouseCursorSkin;
 
-
-
-	private const int RESOURCE_BAR_HEIGHT = 10;
+	private const int RESOURCE_BAR_HEIGHT = 30;
 	private const int LINE_HEIGHT = 20;
 
-	private static int SELECT_BAR_BTN_HEIGHT = 42, SELECT_BAR_BTN_WIDTH = 86;
-	private static int ACTION_BTN_WIDTH = 80, ACTION_BTN_HEIGHT = 30;
+	private static int SELECT_BAR_BTN_HEIGHT = 30, SELECT_BAR_BTN_WIDTH = 60;
+	private static int ACTION_BTN_WIDTH = 76, ACTION_BTN_HEIGHT = 30;
 	private static int MARGIN = 50;
 
 	private static int MINIMAP_WIDTH, MINIMAP_HEIGHT;
@@ -23,12 +20,19 @@ public class HUD : MonoBehaviour {
 	private static int ORDERS_BAR_WIDTH, ORDERS_BAR_HEIGHT;
 	private static int INFO_BAR_HEIGHT = SELECTION_BAR_HEIGHT, INFO_BAR_WIDHT ;
 
+	private static int RESOURCE_DAYNIGHT_TOGGLE_WIDTH = 100;
+	private static int RESOURCE_NAME_WIDTH = 200;
+	private static int RESOURCE_LOCATION_WIDTH = 100;
+	private static int RESOURCE_DRONE_HEIGHT_WIDTH = 100;
+	private static int RESOURCE_BATTERY_WIDTH = 100;
+	private static int RESOURCE_CELL_WIDTH = 100;
+	private static int RESOURCE_WATER_WIDTH = 100;
+
+	private const int ROW_MAX = 6;
+
 	private Player player;
 
 	public bool dayNightToggle = true;
-
-	public Texture2D activeCursor;
-	public Texture2D selectCursor, leftCursor, rightCursor, upCursor, downCursor, moveCursor;
 
 	private CursorState activeCursorState;
 
@@ -46,7 +50,6 @@ public class HUD : MonoBehaviour {
 
 	private Camera camera_minimap;
 
-	// Use this for initialization
 	void Start () {
 		int WIDTH = Screen.width;
 		int HEIGHT = Screen.height;
@@ -54,19 +57,24 @@ public class HUD : MonoBehaviour {
 		MINIMAP_WIDTH=(int)(0.16*WIDTH);
 		MINIMAP_HEIGHT = (int)(0.33 * HEIGHT);
 		SELECTION_BAR_HEIGHT = (int)(0.16 * HEIGHT);
-		SELECTION_BAR_WIDTH = (int)(0.25*WIDTH);
-		ORDERS_BAR_WIDTH = (int)(0.142*WIDTH);
+		SELECTION_BAR_WIDTH = (int)(0.29*WIDTH);
+		ORDERS_BAR_WIDTH = (int)(0.122*WIDTH);
 		ORDERS_BAR_HEIGHT = (int)(0.16*HEIGHT);
 		INFO_BAR_HEIGHT = SELECTION_BAR_HEIGHT;
-		INFO_BAR_WIDHT = (int)(0.2*WIDTH) ;
-
+		INFO_BAR_WIDHT = (int)(0.18*WIDTH) ;
 
 		player = transform.root.GetComponent< Player >();
 		sun = GameObject.FindGameObjectWithTag ("Sun");
 
-		ResourceManager.StoreSelectBoxItems(selectBoxSkin);
+		RESOURCE_DAYNIGHT_TOGGLE_WIDTH = (int)(0.3*WIDTH);;
+		RESOURCE_NAME_WIDTH = (int)(0.08*WIDTH);;
+		RESOURCE_LOCATION_WIDTH = (int)(0.1*WIDTH);
+		RESOURCE_DRONE_HEIGHT_WIDTH = (int)(0.06*WIDTH);
+		RESOURCE_BATTERY_WIDTH = (int)(0.07*WIDTH);
+		RESOURCE_CELL_WIDTH = (int)(0.04*WIDTH);
+		RESOURCE_WATER_WIDTH = (int)(0.06*WIDTH);
 
-		SetCursorState(CursorState.Select);
+		ResourceManager.StoreSelectBoxItems(selectBoxSkin);
 	}
 	
 	void OnGUI () {
@@ -75,13 +83,11 @@ public class HUD : MonoBehaviour {
 			DrawOrdersBar();
 			DrawResourceBar();
 			DrawInfoBar();
-			//DrawMouseCursor();
 			SwitchDayNight();
 			DrawMouseDragSelectionBox ();
 		}
-
-
 	}
+
 	void Update(){
 		MouseDragSelection();
 	}
@@ -89,7 +95,52 @@ public class HUD : MonoBehaviour {
 	private void DrawResourceBar() {
 		GUI.skin = resourceSkin;
 		GUI.BeginGroup(new Rect(0,0,Screen.width,RESOURCE_BAR_HEIGHT));
-		dayNightToggle = GUI.Toggle(new Rect(5, 5, 100, 30), dayNightToggle, "Day/Night");
+
+		int offset = 0;
+
+		offset += RESOURCE_DAYNIGHT_TOGGLE_WIDTH;
+		if (player.getSelectedObjects().Count >0) {
+			GUI.color = new Color(1.0f, 1.0f, 1.0f, 0.9f);
+			GUI.Box(new Rect(0,0,(0.75f*Screen.width), RESOURCE_BAR_HEIGHT),"");
+
+			WorldObject obj = player.getSelectedObjects()[0];
+			string name = obj.objectName; 
+			string cellinfo = "Cell * ";
+			string waterinfo = "Water * ";
+			string location = "Location: (" + (int)(obj.transform.position.x) + ", " + (int)(obj.transform.position.z) + ")";
+			string height = "Height: "+ (int)(obj.transform.position.y);
+			string battery = "";
+			if (obj is Drone) {
+				Drone unit = (Drone)obj;
+				battery += "Battery: " + (int)(unit.currentBattery)+"%";
+				cellinfo += unit.GetCellCount();
+				waterinfo += unit.GetWaterCount();
+			}
+			GUI.DrawTexture(new Rect(offset, 5 ,40,20), this.drone_2d);
+			offset +=40;
+			GUI.Label(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), name);
+			//DrawOutline(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), name, this.resourceSkin.GetStyle("large"), Color.white, Color.black);
+			offset += RESOURCE_NAME_WIDTH;
+
+			GUI.Label(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), location);
+			//DrawOutline(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), location, this.resourceSkin.GetStyle("large"), Color.white, Color.black);
+			offset += RESOURCE_LOCATION_WIDTH;
+
+			GUI.Label(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), height);
+			//DrawOutline(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), height, this.resourceSkin.GetStyle("large"), Color.white, Color.black);
+			offset += RESOURCE_DRONE_HEIGHT_WIDTH;
+
+			GUI.Label(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), battery);
+			//DrawOutline(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), battery, this.resourceSkin.GetStyle("large"), Color.yellow, Color.green);
+			offset += RESOURCE_BATTERY_WIDTH;
+
+			GUI.Label(new Rect(offset,5,Screen.width,ORDERS_BAR_HEIGHT), cellinfo);
+			//DrawOutline(new Rect(offset,5,Screen.width,ORDERS_BAR_HEIGHT), cellinfo, this.resourceSkin.GetStyle("large"), Color.yellow, Color.green);
+			offset += RESOURCE_CELL_WIDTH;
+			GUI.Label(new Rect(offset,5,Screen.width,ORDERS_BAR_HEIGHT), waterinfo);
+			//DrawOutline(new Rect(offset,5,Screen.width,ORDERS_BAR_HEIGHT), waterinfo, this.resourceSkin.GetStyle("large"), Color.yellow, Color.green);
+		}
+		dayNightToggle = GUI.Toggle(new Rect(5, 5, RESOURCE_DAYNIGHT_TOGGLE_WIDTH, RESOURCE_BAR_HEIGHT), dayNightToggle, "Day/Night");
 		GUI.EndGroup();
 	}
 
@@ -107,8 +158,11 @@ public class HUD : MonoBehaviour {
 
 				GUI.color = obj.color;
 
-				if(obj.currentlySelected){
-					if(GUI.Button(new Rect(MINIMAP_WIDTH+ i*SELECT_BAR_BTN_WIDTH,Screen.height - SELECTION_BAR_HEIGHT  ,SELECT_BAR_BTN_WIDTH,SELECT_BAR_BTN_HEIGHT), drone_2d_h)){
+				int row = i/ROW_MAX;
+				int col = i - row*ROW_MAX ;
+
+				if(obj.isSelected()){
+					if(GUI.Button(new Rect(MINIMAP_WIDTH+ col*SELECT_BAR_BTN_WIDTH,Screen.height - SELECTION_BAR_HEIGHT + row* SELECT_BAR_BTN_HEIGHT  ,SELECT_BAR_BTN_WIDTH,SELECT_BAR_BTN_HEIGHT), drone_2d_h)){
 						if(Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)){
 							this.player.toggleSelectObject(obj);
 						}else{
@@ -118,7 +172,7 @@ public class HUD : MonoBehaviour {
 					}
 				}
 				else{
-					if(GUI.Button(new Rect(MINIMAP_WIDTH+ i*SELECT_BAR_BTN_WIDTH,Screen.height - SELECTION_BAR_HEIGHT  ,SELECT_BAR_BTN_WIDTH,SELECT_BAR_BTN_HEIGHT), drone_2d)){
+					if(GUI.Button(new Rect(MINIMAP_WIDTH+ col*SELECT_BAR_BTN_WIDTH,Screen.height - SELECTION_BAR_HEIGHT + row* SELECT_BAR_BTN_HEIGHT ,SELECT_BAR_BTN_WIDTH,SELECT_BAR_BTN_HEIGHT), drone_2d)){
 						if(Input.GetKey(KeyCode.LeftControl)){
 							this.player.toggleSelectObject(obj);
 						}else{
@@ -166,7 +220,13 @@ public class HUD : MonoBehaviour {
 		GUI.color = Color.white;
 		GUI.skin = ordersSkin;
 		GUI.BeginGroup(new Rect(0, Screen.height - ORDERS_BAR_HEIGHT, Screen.width, ORDERS_BAR_HEIGHT));
-		GUI.Box(new Rect(offset,0,ORDERS_BAR_WIDTH,ORDERS_BAR_HEIGHT),"");
+
+		int orderWidth = Screen.width;
+		if (player.isPIPActive ()) {
+			orderWidth = ORDERS_BAR_WIDTH;
+		}
+
+		GUI.Box(new Rect(offset,0,orderWidth,ORDERS_BAR_HEIGHT),"");
 		GUI.EndGroup();
 
 		if(player.getSelectedObjects().Count>0) {
@@ -233,80 +293,6 @@ public class HUD : MonoBehaviour {
 		return new Rect(0, RESOURCE_BAR_HEIGHT, Screen.width - ORDERS_BAR_HEIGHT, Screen.height - RESOURCE_BAR_HEIGHT);
 	}
 
-	private void DrawMouseCursor() {
-		//bool mouseOverHud = !MouseInBounds() && activeCursorState != CursorState.PanRight && activeCursorState != CursorState.PanUp;
-		bool mouseOverHud = MouseInBounds();
-
-		if(!mouseOverHud) {
-			//Cursor.visible = true;
-		} else {
-			Cursor.visible = false;
-		
-			//Cursor.visible = false;
-			GUI.skin = mouseCursorSkin;
-			GUI.BeginGroup(new Rect(0,0,Screen.width,Screen.height));
-			UpdateCursorAnimation();
-			Rect cursorPosition = GetCursorDrawPosition();
-			GUI.Label(cursorPosition, activeCursor);
-			GUI.EndGroup();
-		}
-	}
-
-	private void UpdateCursorAnimation() {
-		//sequence animation for cursor (based on more than one image for the cursor)
-		//change once per second, loops through array of images
-		if (activeCursorState == CursorState.Move) {
-			activeCursor = moveCursor;
-		} else if (activeCursorState == CursorState.PanUp) {
-			activeCursor = upCursor;
-		} else if (activeCursorState == CursorState.PanDown) {
-			activeCursor = downCursor;
-		} else if (activeCursorState == CursorState.PanLeft) {
-			activeCursor = leftCursor;
-		} else if (activeCursorState == CursorState.PanRight) {
-			activeCursor = rightCursor;
-		}
-
-	}
-	private Rect GetCursorDrawPosition() {
-		//set base position for custom cursor image
-		float leftPos = Input.mousePosition.x;
-		float topPos = Screen.height - Input.mousePosition.y; //screen draw coordinates are inverted
-		//adjust position base on the type of cursor being shown
-		if(activeCursorState == CursorState.PanRight) leftPos = Screen.width - activeCursor.width;
-		else if(activeCursorState == CursorState.PanDown) topPos = Screen.height - activeCursor.height;
-		else if(activeCursorState == CursorState.Move || activeCursorState == CursorState.Select || activeCursorState == CursorState.Harvest) {
-			topPos -= activeCursor.height / 2;
-			leftPos -= activeCursor.width / 2;
-		}
-		return new Rect(leftPos, topPos, activeCursor.width, activeCursor.height);
-	}
-
-	public void SetCursorState(CursorState newState) {
-		activeCursorState = newState;
-		switch(newState) {
-		case CursorState.Select:
-			activeCursor = selectCursor;
-			break;
-		case CursorState.Move:
-			activeCursor = moveCursor;
-			break;
-		case CursorState.PanLeft:
-			activeCursor = leftCursor;
-			break;
-		case CursorState.PanRight:
-			activeCursor = rightCursor;
-			break;
-		case CursorState.PanUp:
-			activeCursor = upCursor;
-			break;
-		case CursorState.PanDown:
-			activeCursor = downCursor;
-			break;
-		default: break;
-		}
-	}
-
 	private void SwitchDayNight(){
 		sun.SetActive(this.dayNightToggle);
 	}
@@ -341,5 +327,23 @@ public class HUD : MonoBehaviour {
 
 	public static float InvertMouseY(float y){
 		return Screen.height - y;
+	}
+
+	public static void DrawOutline(Rect position, string text, GUIStyle style, Color outColor, Color inColor){
+		GUIStyle backupStyle = style;
+		style.normal.textColor = outColor;
+		position.x--;
+		GUI.Label(position, text, style);
+		position.x +=2;
+		GUI.Label(position, text, style);
+		position.x--;
+		position.y--;
+		GUI.Label(position, text, style);
+		position.y +=2;
+		GUI.Label(position, text, style);
+		position.y--;
+		style.normal.textColor = inColor;
+		GUI.Label(position, text, style);
+		style = backupStyle;
 	}
 }

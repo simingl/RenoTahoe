@@ -65,32 +65,19 @@ public class UserInput : MonoBehaviour {
 		float ypos = Input.mousePosition.y;
 		Vector3 movement = new Vector3(0,0,0);
 
-		bool mouseScroll = false;
-		
 		//horizontal camera movement
 		if(xpos >= 0 && xpos < ResourceManager.ScrollWidth) {
 			movement.x -= ResourceManager.ScrollSpeed;
-			player.hud.SetCursorState(CursorState.PanLeft);
-			mouseScroll = true;
 		} else if(xpos <= Screen.width && xpos > (Screen.width - ResourceManager.ScrollWidth)) {
 			movement.x += ResourceManager.ScrollSpeed;
-			player.hud.SetCursorState(CursorState.PanRight);
-			mouseScroll = true;
-		}
 
-		if(!mouseScroll) {
-			player.hud.SetCursorState(CursorState.Select);
 		}
 
 		//vertical camera movement
 		if(ypos >= 0 && ypos < ResourceManager.ScrollWidth) {
 			movement.z -= ResourceManager.ScrollSpeed;
-			player.hud.SetCursorState(CursorState.PanDown);
-			mouseScroll = true;
 		} else if(ypos <= Screen.height && ypos > Screen.height - ResourceManager.ScrollWidth) {
 			movement.z += ResourceManager.ScrollSpeed;
-			player.hud.SetCursorState(CursorState.PanUp);
-			mouseScroll = true;
 		}
 
 		//make sure movement is in the direction the camera is pointing
@@ -99,7 +86,11 @@ public class UserInput : MonoBehaviour {
 		movement.y = 0;
 
 		//away from ground movement
-		movement.y -= ResourceManager.ScrollSpeed * Input.GetAxis("Mouse ScrollWheel");
+		int amplifier = 1;
+		if(Input.GetKey(KeyCode.LeftShift)){
+			amplifier = 10;
+		}
+		movement.y -= ResourceManager.ScrollSpeed * Input.GetAxis("Mouse ScrollWheel") * amplifier;
 
 		//calculate desired camera position based on received input
 		Vector3 origin = Camera.main.transform.position;
@@ -129,8 +120,6 @@ public class UserInput : MonoBehaviour {
 
 		if(Input.GetMouseButtonUp(0)) LeftMouseClick();
 		else if(Input.GetMouseButtonDown(1)) RightMouseClick();
-
-		this.MouseHover ();
 	}
 
 	private void LeftMouseClick() {
@@ -176,23 +165,5 @@ public class UserInput : MonoBehaviour {
 		RaycastHit hit;
 		if(Physics.Raycast(ray, out hit)) return hit.point;
 		return ResourceManager.InvalidPosition;
-	}
-
-	private void MouseHover() {
-		if(player.hud.MouseInBounds()) {
-			GameObject hoverObject = FindHitObject();
-			if(hoverObject) {
-				//if(player.SelectedObject) player.SelectedObject.SetHoverState(hoverObject);
-				//else 
-				if(hoverObject.name != "Ground") {
-					Player owner = hoverObject.transform.root.GetComponent< Player >();
-					if(owner) {
-						Drone unit = hoverObject.transform.parent.GetComponent< Drone >();
-						Building building = hoverObject.transform.parent.GetComponent< Building >();
-						if(owner.username == player.username && (unit || building)) player.hud.SetCursorState(CursorState.Select);
-					}
-				}
-			}
-		}
 	}
 }

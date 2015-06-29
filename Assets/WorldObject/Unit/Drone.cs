@@ -30,12 +30,12 @@ public class Drone : WorldObject {
 	private Image battery;
 	private Canvas canvas;
 
-	public GameObject toggleBatterySliderfabs;
-	private GameObject toggleBatterySlider;
-	private Toggle firstViewCameraToggle;
+//	public GameObject toggleBatterySliderfabs;
+//	private GameObject toggleBatterySlider;
+//	private Toggle firstViewCameraToggle;
 
-//	public Slider batterySliderfabs;
-//	private Slider batterySlider;
+	public Slider batterySliderfabs;
+	private Slider batterySlider;
 
 	private Stack<Cellphone> cellphones;
 	private Stack<WaterBottle> waters;
@@ -58,18 +58,19 @@ public class Drone : WorldObject {
 		//Initialize to random color
 		color = new Color(Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f));  
 		//Create a battery bar from the prefab
-//		batterySlider = (Slider)GameObject.Instantiate (batterySliderfabs, new Vector3(-10000f, -10000f, -10000f), transform.localRotation);
-//		batterySlider.transform.SetParent (canvas.transform);
-//		batterySlider.transform.localScale = Vector3.one;
-//		batterySlider.gameObject.SetActive(false);
 
-		toggleBatterySlider = (GameObject)GameObject.Instantiate (toggleBatterySliderfabs, new Vector3(-10000f, -10000f, -10000f), new Quaternion(0,0,0,1));
-		toggleBatterySlider.transform.SetParent (canvas.transform);
-		toggleBatterySlider.transform.localScale = Vector3.one;
+		batterySlider = (Slider)GameObject.Instantiate (batterySliderfabs, new Vector3(-10000f, -10000f, -10000f), transform.localRotation);
+		batterySlider.transform.SetParent (canvas.transform);
+		batterySlider.transform.localScale = Vector3.one;
+		batterySlider.gameObject.SetActive(false);
 
-		firstViewCameraToggle = toggleBatterySlider.GetComponent<Toggle> ();
-		firstViewCameraToggle.isOn = false;
-		firstViewCameraToggle.onValueChanged.AddListener((value) => this.ToggleFirstCameraAction(value));
+//		toggleBatterySlider = (GameObject)GameObject.Instantiate (toggleBatterySliderfabs, new Vector3(-10000f, -10000f, -10000f), new Quaternion(0,0,0,1));
+//		toggleBatterySlider.transform.SetParent (canvas.transform);
+//		toggleBatterySlider.transform.localScale = Vector3.one;
+
+//		firstViewCameraToggle = toggleBatterySlider.GetComponent<Toggle> ();
+//		firstViewCameraToggle.isOn = false;
+//		firstViewCameraToggle.onValueChanged.AddListener((value) => this.ToggleFirstCameraAction(value));
 
 		this.camera_1st_view = (Camera)(this.transform.FindChild ("camera_1st_view").gameObject).GetComponent<Camera>();
 		this.camera_3rd_view = (Camera)(this.transform.FindChild ("camera_3rd_view").gameObject).GetComponent<Camera>();
@@ -78,6 +79,8 @@ public class Drone : WorldObject {
 		this.camera_1st_view.depth = -1;
 		this.camera_3rd_view.depth = -1;
 		this.camera_hover_view.depth = -1;
+
+		this.SetPIPCameraActive (false);
 	}
 
 	protected override void Start () {
@@ -107,7 +110,7 @@ public class Drone : WorldObject {
 
 		if (Input.GetMouseButtonUp (0) && player.hud.MouseInBounds() && !EventSystem.current.IsPointerOverGameObject ()) {
 			Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
-			camPos.y = CameraManagement.InvertMouseY(camPos.y);
+//			camPos.y = CameraManagement.InvertMouseY(camPos.y);
 			if(HUD.selection.Contains(camPos)){
 				this.player.addSelectedObject(this);
 			}
@@ -126,40 +129,32 @@ public class Drone : WorldObject {
 	
 	protected override void OnGUI() {
 		base.OnGUI();
-//		batterySlider.value = this.currentBattery;
-		//batterySlider.gameObject.SetActive (currentlySelected);
+		batterySlider.value = this.currentBattery;
+		batterySlider.gameObject.SetActive (player.isSelected(this));
 
-		Slider bs = toggleBatterySlider.transform.FindChild ("BatterySlider").gameObject.GetComponent<Slider>();
-		bs.value = this.currentBattery;
-		toggleBatterySlider.gameObject.SetActive (currentlySelected);
+//		Slider bs = toggleBatterySlider.transform.FindChild ("BatterySlider").gameObject.GetComponent<Slider>();
+//		bs.value = this.currentBattery;
+//		toggleBatterySlider.gameObject.SetActive (currentlySelected);
 
-		if (currentlySelected && player.GetComponent<ChangePOV> ().activeCamera == null) {
-			//batterySlider.gameObject.SetActive (true);
-			toggleBatterySlider.gameObject.SetActive (true);
+		if (base.isSelected() && player.GetComponent<ChangePOV> ().activeCamera == null) {
+			batterySlider.gameObject.SetActive (true);
+			//toggleBatterySlider.gameObject.SetActive (true);
 			this.camera_1st_view.depth = 2;
 			this.camera_3rd_view.depth = 2;
 			this.camera_hover_view.depth = 2;
 		} else {
-			//batterySlider.gameObject.SetActive (false);
-			toggleBatterySlider.gameObject.SetActive (false);
+			batterySlider.gameObject.SetActive (false);
+			//toggleBatterySlider.gameObject.SetActive (false);
 			this.camera_1st_view.depth = -1;
 			this.camera_3rd_view.depth = -1;
 			this.camera_hover_view.depth = -1;
 		}
 	}
 
-	public override void SetHoverState(GameObject hoverObject) {
-		base.SetHoverState(hoverObject);
-		//only handle input if owned by a human player and currently selected
-		if(player && player.human && currentlySelected) {
-			if(hoverObject.name == "Ground") player.hud.SetCursorState(CursorState.Move);
-		}
-	}
-
 	public override void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller) {
 		base.MouseClick(hitObject, hitPoint, controller);
 		//only handle input if owned by a human player and currently selected
-		if(player && player.human && currentlySelected && Input.GetMouseButton(1)) {
+		if(player && player.human && base.isSelected() && Input.GetMouseButton(1)) {
 			if(hitObject.name == "Ground" && hitPoint != ResourceManager.InvalidPosition) {
 				float x = hitPoint.x;
 				//makes sure that the unit stays on top of the surface it is on
@@ -222,9 +217,9 @@ public class Drone : WorldObject {
 
 	private void drawBatteryBar(Rect rect){
 		Vector3 pos = Camera.main.WorldToScreenPoint (transform.position);
-//		batterySlider.transform.position = new Vector3 (pos.x,pos.y+rect.height/2,0);
+		batterySlider.transform.position = new Vector3 (pos.x,pos.y+rect.height/2,0);
 
-		toggleBatterySlider.transform.position = new Vector3 (pos.x,pos.y+rect.height/2+10,0);
+		//toggleBatterySlider.transform.position = new Vector3 (pos.x,pos.y+rect.height/2+10,0);
 	}
 
 	private void CalculateBattery(){
@@ -311,12 +306,11 @@ public class Drone : WorldObject {
 		return waters.Count;
 	}
 
-	private void ToggleFirstCameraAction(bool value){
-		if (value) {
-			this.camera_1st_view.depth = 2;
-		} else {
-			this.camera_1st_view.depth = -1;
-		}
-
+	public void SetPIPCameraActive(bool isActive){
+		this.camera_1st_view.enabled = isActive;
+		this.camera_3rd_view.enabled = isActive;
+		this.camera_hover_view.enabled = isActive;
 	}
+
+
 }

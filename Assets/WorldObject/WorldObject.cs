@@ -9,7 +9,6 @@ public class WorldObject : MonoBehaviour {
 
 	protected Player player;
 	protected string[] actions = {};
-	public bool currentlySelected = false;
 
 	protected Bounds selectionBounds;
 
@@ -32,13 +31,9 @@ public class WorldObject : MonoBehaviour {
 	}
 	
 	protected virtual void OnGUI() {
-		if (currentlySelected && this.player.changePOV.activeCamera == null) {
+		if (this.isSelected() && this.player.changePOV.activeCamera == null) {
 			DrawSelection ();
 		}
-	}
-
-	public void SetSelection(bool selected) {
-		currentlySelected = selected;
 	}
 
 	public string[] GetActions() {
@@ -50,7 +45,7 @@ public class WorldObject : MonoBehaviour {
 
 	public virtual void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller) {
 		//only handle input if currently selected
-		if(currentlySelected && hitObject && hitObject.name != "Ground") {
+		if(this.isSelected() && hitObject && hitObject.name != "Ground") {
 			WorldObject worldObject = hitObject.GetComponent< WorldObject >();
 			//clicked on another selectable object
 			if(worldObject) ChangeSelection(worldObject, controller);
@@ -84,10 +79,7 @@ public class WorldObject : MonoBehaviour {
 		GUI.Box(selectBox, "");
 	}
 
-	public virtual void SetHoverState(GameObject hoverObject) {
-		//only handle input if owned by a human player and currently selected
-		if(player && player.human && currentlySelected) {
-			if(hoverObject.name != "Ground") player.hud.SetCursorState(CursorState.Select);
-		}
+	public bool isSelected(){
+		return player.isSelected (this);
 	}
 }

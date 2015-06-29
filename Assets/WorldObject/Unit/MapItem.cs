@@ -13,7 +13,7 @@ public class MapItem : MonoBehaviour {
 		mapBounds = GameObject.Instantiate (drone_map);
 
 		//GameObject mapBounds = GameObject.CreatePrimitive (PrimitiveType.Cube);
-		mapBounds.name = "MapBounds";
+		mapBounds.name = "MiniMapIcon";
 
 		this.SetLayerRecursively (mapBounds, 8);
 		//mapBounds.layer = 8;
