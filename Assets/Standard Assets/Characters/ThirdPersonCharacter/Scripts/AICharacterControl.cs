@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
@@ -22,10 +24,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 	        agent.updatePosition = true;
         }
 
+		private float timer = 0;
 
         // Update is called once per frame
         private void Update()
         {
+			timer += Time.deltaTime;
+
             if (target != null)
             {
 				//Vector3 dest = new Vector3(-100f,100f,0f);
@@ -39,8 +44,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
             else
             {
+				if((int)timer % 30 == 0){
+					Vector3 dest = this.generateRandomPosition(1000, 1000);
+					agent.SetDestination(dest);
+					character.Move(agent.desiredVelocity, false, false);
+				}
                 // We still need to call the character's move function, but we send zeroed input as the move param.
-                character.Move(Vector3.zero, false, false);
+                
             }
 
         }
@@ -50,5 +60,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         {
             this.target = target;
         }
+
+		private Vector3 generateRandomPosition(int w, int h){
+			float x = UnityEngine.Random.Range(-1*w, h);
+			float z = UnityEngine.Random.Range(-1*w, h);
+			
+			return new Vector3 (x,1,z);
+		}
     }
 }

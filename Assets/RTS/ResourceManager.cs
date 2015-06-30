@@ -13,8 +13,14 @@ namespace RTS {
 		}
 		public static float RotateSpeed { get { return 100; } }
 		public static int ScrollWidth { get { return 15; } }
-		public static float MinCameraHeight { get { return 10; } }
+
+		public static float MinCameraHeight { get { return 30; } }
 		public static float MaxCameraHeight { get { return 2000; } }
+		public static float MinCameraWidth { get { return -500; } }
+		public static float MaxCameraWidth { get { return 500; } }
+		public static float MinCameraLength { get { return -500; } }
+		public static float MaxCameraLength { get { return 500; } }
+
 		private static Vector3 invalidPosition = new Vector3(-99999, -99999, -99999);
 		public static Vector3 InvalidPosition { get { return invalidPosition; } }
 

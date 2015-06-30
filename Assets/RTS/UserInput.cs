@@ -70,7 +70,6 @@ public class UserInput : MonoBehaviour {
 			movement.x -= ResourceManager.ScrollSpeed;
 		} else if(xpos <= Screen.width && xpos > (Screen.width - ResourceManager.ScrollWidth)) {
 			movement.x += ResourceManager.ScrollSpeed;
-
 		}
 
 		//vertical camera movement
@@ -86,11 +85,8 @@ public class UserInput : MonoBehaviour {
 		movement.y = 0;
 
 		//away from ground movement
-		int amplifier = 1;
-		if(Input.GetKey(KeyCode.LeftShift)){
-			amplifier = 10;
-		}
-		movement.y -= ResourceManager.ScrollSpeed * Input.GetAxis("Mouse ScrollWheel") * amplifier;
+		//movement.y -= ResourceManager.ScrollSpeed * Input.GetAxis("Mouse ScrollWheel");
+		movement += Camera.main.transform.forward * ResourceManager.ScrollSpeed * Input.GetAxis("Mouse ScrollWheel");;
 
 		//calculate desired camera position based on received input
 		Vector3 origin = Camera.main.transform.position;
@@ -100,11 +96,10 @@ public class UserInput : MonoBehaviour {
 		destination.z += movement.z;
 
 		//limit away from ground movement to be between a minimum and maximum distance
-		if(destination.y > ResourceManager.MaxCameraHeight) {
-			destination.y = ResourceManager.MaxCameraHeight;
-		} else if(destination.y < ResourceManager.MinCameraHeight) {
-			destination.y = ResourceManager.MinCameraHeight;
-		}
+		destination.x = Mathf.Clamp(destination.x, ResourceManager.MinCameraWidth, ResourceManager.MaxCameraWidth);
+		destination.y = Mathf.Clamp(destination.y, ResourceManager.MinCameraHeight, ResourceManager.MaxCameraHeight);
+		destination.z = Mathf.Clamp(destination.z, ResourceManager.MinCameraLength, ResourceManager.MaxCameraLength);
+
 		//if a change in position is detected perform the necessary update
 		if(destination != origin) {
 			Camera.main.transform.position = Vector3.MoveTowards(origin, destination, Time.deltaTime * ResourceManager.ScrollSpeed);
