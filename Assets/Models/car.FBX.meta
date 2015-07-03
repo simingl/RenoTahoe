@@ -1,0 +1,133 @@
+fileFormatVersion: 2
+guid: 444e6b8db3c024343a210f2e110998f4
+timeCreated: 1435957296
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: 599_gtb
+    100002: 599_gtb_MeshPart0
+    100004: 599_gtb_MeshPart1
+    100006: 599_gtb_MeshPart2
+    100008: //RootNode
+    100010: tire01
+    100012: tire01_MeshPart0
+    100014: tire01_MeshPart1
+    100016: tire01_MeshPart2
+    100018: tire01_MeshPart3
+    100020: tire02
+    100022: tire02_MeshPart0
+    100024: tire02_MeshPart1
+    100026: tire02_MeshPart2
+    100028: tire02_MeshPart3
+    400000: 599_gtb
+    400002: 599_gtb_MeshPart0
+    400004: 599_gtb_MeshPart1
+    400006: 599_gtb_MeshPart2
+    400008: //RootNode
+    400010: tire01
+    400012: tire01_MeshPart0
+    400014: tire01_MeshPart1
+    400016: tire01_MeshPart2
+    400018: tire01_MeshPart3
+    400020: tire02
+    400022: tire02_MeshPart0
+    400024: tire02_MeshPart1
+    400026: tire02_MeshPart2
+    400028: tire02_MeshPart3
+    2300000: 599_gtb_MeshPart0
+    2300002: 599_gtb_MeshPart1
+    2300004: 599_gtb_MeshPart2
+    2300006: tire01_MeshPart0
+    2300008: tire01_MeshPart1
+    2300010: tire01_MeshPart2
+    2300012: tire01_MeshPart3
+    2300014: tire02_MeshPart0
+    2300016: tire02_MeshPart1
+    2300018: tire02_MeshPart2
+    2300020: tire02_MeshPart3
+    3300000: 599_gtb_MeshPart0
+    3300002: 599_gtb_MeshPart1
+    3300004: 599_gtb_MeshPart2
+    3300006: tire01_MeshPart0
+    3300008: tire01_MeshPart1
+    3300010: tire01_MeshPart2
+    3300012: tire01_MeshPart3
+    3300014: tire02_MeshPart0
+    3300016: tire02_MeshPart1
+    3300018: tire02_MeshPart2
+    3300020: tire02_MeshPart3
+    4300000: 599_gtb_MeshPart0
+    4300002: 599_gtb_MeshPart1
+    4300004: 599_gtb_MeshPart2
+    4300006: tire01_MeshPart0
+    4300008: tire01_MeshPart1
+    4300010: tire01_MeshPart2
+    4300012: tire01_MeshPart3
+    4300014: tire02_MeshPart0
+    4300016: tire02_MeshPart1
+    4300018: tire02_MeshPart2
+    4300020: tire02_MeshPart3
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
