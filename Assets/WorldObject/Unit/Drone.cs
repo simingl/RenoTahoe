@@ -139,9 +139,9 @@ public class Drone : WorldObject {
 		if (base.isSelected() && player.GetComponent<ChangePOV> ().activeCamera == null) {
 			batterySlider.gameObject.SetActive (true);
 			//toggleBatterySlider.gameObject.SetActive (true);
-			this.camera_1st_view.depth = 2;
-			this.camera_3rd_view.depth = 2;
-			this.camera_hover_view.depth = 2;
+//			this.camera_1st_view.depth = 2;
+//			this.camera_3rd_view.depth = 2;
+//			this.camera_hover_view.depth = 2;
 		} else {
 			batterySlider.gameObject.SetActive (false);
 			//toggleBatterySlider.gameObject.SetActive (false);
@@ -312,5 +312,21 @@ public class Drone : WorldObject {
 		this.camera_hover_view.enabled = isActive;
 	}
 
+	public void showPIP(int i){
+		if (i == 0) {
+			this.camera_1st_view.depth = 2;
+			this.camera_3rd_view.depth = -1;
+			this.camera_hover_view.depth = -1;
+		} else if (i == 1) {
+			this.camera_1st_view.depth = -1;
+			this.camera_3rd_view.depth = 2;
+			this.camera_hover_view.depth = -1;
 
+		} else if (i == 2) {
+			this.camera_1st_view.depth = -1;
+			this.camera_3rd_view.depth = -1;
+			this.camera_hover_view.depth = 2;
+
+		}
+	}
 }

@@ -28,6 +28,9 @@ public class HUD : MonoBehaviour {
 	private static int RESOURCE_CELL_WIDTH = 100;
 	private static int RESOURCE_WATER_WIDTH = 100;
 
+	private const int PIP_BTN_WIDTH = 20;
+	private const int PIP_BTN_HEIGHT = 18;
+
 	private const int ROW_MAX = 6;
 
 	private Player player;
@@ -54,11 +57,11 @@ public class HUD : MonoBehaviour {
 		int WIDTH = Screen.width;
 		int HEIGHT = Screen.height;
 
-		MINIMAP_WIDTH=(int)(0.16*WIDTH);
+		MINIMAP_WIDTH=(int)(0.2*WIDTH);
 		MINIMAP_HEIGHT = (int)(0.33 * HEIGHT);
 		SELECTION_BAR_HEIGHT = (int)(0.16 * HEIGHT);
 		SELECTION_BAR_WIDTH = (int)(0.29*WIDTH);
-		ORDERS_BAR_WIDTH = (int)(0.122*WIDTH);
+		ORDERS_BAR_WIDTH = (int)(0.131*WIDTH);
 		ORDERS_BAR_HEIGHT = (int)(0.16*HEIGHT);
 		INFO_BAR_HEIGHT = SELECTION_BAR_HEIGHT;
 		INFO_BAR_WIDHT = (int)(0.18*WIDTH) ;
@@ -83,6 +86,7 @@ public class HUD : MonoBehaviour {
 			DrawOrdersBar();
 			DrawResourceBar();
 			DrawInfoBar();
+			DrawPIPBar();
 			SwitchDayNight();
 			DrawMouseDragSelectionBox ();
 		}
@@ -101,7 +105,7 @@ public class HUD : MonoBehaviour {
 		offset += RESOURCE_DAYNIGHT_TOGGLE_WIDTH;
 		if (player.getSelectedObjects().Count >0) {
 			GUI.color = new Color(1.0f, 1.0f, 1.0f, 0.9f);
-			GUI.Box(new Rect(0,0,(0.75f*Screen.width), RESOURCE_BAR_HEIGHT),"");
+			GUI.Box(new Rect(0,0,Screen.width, RESOURCE_BAR_HEIGHT),"");
 
 			WorldObject obj = player.getSelectedObjects()[0];
 			string name = obj.objectName; 
@@ -193,6 +197,8 @@ public class HUD : MonoBehaviour {
 		GUI.Box(new Rect(MINIMAP_WIDTH + SELECTION_BAR_WIDTH,0,INFO_BAR_WIDHT,INFO_BAR_HEIGHT),"");
 		GUI.EndGroup();
 
+		return;
+
 		List<WorldObject> objs = player.getSelectedObjects();
 		for (int i =0; i<objs.Count; i++) {
 			WorldObject obj = objs [i];
@@ -269,8 +275,8 @@ public class HUD : MonoBehaviour {
 		//bool insideHeight = mousePos.y >= 0 && mousePos.y <= Screen.height;
 		bool insideMinimap = this.MouseInBoundsMinimap ();
 		bool insideOrderBar = this.MouseInBoundsOrderBar ();
-
-		bool inBounds = insideWidth && insideHeight && !insideMinimap && !insideOrderBar;
+		bool insidePIPCamera = this.MouseInBoundsPIP ();
+		bool inBounds = insideWidth && insideHeight && !insideMinimap && !insideOrderBar && !insidePIPCamera;
 
 		return inBounds;
 	}
@@ -288,6 +294,14 @@ public class HUD : MonoBehaviour {
 		bool insideHeight = mousePos.y >= 0 && mousePos.y <ORDERS_BAR_HEIGHT;
 		return insideWidth && insideHeight;
 	}
+
+	private bool MouseInBoundsPIP(){
+		Vector3 mousePos = Input.mousePosition;
+		bool insideWidth = (mousePos.x >= MINIMAP_WIDTH+ SELECTION_BAR_WIDTH + INFO_BAR_WIDHT+ORDERS_BAR_WIDTH) && mousePos.x <= Screen.width;
+		bool insideHeight = mousePos.y >= 0 && mousePos.y < MINIMAP_HEIGHT;
+		return insideWidth && insideHeight;
+	}
+
 
 	public Rect GetPlayingArea() {
 		return new Rect(0, RESOURCE_BAR_HEIGHT, Screen.width - ORDERS_BAR_HEIGHT, Screen.height - RESOURCE_BAR_HEIGHT);
@@ -325,6 +339,26 @@ public class HUD : MonoBehaviour {
 		}
 	}
 
+	private void DrawPIPBar(){
+		if (player.getSelectedObjects ().Count > 0) {
+			WorldObject wo = player.getSelectedObjects()[0];
+			if(wo is Drone){
+				Drone drone = (Drone)wo;
+				int offset_w = MINIMAP_WIDTH + ORDERS_BAR_WIDTH + INFO_BAR_WIDHT + SELECTION_BAR_WIDTH;
+				int offset_h = Screen.height - MINIMAP_HEIGHT;
+
+				if (GUI.Button (new Rect (offset_w, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), "1")) {
+					drone.showPIP(0);
+				}
+				if (GUI.Button (new Rect (offset_w + PIP_BTN_WIDTH, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), "2")) {
+					drone.showPIP(1);
+				}
+				if (GUI.Button (new Rect (offset_w + PIP_BTN_WIDTH * 2, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), "3")) {
+					drone.showPIP(2);
+				}
+			}
+		}
+	}
 	public static float InvertMouseY(float y){
 		return Screen.height - y;
 	}
