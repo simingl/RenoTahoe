@@ -61,10 +61,10 @@
      <Compile Include="Assets\Scripts\Camera\MinimapManagement.cs" />
      <Compile Include="Assets\Scripts\Drone\DroneController.cs" />
      <Compile Include="Assets\WorldObject\Building\Building.cs" />
+     <Compile Include="Assets\WorldObject\MapItem.cs" />
      <Compile Include="Assets\WorldObject\Resource\Cellphone.cs" />
      <Compile Include="Assets\WorldObject\Resource\WaterBottle.cs" />
      <Compile Include="Assets\WorldObject\Unit\Drone.cs" />
-     <Compile Include="Assets\WorldObject\Unit\MapItem.cs" />
      <Compile Include="Assets\WorldObject\Unit\NPC.cs" />
      <Compile Include="Assets\WorldObject\WorldObject.cs" />
      <Compile Include="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Shared\Scripts\HideMouse.cs" />

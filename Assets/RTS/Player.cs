@@ -31,6 +31,7 @@ public class Player : MonoBehaviour {
 		if (obj == this.selectedObjects [0] && obj is Drone) {
 			Drone drone = (Drone)obj;
 			drone.SetPIPCameraActive(true);
+			drone.showPIP(0);
 		}
 	}
 

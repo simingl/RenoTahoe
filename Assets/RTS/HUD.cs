@@ -53,6 +53,8 @@ public class HUD : MonoBehaviour {
 
 	private Camera camera_minimap;
 
+	public bool isSelectedByClick;
+
 	void Start () {
 		int WIDTH = Screen.width;
 		int HEIGHT = Screen.height;
@@ -69,7 +71,7 @@ public class HUD : MonoBehaviour {
 		player = transform.root.GetComponent< Player >();
 		sun = GameObject.FindGameObjectWithTag ("Sun");
 
-		RESOURCE_DAYNIGHT_TOGGLE_WIDTH = (int)(0.3*WIDTH);;
+		RESOURCE_DAYNIGHT_TOGGLE_WIDTH = (int)(0.54*WIDTH);;
 		RESOURCE_NAME_WIDTH = (int)(0.08*WIDTH);;
 		RESOURCE_LOCATION_WIDTH = (int)(0.1*WIDTH);
 		RESOURCE_DRONE_HEIGHT_WIDTH = (int)(0.06*WIDTH);

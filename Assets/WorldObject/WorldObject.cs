@@ -21,7 +21,6 @@ public class WorldObject : MonoBehaviour {
 	
 	protected virtual void Start () {
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
-//		player = transform.root.GetComponentInChildren< Player >();
 		this.playingArea = player.hud.GetPlayingArea ();
 	}
 	

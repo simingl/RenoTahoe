@@ -9,6 +9,8 @@ public class UserInput : MonoBehaviour {
 	private Player player;
 	private GameObject dayNightToggle;
 
+
+
 	// Use this for initialization
 	void Start () {
 		player = transform.root.GetComponent< Player >();
@@ -21,6 +23,7 @@ public class UserInput : MonoBehaviour {
 			MoveCameraByMouse ();
 			//RotateCamera ();
 			MouseActivity();
+			KeyboardActivity();
 		}
 	}
 
@@ -115,6 +118,16 @@ public class UserInput : MonoBehaviour {
 
 		if(Input.GetMouseButtonUp(0)) LeftMouseClick();
 		else if(Input.GetMouseButtonDown(1)) RightMouseClick();
+	}
+
+	private void KeyboardActivity() {
+		if (Input.GetKey (KeyCode.LeftControl) && Input.GetKey (KeyCode.LeftShift)) {
+			if(Input.GetMouseButtonUp(0)){
+				Vector3 hitPoint = FindHitPoint();
+				hitPoint.y = 20;
+				this.player.sceneManager.CreateDrone(hitPoint);
+			}
+		}
 	}
 
 	private void LeftMouseClick() {

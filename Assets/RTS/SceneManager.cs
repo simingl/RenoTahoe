@@ -3,21 +3,29 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class SceneManager : MonoBehaviour {
+	private const int MAX_DRONE = 16;
+
 	public GameObject tree;
 	public GameObject fire;
 	public GameObject cellphone;
 	public GameObject water;
+	public GameObject drone;
 
 	private List<WorldObject> allEntities = new List<WorldObject> ();
 
-	private int number = 10;
+	private int number = 5;
 
 	private Vector3[] treePoints;
 	private Vector3[] firePoints;
 	private Vector3[] cellPoints;
 	private Vector3[] waterPoints;
 
-	private int width = 10, height = 10;
+	private int width = 300, height = 300;
+
+	private Player player;
+	void Awake(){
+		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
+	}
 
 	void Start(){
 		Random.seed = 1;
@@ -129,5 +137,16 @@ public class SceneManager : MonoBehaviour {
 	public Drone[] getAllDrones(){
 		Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 		return player.GetComponentsInChildren<Drone> ();
+	}
+
+	public void CreateDrone(Vector3 position){
+		Drone[] drones = this.getAllDrones ();
+		if (drones.Length >= MAX_DRONE) {
+			return;
+		}
+
+		GameObject newdrone = (GameObject)Instantiate (drone, position, new Quaternion(0,0,0,1));
+		newdrone.transform.parent = this.player.transform;
+		newdrone.name = "Drone-" + drones.Length;
 	}
 }
