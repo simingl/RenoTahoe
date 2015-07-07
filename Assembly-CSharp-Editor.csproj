@@ -60,6 +60,10 @@
      <Compile Include="Assets\Editor\ImageEffects\SunShaftsEditor.cs" />
      <Compile Include="Assets\Editor\ImageEffects\TonemappingEditor.cs" />
      <Compile Include="Assets\Editor\ImageEffects\VignetteAndChromaticAberrationEditor.cs" />
+     <Compile Include="Assets\MAPNAV\Editor\GetDistInspector.cs" />
+     <Compile Include="Assets\MAPNAV\Editor\GetGeoInspector.cs" />
+     <Compile Include="Assets\MAPNAV\Editor\MapNavInspector.cs" />
+     <Compile Include="Assets\MAPNAV\Editor\SetGeoInspector.cs" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
      <None Include="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\NoiseEffectShaderRGB.shader" />

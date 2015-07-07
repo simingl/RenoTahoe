@@ -46,6 +46,18 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\MAPNAV\Demo Scenes\2D Scene\InOut.cs" />
+     <Compile Include="Assets\MAPNAV\Demo Scenes\2D Scene\Points.cs" />
+     <Compile Include="Assets\MAPNAV\Demo Scenes\2D Scene\TouchSound.cs" />
+     <Compile Include="Assets\MAPNAV\Demo Scenes\3D Scene\PlaySound.cs" />
+     <Compile Include="Assets\MAPNAV\Scripts\FixPlaneAspect.cs" />
+     <Compile Include="Assets\MAPNAV\Scripts\FixQuadAspect.cs" />
+     <Compile Include="Assets\MAPNAV\Scripts\GPS_Status.cs" />
+     <Compile Include="Assets\MAPNAV\Scripts\GetDistance.cs" />
+     <Compile Include="Assets\MAPNAV\Scripts\GetGeolocation.cs" />
+     <Compile Include="Assets\MAPNAV\Scripts\InitScreen.cs" />
+     <Compile Include="Assets\MAPNAV\Scripts\MapNav.cs" />
+     <Compile Include="Assets\MAPNAV\Scripts\SetGeolocation.cs" />
      <Compile Include="Assets\RTS\AudioManager.cs" />
      <Compile Include="Assets\RTS\Enums.cs" />
      <Compile Include="Assets\RTS\HUD.cs" />
