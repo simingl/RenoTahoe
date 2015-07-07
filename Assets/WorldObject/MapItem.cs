@@ -38,7 +38,7 @@ public class MapItem : MonoBehaviour {
 			mapBounds.transform.RotateAround (mapBounds.transform.position, forwardaxis, 90);
 			mapBounds.transform.RotateAround (mapBounds.transform.position, leftaxis, 90);
 			
-			mapBounds.transform.localPosition = new Vector3 (0, 50, 0);
+			mapBounds.transform.localPosition = new Vector3 (0, 0, 0);
 			
 			Transform childtr = mapBounds.transform.GetChild (0);
 			MeshRenderer rend_mapBounds = childtr.gameObject.GetComponent<MeshRenderer> ();
@@ -51,7 +51,7 @@ public class MapItem : MonoBehaviour {
 			mapBounds.GetComponent<Collider> ().enabled = false;
 
 			mapBounds.transform.parent = transform;
-			mapBounds.transform.localScale = Vector3.one * 8;
+			mapBounds.transform.localScale = Vector3.one ;
 			mapBounds.transform.localPosition = new Vector3 (0, 0, 0);
 			mapBounds.GetComponent<Renderer> ().material.color = Color.red;
 		} else if (worldObj is WaterBottle || worldObj is Cellphone) {
@@ -60,8 +60,8 @@ public class MapItem : MonoBehaviour {
 			mapBounds.GetComponent<Collider> ().enabled = false;
 			
 			mapBounds.transform.parent = transform;
-			mapBounds.transform.localScale = Vector3.one * 50;
-			mapBounds.transform.localPosition = new Vector3 (0, 50, 0);
+			mapBounds.transform.localScale = Vector3.one * 5;
+			mapBounds.transform.localPosition = new Vector3 (0, 0, 0);
 			mapBounds.GetComponent<Renderer> ().material.color = Color.green;
 		}
 		mapBounds.name = MAP_ITEM_NAME;

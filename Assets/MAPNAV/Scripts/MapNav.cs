@@ -118,7 +118,7 @@ public class MapNav : MonoBehaviour
 		//Please make sure your camera is tagged as "MainCamera" and your user visualization/character as "Player"
 		cam = Camera.main.transform;
 		mycam = Camera.main;
-		user = GameObject.FindGameObjectWithTag("Player").transform;
+		user = GameObject.FindGameObjectWithTag("Player").transform.FindChild("drone").transform;
 		
 		//Store most used components and values into variables for faster access.
 		mymap = transform;
@@ -202,56 +202,10 @@ public class MapNav : MonoBehaviour
 		//The "ready" variable will be true when the map texture has been successfully loaded.
 		ready = false; 
 		
-		//STARTING LOCATION SERVICES
-		// First, check if user has location service enabled
-		if (!Input.location.isEnabledByUser){
-			//This message prints to the Editor Console
-			print("Please enable location services and restart the App");
-			//You can use this "status" variable to show messages in your custom user interface (GUIText, etc.)
-			status = "Please enable location services\n and restart the App";
-			yield return new WaitForSeconds(4);
-			Application.Quit();
-		}
-
 		// Start service before querying location
 		Input.location.Start (3.0f, 3.0f); 
 		Input.compass.enabled = true;
-		print("Initializing Location Services..");
-		status = "Initializing Location Services..";
-
-		// Wait until service initializes
-		while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0) {
-			yield return new WaitForSeconds (1);
-			maxWait--;
-		}
-
-		// Service didn't initialize in 30 seconds
-		if (maxWait < 1) {
-			print("Unable to initialize location services.\nPlease check your location settings and restart the App");
-			status = "Unable to initialize location services.\nPlease check your location settings\n and restart the App";
-			yield return new WaitForSeconds(4);
-			Application.Quit();
-		}
-
-		// Connection has failed
-		if (Input.location.status == LocationServiceStatus.Failed) {
-			print("Unable to determine your location.\nPlease check your location setting and restart this App");
-			status = "Unable to determine your location.\nPlease check your location settings\n and restart this App";
-			yield return new WaitForSeconds(4);
-			Application.Quit();
-		}
-		
-		// Access granted and location value could be retrieved
-		else {
-			if(!mapDisabled){
-				print("GPS Fix established. Setting position..");
-				status = "GPS Fix established!\n Setting position ...";
-			}
-			else{
-				print("GPS Fix established.");
-				status = "GPS Fix established!";
-			}
-					
+			
 			if(!simGPS){
 				//Wait in order to find enough satellites and increase GPS accuracy
 				yield return new WaitForSeconds(initTime);
@@ -270,7 +224,7 @@ public class MapNav : MonoBehaviour
 			}  
 			else{
 				//Simulate initialization time
-				yield return new WaitForSeconds(initTime);
+				yield return new WaitForSeconds(0);
 				//Set Position
 				iniRef.x = ((fixLon*20037508.34f/180)/100);
 				iniRef.z = (float)(System.Math.Log(System.Math.Tan((90+fixLat)*System.Math.PI/360))/(System.Math.PI/180));
@@ -281,7 +235,7 @@ public class MapNav : MonoBehaviour
 				//Update Map for the current location
 				StartCoroutine(MapPosition());
 			}    
-		}
+
 
 		//Rescale map, set new camera height, and resize user pointer according to new zoom level
 		 StartCoroutine(ReScale()); 
@@ -377,7 +331,7 @@ public class MapNav : MonoBehaviour
 			// Wait until service initializes
 			int maxWait = 20;
 			while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0) {
-				yield return new WaitForSeconds (1);
+				yield return new WaitForSeconds (0);
 				maxWait--;
 			}
 
@@ -852,179 +806,7 @@ public class MapNav : MonoBehaviour
 
 	//SAMPLE USER INTERFACE. MODIFY OR EXTEND IF NECESSARY =============================================================
 	void OnGUI () {
-		GUI.skin.box.alignment = TextAnchor.MiddleCenter;
-		GUI.skin.box.font = Resources.Load("Neuropol") as Font;
-		GUI.skin.box.normal.background = Resources.Load("grey") as Texture2D;
-		if(Screen.width >= Screen.height){
-			GUI.skin.button.fontSize = (int)Mathf.Round(10*Screen.width/480);
-			GUI.skin.box.fontSize = (int)Mathf.Round(10*Screen.width/320);
-		}
-		else{	
-			GUI.skin.button.fontSize = (int) Mathf.Round(10*Screen.height/480);
-			GUI.skin.box.fontSize = (int) Mathf.Round(10*Screen.height/320);
-		}	
-		
-		//Display Updating Map message
-		if(ready && mapping){
-			GUI.Box (new Rect (0, screenY-screenY/12, screenX, screenY/12), "Updating...");
-		}
-		
-		//Display button to center camera at user position if GUI buttons are not enabled
-		if (ready && !mapping && !buttons && !centered){	
-			if (GUI.Button(new Rect(10*dot, screenY-74*dot, 64*dot, 64*dot), centerIcon)){
-				centering = true;
-				 StartCoroutine(MapPosition());
-				 StartCoroutine(ReScale());
-			}
-		}
-		
-		//Display surrounding tiles buttons 
-		if (ready && !mapping){	
-			if(tileTop){
-				GUI.DrawTexture(topCursorPos, topIcon);
-				if (GUI.Button(topCursorPos, "", "label")){
-					borderTile = 1;
-					 StartCoroutine(MapPosition());
-					 StartCoroutine(ReScale());
-				}
-			}
-			if(tileRight){
-				GUI.DrawTexture(rightCursorPos, rightIcon);
-				if (GUI.Button(rightCursorPos, "", "label")){
-					borderTile = 2;
-					 StartCoroutine(MapPosition());
-					 StartCoroutine(ReScale());
-				}
-			} 
-			if(tileBottom){
-				GUI.DrawTexture(bottomCursorPos, bottomIcon);
-				if (GUI.Button(bottomCursorPos, "", "label")){
-					borderTile = 3;
-					 StartCoroutine(MapPosition());
-					 StartCoroutine(ReScale());
-				}
-			} 
-			if(tileLeft){
-				GUI.DrawTexture(leftCursorPos, leftIcon);
-				if (GUI.Button(leftCursorPos, "", "label")){
-					borderTile = 4;
-					 StartCoroutine(MapPosition());
-					 StartCoroutine(ReScale());
-				}
-			} 
-		}
-		
-		if (ready && !mapping && buttons){
-			GUI.BeginGroup (new Rect (0, screenY-screenY/12, screenX, screenY/12));	
-			GUI.Box (new Rect (0, 0, screenX, screenY/12), "");
-			
-			//Map type toggle button
-			if (GUI.Button(new Rect(0, 0, screenX/5, screenY/12), maptype[index])){
-				if(mapping == false){
-					if(index < maptype.Length-1)
-						index = index+1;
-					else
-						index = 0;	
-					 StartCoroutine(MapPosition());
-					 StartCoroutine(ReScale());
-				}    
-			}
 
-			//3D Zoom Buttons
-			if(triDView){
-				//Zoom In button
-				if(GUI.Button(new Rect(2*screenX/5, 0, screenX/5, screenY/12), "zoom +")){
-					if(zoom < maxZoom){
-						zoom = zoom+1;
-						 StartCoroutine(MapPosition());
-						 StartCoroutine(ReScale());
-					}
-				}
-				//Zoom Out button
-				if(GUI.Button(new Rect(screenX/5, 0, screenX/5, screenY/12), "zoom -")){
-					if(zoom > minZoom){
-						zoom = zoom-1;
-						 StartCoroutine(MapPosition());
-						 StartCoroutine(ReScale());
-					}
-				}
-
-			//2D Zoom Buttons
-			}else{
-				//Zoom In button
-				if(GUI.RepeatButton(new Rect(2*screenX/5, 0, screenX/5, screenY/12), "zoom +")){
-					if(Input.GetMouseButton(0)){
-						currentOrtoSize = mycam.orthographicSize;
-						currentOrtoSize = Mathf.MoveTowards (currentOrtoSize, 3*targetOrtoSize/8, 5*32768*Time.deltaTime/Mathf.Pow(2, zoom));
-						mycam.orthographicSize = currentOrtoSize;
-						
-						//Clamp the camera position to avoid displaying any off the map areas
-						ClampCam();
-						CursorsOff();
-						
-						//Get touch drag speed for new zoom level
-						dragSpeed = 0.8f/9.594413f*mycam.orthographicSize;
-
-						//Increase zoom level
-						if(Mathf.Round(mycam.orthographicSize*1000.0f)/1000.0f <= Mathf.Round((3*targetOrtoSize/8)*1000.0f)/1000.0f && zoom<maxZoom){
-							if(!mapping){
-								zoom = zoom+1;
-								 StartCoroutine(MapPosition());
-								 StartCoroutine(ReScale());
-							}
-						}
-					}
-				}
-
-				//Zoom Out button
-				if (GUI.RepeatButton(new Rect(screenX/5, 0, screenX/5, screenY/12), "zoom -")){
-					if(Input.GetMouseButton(0)){
-						currentOrtoSize = mycam.orthographicSize;
-						currentOrtoSize = Mathf.MoveTowards (currentOrtoSize, targetOrtoSize, 5*32768*Time.deltaTime/Mathf.Pow(2, zoom));
-						mycam.orthographicSize = currentOrtoSize;
-						
-						//Center camera on map as we zoom out
-						currentPosition.x = cam.position.x;
-						currentPosition.x = Mathf.MoveTowards (currentPosition.x, mymap.position.x, 10*32768*Time.deltaTime/Mathf.Pow(2, zoom));
-						currentPosition.z = cam.position.z;
-						currentPosition.z = Mathf.MoveTowards (currentPosition.z, mymap.position.z, 10*32768*Time.deltaTime/Mathf.Pow(2, zoom));
-                        cam.position = new Vector3(currentPosition.x, cam.position.y, currentPosition.z);
-
-						//Clamp the camera position to avoid displaying any off the map areas
-						ClampCam();
-						CursorsOff();
-
-						//Get touch drag speed for new zoom level
-						dragSpeed = 0.8f/9.594413f*mycam.orthographicSize;
-							
-						//Decrease zoom level
-						if(Mathf.Round(mycam.orthographicSize*1000.0f)/1000.0f >= Mathf.Round(targetOrtoSize*1000.0f)/1000.0f && zoom>minZoom){
-							if(!mapping){
-							    zoom = zoom-1;
-							    StartCoroutine(MapPosition());
-								StartCoroutine(ReScale());
-							}
-						}
-					}
-				}	
-			}
-
-			//Update map and center user position 
-			if (GUI.Button(new Rect(3*screenX/5, 0, screenX/5, screenY/12), centre)){
-				centering = true;
-				StartCoroutine(MapPosition());
-				StartCoroutine(ReScale());
-			}
-
-			//Show GPS Status info. Please make sure the GPS_Status.cs script is attached and enabled in the map object.
-			if (GUI.Button(new Rect(4*screenX/5, 0, screenX/5, screenY/12), "info")){
-				if(info)
-					info = false;
-				else
-					info = true;
-			}
-			GUI.EndGroup ();
-		}
 	}
   
     //Translate decimal latitude to Degrees Minutes and Seconds
