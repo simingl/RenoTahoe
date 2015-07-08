@@ -660,7 +660,17 @@ public class MapNav : MonoBehaviour
 
 	//SAMPLE USER INTERFACE. MODIFY OR EXTEND IF NECESSARY =============================================================
 	void OnGUI () {
-
+		//Map type toggle button
+		if (GUI.Button(new Rect(0, 0, screenX/5, screenY/12), maptype[index])){
+			if(mapping == false){
+				if(index < maptype.Length-1)
+					index = index+1;
+				else
+					index = 0;	
+				StartCoroutine(MapPosition());
+				//StartCoroutine(ReScale());
+			}    
+		}
 	}
   
     //Translate decimal latitude to Degrees Minutes and Seconds
