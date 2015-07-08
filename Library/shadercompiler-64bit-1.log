@@ -41,3 +41,15 @@ Cmd: compileSnippet
   api=4 type=0 insize=934 outsize=4727 kw=POINT SHADOWS_OFF ok=1
 Cmd: compileSnippet
   api=4 type=1 insize=934 outsize=5889 kw=POINT SHADOWS_OFF ok=1
+Cmd: compileSnippet
+  api=4 type=0 insize=63517 outsize=4012 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=63517 outsize=2826 kw=DIRECTIONAL SHADOWS_OFF LIGHTMAP_OFF DIRLIGHTMAP_OFF DYNAMICLIGHTMAP_OFF ok=1
+Cmd: compileSnippet
+  api=4 type=0 insize=39955 outsize=3256 kw=POINT ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=39955 outsize=3078 kw=POINT ok=1
+Cmd: compileSnippet
+  api=4 type=0 insize=39955 outsize=3256 kw=DIRECTIONAL ok=1
+Cmd: compileSnippet
+  api=4 type=1 insize=39955 outsize=2298 kw=DIRECTIONAL ok=1

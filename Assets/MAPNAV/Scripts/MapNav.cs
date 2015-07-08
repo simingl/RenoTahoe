@@ -23,6 +23,7 @@ public class MapNav : MonoBehaviour
 	private float multiplier; 									//1 for a size=640x640 tile, 2 for size=1280*1280 tile, etc. Automatically set when selecting tile size
 	public string key = "Fmjtd%7Cluur29072d%2Cbg%3Do5-908s00";  //AppKey (API key) code obtained from your maps provider (MapQuest, Google, etc.). 
 																//Default MapQuest key for demo purposes only (with limitations). Please get your own key before you start yout project.															 
+	public string keyGoogle = "AIzaSyBUPUCJe4DptCMLSDvxOh427NSwyvRrzVo";
 	public string[] maptype;									//Array including available map types
 	public int[] mapSize;										//Array including available map sizes(pixels)
 	public int index;											//maptype array index. 
@@ -129,7 +130,7 @@ public class MapNav : MonoBehaviour
 		//Add possible values to maptype and mapsize arrays 
 		//ATENTTION: Modify if using a maps provider other than MapQuest Open Static Maps.
 		maptype = new string[]{"map", "sat", "hyb"};
-		mapSize = new int[]{640, 1280, 1920, 2560}; //in pixels
+		mapSize = new int[]{1280, 1920, 2560, 3840}; //in pixels
 		
 		//Set GUI "center" button label
 		if(triDView){
@@ -357,68 +358,31 @@ public class MapNav : MonoBehaviour
 		
 		
 		//Set target latitude and longitude
-		if(triDView){
-			if(simGPS){
-				fixLon = (18000*(user.position.x+iniRef.x))/20037508.34f;
-				fixLat = ((360/Mathf.PI)*Mathf.Atan(Mathf.Exp(0.00001567855943f*(user.position.z+iniRef.z))))-90;	
-			}else{
-				fixLon = loc.longitude;
-				fixLat = loc.latitude;
-			}
-		}else{
-			if(centering){
-				if(simGPS){
-					fixLon = (18000*(user.position.x+iniRef.x))/20037508.34f;
-					fixLat = ((360/Mathf.PI)*Mathf.Atan(Mathf.Exp(0.00001567855943f*(user.position.z+iniRef.z))))-90;	
-				}else{
-					fixLon = loc.longitude;
-					fixLat = loc.latitude;
-				}
-			}
-			else{
-				if(borderTile == 0){
-					fixLat = ((360/Mathf.PI)*Mathf.Atan(Mathf.Exp(0.00001567855943f*(cam.position.z+iniRef.z))))-90;	
-					fixLon = (18000*(cam.position.x+iniRef.x))/20037508.34f;
-				}
-				//North tile
-				if (borderTile == 1){
-					fixLat = ((360/Mathf.PI)*Mathf.Atan(Mathf.Exp(0.00001567855943f*(cam.position.z+3*mycam.orthographicSize/2+iniRef.z))))-90;	
-					fixLon = (18000 *(cam.position.x+iniRef.x))/20037508.34f;
-					borderTile=0;	
-					tileTop=false;
-				}
-				//East Tile
-				if (borderTile == 2){
-					fixLat = ((360/Mathf.PI)*Mathf.Atan(Mathf.Exp(0.00001567855943f*(cam.position.z+iniRef.z))))-90;	
-					fixLon = (18000*(cam.position.x+3*(screenX*mycam.orthographicSize/screenY)/2+iniRef.x))/20037508.34f;
-					borderTile = 0;
-				}
-				//South Tile
-				if (borderTile == 3){
-					fixLat = ((360/Mathf.PI)*Mathf.Atan(Mathf.Exp(0.00001567855943f*(cam.position.z-3*mycam.orthographicSize/2+iniRef.z))))-90;	
-					fixLon = (18000*(cam.position.x+iniRef.x))/20037508.34f;
-					borderTile=0;
-				}
-				//West Tile
-				if (borderTile == 4){
-					fixLat = ((360/Mathf.PI)*Mathf.Atan(Mathf.Exp(0.00001567855943f*(cam.position.z+iniRef.z))))-90;	
-					fixLon = (18000*(cam.position.x-3*(screenX*mycam.orthographicSize/screenY)/2+iniRef.x))/20037508.34f;
-					borderTile=0;
-				}
-			}
-		}
-		
+			
+		fixLon = (18000*(iniRef.x))/20037508.34f;
+		fixLat = ((360/Mathf.PI)*Mathf.Atan(Mathf.Exp(0.00001567855943f*(iniRef.z))))-90;	
+
 		//MAPQUEST=========================================================================================
 
 		//Build a valid MapQuest OpenMaps tile request for the current location
-		multiplier = mapSize[indexSize]/640.0f;  //Tile Size= 640*multiplier
+//		multiplier = mapSize[indexSize]/320.0f;  //Tile Size= 640*multiplier
 		//ATENTTION: If you want to implement maps from a different tiles provider, modify the following url accordingly to create a valid request
         //Example code can be found at http://recursivearts.com/mapnav/faq.html
 
-		url = "http://open.mapquestapi.com/staticmap/v4/getmap?key="+key+"&size="+mapSize[indexSize].ToString()+","+mapSize[indexSize].ToString()+"&zoom="+zoom+"&type="+maptype[index]+"&center="+fixLat+","+fixLon+"&scalebar=false";
-		tempLat = fixLat; 
-		tempLon = fixLon;
+//		url = "http://open.mapquestapi.com/staticmap/v4/getmap?key="+key+"&size="+mapSize[indexSize].ToString()+","+mapSize[indexSize].ToString()+"&zoom="+zoom+"&type="+maptype[index]+"&center="+fixLat+","+fixLon+"&scalebar=false";
+//		tempLat = fixLat; 
+//		tempLon = fixLon;
 
+
+		//Add possible values to maptype and mapsize arrays (GOOGLE)
+		maptype = new string[]{"satellite","roadmap","hybrid","terrain"};
+		mapSize = new int[]{640}; //in pixels
+		//GOOGLE ================================================================================
+		//Build a valid Google Maps tile request for the current location 
+		multiplier=10;
+		url= "http://maps.google.com/maps/api/staticmap?center="+fixLat+","+fixLon+"&zoom="+16+"&scale=2&size=1024x1024&format=jpg&maptype="+maptype[index]+"&sensor=false&key="+keyGoogle;
+		tempLat = fixLat;
+		tempLon = fixLon;
 		//=================================================================================================
 
 		//Proceed with download if a Wireless internet connection is available 
@@ -661,14 +625,13 @@ public class MapNav : MonoBehaviour
 	//SAMPLE USER INTERFACE. MODIFY OR EXTEND IF NECESSARY =============================================================
 	void OnGUI () {
 		//Map type toggle button
-		if (GUI.Button(new Rect(0, 0, screenX/5, screenY/12), maptype[index])){
+		if (GUI.Button(new Rect(200, 0, 100, 50), maptype[index])){
 			if(mapping == false){
 				if(index < maptype.Length-1)
 					index = index+1;
 				else
 					index = 0;	
 				StartCoroutine(MapPosition());
-				//StartCoroutine(ReScale());
 			}    
 		}
 	}
