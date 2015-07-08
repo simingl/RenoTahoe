@@ -363,27 +363,28 @@ public class MapNav : MonoBehaviour
 		fixLat = ((360/Mathf.PI)*Mathf.Atan(Mathf.Exp(0.00001567855943f*(iniRef.z))))-90;	
 
 		//MAPQUEST=========================================================================================
-
+		bool isGoogleMap = true;
 		//Build a valid MapQuest OpenMaps tile request for the current location
-//		multiplier = mapSize[indexSize]/320.0f;  //Tile Size= 640*multiplier
-		//ATENTTION: If you want to implement maps from a different tiles provider, modify the following url accordingly to create a valid request
-        //Example code can be found at http://recursivearts.com/mapnav/faq.html
+		if (!isGoogleMap) {
+			multiplier = mapSize [indexSize] / 640.0f;  //Tile Size= 640*multiplier
+			//ATENTTION: If you want to implement maps from a different tiles provider, modify the following url accordingly to create a valid request
+			//Example code can be found at http://recursivearts.com/mapnav/faq.html
 
-//		url = "http://open.mapquestapi.com/staticmap/v4/getmap?key="+key+"&size="+mapSize[indexSize].ToString()+","+mapSize[indexSize].ToString()+"&zoom="+zoom+"&type="+maptype[index]+"&center="+fixLat+","+fixLon+"&scalebar=false";
-//		tempLat = fixLat; 
-//		tempLon = fixLon;
-
-
-		//Add possible values to maptype and mapsize arrays (GOOGLE)
-		maptype = new string[]{"satellite","roadmap","hybrid","terrain"};
-		mapSize = new int[]{640}; //in pixels
-		//GOOGLE ================================================================================
-		//Build a valid Google Maps tile request for the current location 
-		multiplier=10;
-		url= "http://maps.google.com/maps/api/staticmap?center="+fixLat+","+fixLon+"&zoom="+16+"&scale=2&size=1024x1024&format=jpg&maptype="+maptype[index]+"&sensor=false&key="+keyGoogle;
-		tempLat = fixLat;
-		tempLon = fixLon;
-		//=================================================================================================
+			url = "http://open.mapquestapi.com/staticmap/v4/getmap?key=" + key + "&size=" + mapSize [indexSize].ToString () + "," + mapSize [indexSize].ToString () + "&zoom=" + zoom + "&type=" + maptype [index] + "&center=" + fixLat + "," + fixLon + "&scalebar=false";
+			tempLat = fixLat; 
+			tempLon = fixLon;
+		} else {
+			//Add possible values to maptype and mapsize arrays (GOOGLE)
+			maptype = new string[]{"satellite","roadmap","hybrid"};
+			mapSize = new int[]{640}; //in pixels
+			//GOOGLE ================================================================================
+			//Build a valid Google Maps tile request for the current location 
+			multiplier = 10;
+			url = "http://maps.google.com/maps/api/staticmap?center=" + fixLat + "," + fixLon + "&zoom=" + 16 + "&scale=2&size=1024x1024&format=jpg&maptype=" + maptype [index] + "&sensor=false&key=" + keyGoogle;
+			tempLat = fixLat;
+			tempLon = fixLon;
+			//=================================================================================================
+		}
 
 		//Proceed with download if a Wireless internet connection is available 
 		if(Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork){
