@@ -9,8 +9,6 @@ public class UserInput : MonoBehaviour {
 	private Player player;
 	private GameObject dayNightToggle;
 
-
-
 	// Use this for initialization
 	void Start () {
 		player = transform.root.GetComponent< Player >();
@@ -82,30 +80,23 @@ public class UserInput : MonoBehaviour {
 			movement.z += ResourceManager.ScrollSpeed;
 		}
 
-		//make sure movement is in the direction the camera is pointing
-		//but ignore the vertical tilt of the camera to get sensible scrolling
-		movement = Camera.main.transform.TransformDirection(movement);
-		movement.y = 0;
-
 		//away from ground movement
-		//movement.y -= ResourceManager.ScrollSpeed * Input.GetAxis("Mouse ScrollWheel");
-		movement += Camera.main.transform.forward * ResourceManager.ScrollSpeed * Input.GetAxis("Mouse ScrollWheel");;
+		Camera.main.orthographicSize -= ResourceManager.ScrollSpeed * Input.GetAxis("Mouse ScrollWheel");
+		//movement += Camera.main.transform.forward * ResourceManager.ScrollSpeed * Input.GetAxis("Mouse ScrollWheel");;
 
 		//calculate desired camera position based on received input
 		Vector3 origin = Camera.main.transform.position;
 		Vector3 destination = origin;
 		destination.x += movement.x;
-		destination.y += movement.y;
 		destination.z += movement.z;
 
 		//limit away from ground movement to be between a minimum and maximum distance
 		destination.x = Mathf.Clamp(destination.x, ResourceManager.MinCameraWidth, ResourceManager.MaxCameraWidth);
-		destination.y = Mathf.Clamp(destination.y, ResourceManager.MinCameraHeight, ResourceManager.MaxCameraHeight);
 		destination.z = Mathf.Clamp(destination.z, ResourceManager.MinCameraLength, ResourceManager.MaxCameraLength);
 
 		//if a change in position is detected perform the necessary update
 		if(destination != origin) {
-			Camera.main.transform.position = Vector3.MoveTowards(origin, destination, Time.deltaTime * ResourceManager.ScrollSpeed);
+			Camera.main.transform.position = Vector3.MoveTowards(origin, destination, Time.deltaTime * ResourceManager.ScrollSpeed*10);
 		}
 	}
 	
@@ -124,7 +115,7 @@ public class UserInput : MonoBehaviour {
 		if (Input.GetKey (KeyCode.LeftControl) && Input.GetKey (KeyCode.LeftShift)) {
 			if(Input.GetMouseButtonUp(0)){
 				Vector3 hitPoint = FindHitPoint();
-				hitPoint.y = 20;
+				hitPoint.y = 2;
 				this.player.sceneManager.CreateDrone(hitPoint);
 			}
 		}

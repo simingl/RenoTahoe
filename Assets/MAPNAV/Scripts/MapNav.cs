@@ -192,11 +192,7 @@ public class MapNav : MonoBehaviour
 			mycam.orthographic = true;
 			mycam.nearClipPlane = 0.1f;
 			mycam.farClipPlane = cam.position.y+1;	
-			if(screenY >= screenX){
-				mycam.orthographicSize = mymap.localScale.z*5.0f;
-			}else{
-				mycam.orthographicSize = (screenY/screenX)*mymap.localScale.x*5.0f;		
-			}
+
 		}
 		
 		//The "ready" variable will be true when the map texture has been successfully loaded.
@@ -238,20 +234,20 @@ public class MapNav : MonoBehaviour
 
 
 		//Rescale map, set new camera height, and resize user pointer according to new zoom level
-		 StartCoroutine(ReScale()); 
+		ReScale(); 
 
 		//Set player's position using new location data (every "updateRate" seconds)
 		//Default value for updateRate is 0.1. Increase if necessary to improve performance
-		InvokeRepeating("MyPosition", 1, updateRate); 
+		//InvokeRepeating("MyPosition", 1, updateRate); 
 
 		//Read incoming compass data (every 0.1s)
-		InvokeRepeating("Orientate", 1, 0.1f);
+		//InvokeRepeating("Orientate", 1, 0.1f);
 		
 		//Get altitude and horizontal accuracy readings using new location data (Default: every 2s)
-		InvokeRepeating("AccuracyAltitude", 1, 2);
+		//InvokeRepeating("AccuracyAltitude", 1, 2);
 		
 		//Auto-Center Map on 2D View Mode 
-		InvokeRepeating("Check", 1, 0.2f);
+		//InvokeRepeating("Check", 1, 0.2f);
 	}
 
 
@@ -357,7 +353,7 @@ public class MapNav : MonoBehaviour
 		//Get last available location data
 		loc = Input.location.lastData;
 		//Make player invisible while updating map
-		user.gameObject.GetComponent<Renderer>().enabled = false;
+		//user.gameObject.GetComponent<Renderer>().enabled = false;
 		
 		
 		//Set target latitude and longitude
@@ -433,10 +429,6 @@ public class MapNav : MonoBehaviour
 		else if(Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork){
 			 StartCoroutine(Online());
 		}
-		//No internet connection is available. Switching to Offline mode.	 
-		else{
-			Offline();
-		}	
 	}
 
 	//ONLINE MAP DOWNLOAD
@@ -458,7 +450,7 @@ public class MapNav : MonoBehaviour
 				print("Map Ready!");
 				//use the status string variable to print messages to your own user interface (GUIText, etc.)
 				status = "Updating map 100 %\nMap Ready!";
-				yield return new WaitForSeconds (0.5f);
+				yield return new WaitForSeconds (0);
 				maprender.material.mainTexture = null;
 				Texture2D tmp;
 				tmp = new Texture2D(1280, 1280, TextureFormat.RGB24, false);
@@ -470,30 +462,18 @@ public class MapNav : MonoBehaviour
 				print("Map Error:"+www.error);
 				//use the status string variable to print messages to your own user interface (GUIText, etc.)
 				status = "Map Error:"+www.error;
-				yield return new WaitForSeconds (1);
+				yield return new WaitForSeconds (0);
 				maprender.material.mainTexture = null;
-				Offline();
 			}
 			maprender.enabled = true;
 		}
-		ReSet();
-		user.gameObject.GetComponent<Renderer>().enabled = true;
+		//ReSet();
+		//user.gameObject.GetComponent<Renderer>().enabled = true;
 		ready = true;
 		mapping = false;
 		
 	}
 
-	//USING OFFLINE BACKGROUND TEXTURE
-	void Offline(){
-		if(!mapDisabled){
-			maprender.material.mainTexture=Resources.Load("offline") as Texture2D;
-			maprender.enabled = true;
-		}
-		ReSet();
-		ready = true;
-		mapping = false;
-		user.gameObject.GetComponent<Renderer>().enabled = true;
-	}
 
 	//Re-position map and camera using updated data
 	void ReSet(){
@@ -537,59 +517,11 @@ public class MapNav : MonoBehaviour
 		
 		//2D View. Set camera position 
 		else{
-			if(firstTime){
-				cam.localEulerAngles = new Vector3(90, 0, 0);
-				if(screenY >= screenX){
-					mycam.orthographicSize = mymap.localScale.z*5.0f*0.75f;
-				}else{
-					mycam.orthographicSize = (screenY/screenX)*mymap.localScale.x*5.0f*0.75f;		
-				}
-			}
-			firstTime = false;
-
-			if(screenY >= screenX){
-				targetOrtoSize = Mathf.Round(mymap.localScale.z*5.0f*100.0f)/100.0f;
-			}else{
-				targetOrtoSize = Mathf.Round((screenY/screenX)*mymap.localScale.x*5.0f*100.0f)/100.0f;		
-			}
-			
-			while(Mathf.Abs(mycam.orthographicSize-targetOrtoSize*0.625f) > 0.01f){
-			currentOrtoSize = mycam.orthographicSize;
-			currentOrtoSize = Mathf.MoveTowards (currentOrtoSize, targetOrtoSize*0.625f, 2.5f*32768*Time.deltaTime/Mathf.Pow(2, zoom));
-			mycam.orthographicSize = currentOrtoSize;
 			yield return null;
-			}
-			
-			//Drag to pan speed according to zoom level
-			dragSpeed = 0.8f/9.594413f*mycam.orthographicSize;
 		}
 	}
 
 	void Update(){
-
-		//Rename GUI "center" button label
-		if(!triDView){
-			if(cam.position.x != user.position.x || cam.position.z != user.position.z)
-				centre ="center";
-			else
-				centre ="refresh";
-		}
-		
-		//User pointer speed
-		if(realSpeed){
-			speed = userSpeed*0.05f;
-		}
-		else{
-			speed = userSpeed*10000/(Mathf.Pow(2, zoom)*1.0f);
-		}
-		
-		//3D-2D View Camera Toggle (use only while game is stopped) 
-		if(triDView && !freeCam){
-			cam.parent = user;
-			if(ready)
-				cam.LookAt(user);
-		}	
-		
 		if(ready){	
 			if(!simGPS){
 				//Smoothly move pointer to updated position
@@ -626,85 +558,7 @@ public class MapNav : MonoBehaviour
 			if(www != null)
                 download = www.progress;
 		}	
-		
-		//Enable/Disable map renderer 
-		if(mapDisabled)
-			maprender.enabled = false;
-		else
-			maprender.enabled = true;
-		
-		//PINCH TO ZOOM ================================================================================================
-		if(pinchToZoom){
-			if(Input.touchCount == 2 && mapping == false){
-				touch = Input.GetTouch(0);
-				touch2 = Input.GetTouch(1);
-				
-				if(touch.phase == TouchPhase.Began || touch2.phase == TouchPhase.Began){
-					focusScreenPoint = (touch.position+touch2.position)/2;
-					focusWorldPoint = mycam.ScreenToWorldPoint(new Vector3(focusScreenPoint.x, focusScreenPoint.y, cam.position.y));
-				}
-				
-				if(touch.phase == TouchPhase.Moved && touch2.phase == TouchPhase.Moved){
-					touchZoom = true;
-					curDist = touch.position-touch2.position;
-					prevDist = (touch.position-touch.deltaPosition)-(touch2.position-touch2.deltaPosition);
-					actualDist = prevDist.magnitude-curDist.magnitude;
-				}else{
-					touchZoom = false;
-				}
-			}
-		}
-		if(touchZoom){								
-																	
-			//Modify camera orthographic size
-			mycam.orthographicSize = mycam.orthographicSize+actualDist*Time.deltaTime*mycam.orthographicSize/30;
-			mycam.orthographicSize = Mathf.Clamp(mycam.orthographicSize, 3*targetOrtoSize/8, targetOrtoSize);
-			
-			if(actualDist < 0){
-				currentPosition.x = cam.position.x;
-				currentPosition.x = Mathf.MoveTowards (currentPosition.x, focusWorldPoint.x, -actualDist*0.7f*32768*Time.deltaTime/Mathf.Pow(2, zoom));
-				currentPosition.z = cam.position.z;
-				currentPosition.z = Mathf.MoveTowards (currentPosition.z, focusWorldPoint.z, -actualDist*0.7f*32768*Time.deltaTime/Mathf.Pow(2, zoom));
-				cam.position = new Vector3(currentPosition.x, cam.position.y, currentPosition.z);
-			}
-			else if (actualDist == 0){
-				//Do nothing
-			}
-			else{
-				currentPosition.x = cam.position.x;
-				currentPosition.x = Mathf.MoveTowards (currentPosition.x, mymap.position.x, actualDist*0.7f*32768*Time.deltaTime/Mathf.Pow(2, zoom));
-				currentPosition.z = cam.position.z;
-				currentPosition.z = Mathf.MoveTowards (currentPosition.z, mymap.position.z, actualDist*0.7f*32768*Time.deltaTime/Mathf.Pow(2, zoom));
-                cam.position = new Vector3(currentPosition.x, cam.position.y, currentPosition.z);
-			}
-			
-			//Get touch drag speed for new zoom level
-			dragSpeed = 0.8f/9.594413f*mycam.orthographicSize;
-			
-			//Clamp the camera position to avoid displaying any off the map areas
-			ClampCam();
-			CursorsOff();
-					
-			//Decrease zoom level
-			if(Mathf.Round(mycam.orthographicSize*1000.0f)/1000.0f >= Mathf.Round(targetOrtoSize*1000.0f)/1000.0f && zoom>minZoom){
-				if(!mapping){
-					touchZoom = false;
-					zoom = zoom-1;
-					 StartCoroutine(MapPosition());
-					 StartCoroutine(ReScale());
-				}
-			}
-			//Increase zoom level
-			if(Mathf.Round(mycam.orthographicSize*1000.0f)/1000.0f <= Mathf.Round((3*targetOrtoSize/8)*1000.0f)/1000.0f && zoom<maxZoom){
-				if(!mapping){
-					touchZoom = false;
-					zoom = zoom+1;
-					 StartCoroutine(MapPosition());
-					 StartCoroutine(ReScale());
-				}
-			}
-		}
-		
+
 		//DRAG TO PAN ==================================================================================================
 		if(dragToPan){
 			if(!mapping && ready){

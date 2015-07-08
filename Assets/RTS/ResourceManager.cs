@@ -5,9 +5,9 @@ namespace RTS {
 	public static class ResourceManager {
 		public static float ScrollSpeed { get { 
 				if(Input.GetKey(KeyCode.LeftShift)){
-					return 1000;
+					return 10;
 				}else{
-					return 100; 
+					return 1; 
 				}
 			} 
 		}

@@ -283,7 +283,7 @@ public class HUD : MonoBehaviour {
 		return inBounds;
 	}
 
-	private bool MouseInBoundsMinimap(){
+	public bool MouseInBoundsMinimap(){
 		Vector3 mousePos = Input.mousePosition;
 		bool insideWidth = mousePos.x >= 0 && mousePos.x <= MINIMAP_WIDTH;
 		bool insideHeight = mousePos.y >= 0 && mousePos.y < MINIMAP_HEIGHT;

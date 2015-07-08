@@ -51,7 +51,7 @@ public class MapItem : MonoBehaviour {
 			mapBounds.GetComponent<Collider> ().enabled = false;
 
 			mapBounds.transform.parent = transform;
-			mapBounds.transform.localScale = Vector3.one ;
+			mapBounds.transform.localScale = Vector3.one *0.1f;
 			mapBounds.transform.localPosition = new Vector3 (0, 0, 0);
 			mapBounds.GetComponent<Renderer> ().material.color = Color.red;
 		} else if (worldObj is WaterBottle || worldObj is Cellphone) {
