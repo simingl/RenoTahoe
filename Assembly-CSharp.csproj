@@ -46,6 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\CarNavMeshAI.cs" />
      <Compile Include="Assets\MAPNAV\Demo Scenes\2D Scene\InOut.cs" />
      <Compile Include="Assets\MAPNAV\Demo Scenes\2D Scene\Points.cs" />
      <Compile Include="Assets\MAPNAV\Demo Scenes\2D Scene\TouchSound.cs" />
