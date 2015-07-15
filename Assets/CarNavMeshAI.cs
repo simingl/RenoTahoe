@@ -16,42 +16,43 @@ public class CarNavMeshAI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		waypoints = GameObject.FindGameObjectsWithTag("Waypoint");
-		int count = 1;
+		//int count = 1;
 		foreach (GameObject waypoint in waypoints)
 		{
 			
-			waypoint.name = "waypoint"+count.ToString();
-			count++;
+			//waypoint.name = "waypoint"+count.ToString();
+			//count++;
 			targetList.Add(waypoint.transform);	
 		}
 		agent = GetComponent<NavMeshAgent>();
 		needsNewTarget = false;
 		
 		target = targetList[Random.Range(0,targetList.Count)];
+		Debug.Log (target.ToString ());
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(!needsNewTarget)
-		{
+		//if(!needsNewTarget)
+		//{
 			GoToTarget();
-		}
-		else
-		{
+		//}
+		//else
+		//{
 			
-		}
+		//}
 	}
 	
 	public void GoToTarget ()
 	{
-		if (this.gameObject.transform.position != target.transform.position) {
+		//if (this.gameObject.transform.position != target.transform.position) {
 			agent.SetDestination (target.position);
-		}
-		else
-		{
-			needsNewTarget = true;
-			Debug.Log("arrived at target");
-		}
+		//}
+		//else
+		//{
+		//	needsNewTarget = true;
+		//	Debug.Log("arrived at target");
+		//}
 		
 	}
 	public IEnumerator GetNewTarget(Collider other)
@@ -70,10 +71,11 @@ public class CarNavMeshAI : MonoBehaviour {
 	}
 	public void OnTriggerEnter (Collider other)
 	{
-		Debug.Log (other.ToString ());
-		//needsNewTarget = true;
-		if(other.tag == "Waypoint")
-		StartCoroutine(GetNewTarget(other));
+		needsNewTarget = true;
+		if (other.tag == "Waypoint" && other.name == target.name) {
+			StartCoroutine (GetNewTarget (other));
+			Debug.Log("Reached desired waypoint");
+		}
 	}
 	
 }
