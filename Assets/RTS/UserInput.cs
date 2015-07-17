@@ -38,6 +38,9 @@ public class UserInput : MonoBehaviour {
 			if(player.getSelectedObjects().Count > 0){
 				WorldObject wo = player.getSelectedObjects()[0];
 				wo.CalculateBounds();
+				if(wo is Drone) {
+					((Drone)wo).StopMove();
+				}
 				Rigidbody rb = wo.gameObject.GetComponent<Rigidbody> ();
 				this.RotatingObject(rb, horizontal);
 				this.MovingObject(rb,jump, vertical);

@@ -5,7 +5,7 @@ public class MapItem : MonoBehaviour {
 	public GameObject drone_map;
 
 	private WorldObject worldObj;
-	private GameObject mapBounds;
+	public GameObject mapBounds;
 
 	private const int MINIMAP_LAYER = 8;
 
@@ -21,7 +21,6 @@ public class MapItem : MonoBehaviour {
 			}
 		}
 
-
 		worldObj = this.GetComponent<WorldObject> ();
 		if (worldObj is Drone) {
 			Drone drone = (Drone)worldObj;
@@ -29,7 +28,7 @@ public class MapItem : MonoBehaviour {
 			this.SetLayerRecursively (mapBounds, MINIMAP_LAYER);
 
 			mapBounds.transform.parent = transform;
-			mapBounds.transform.localScale = Vector3.one * 15;
+			mapBounds.transform.localScale = Vector3.one * 5;
 			mapBounds.transform.rotation = transform.rotation;
 			
 			Vector3 forwardaxis = transform.TransformDirection (Vector3.forward);
@@ -51,9 +50,11 @@ public class MapItem : MonoBehaviour {
 			mapBounds.GetComponent<Collider> ().enabled = false;
 
 			mapBounds.transform.parent = transform;
-			mapBounds.transform.localScale = Vector3.one *0.1f;
+			mapBounds.transform.localScale = Vector3.one*8;
 			mapBounds.transform.localPosition = new Vector3 (0, 0, 0);
 			mapBounds.GetComponent<Renderer> ().material.color = Color.red;
+
+			mapBounds.SetActive(false);
 		} else if (worldObj is WaterBottle || worldObj is Cellphone) {
 			mapBounds = GameObject.CreatePrimitive (PrimitiveType.Cube);
 			mapBounds.layer = MINIMAP_LAYER;
@@ -63,7 +64,21 @@ public class MapItem : MonoBehaviour {
 			mapBounds.transform.localScale = Vector3.one * 5;
 			mapBounds.transform.localPosition = new Vector3 (0, 0, 0);
 			mapBounds.GetComponent<Renderer> ().material.color = Color.green;
+		}else if (worldObj is Vehicle) {
+			mapBounds = GameObject.CreatePrimitive (PrimitiveType.Cube);
+			mapBounds.layer = MINIMAP_LAYER;
+			mapBounds.GetComponent<Collider> ().enabled = false;
+			
+			mapBounds.transform.parent = transform;
+			mapBounds.transform.localScale = Vector3.one * 40;
+			mapBounds.transform.localPosition = new Vector3 (0, 0, 0);
+			mapBounds.GetComponent<Renderer> ().material.color = Color.yellow;
+
+			mapBounds.SetActive(false);
+
 		}
+
+		//mapBounds.transform.rotation = transform.rotation;
 		mapBounds.name = MAP_ITEM_NAME;
 	}
 
@@ -78,5 +93,10 @@ public class MapItem : MonoBehaviour {
 		{
 			SetLayerRecursively( child.gameObject, newLayer );
 		}
+	}
+
+	public void setColor(Color color){
+		mapBounds.SetActive(true);
+		mapBounds.GetComponent<Renderer> ().material.color = color;
 	}
 }

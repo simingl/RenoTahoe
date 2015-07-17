@@ -46,6 +46,7 @@ public class SceneManager : MonoBehaviour {
 	}
 
 	void InitialScene (){
+		return;
 		for (int i = 0; i< number;i++) {
 			//Instantiate (tree, treePoints[i], new Quaternion(0,0,0,0));
 			//GameObject newfire = (GameObject)Instantiate (fire, firePoints[i], new Quaternion(1,1,0,1));

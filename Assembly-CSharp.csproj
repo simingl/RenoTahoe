@@ -79,6 +79,7 @@
      <Compile Include="Assets\WorldObject\Resource\WaterBottle.cs" />
      <Compile Include="Assets\WorldObject\Unit\Drone.cs" />
      <Compile Include="Assets\WorldObject\Unit\NPC.cs" />
+     <Compile Include="Assets\WorldObject\Unit\Vehicle.cs" />
      <Compile Include="Assets\WorldObject\WorldObject.cs" />
      <Compile Include="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Shared\Scripts\HideMouse.cs" />
      <Compile Include="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Shared\Scripts\Showcase\DemoSwitcher.cs" />

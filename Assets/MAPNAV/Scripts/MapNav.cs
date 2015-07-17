@@ -173,7 +173,7 @@ public class MapNav : MonoBehaviour
 		tmp.y=180;
 		mymap.eulerAngles = tmp;
 		initPointerSize = user.localScale.x;
-		user.position = new Vector3(0, user.position.y, 0);
+		//user.position = new Vector3(0, user.position.y, 0);
 		
 		//Initial Camera Settings
 		//3D 
@@ -375,7 +375,7 @@ public class MapNav : MonoBehaviour
 			tempLon = fixLon;
 		} else {
 			//Add possible values to maptype and mapsize arrays (GOOGLE)
-			maptype = new string[]{"satellite","roadmap","hybrid"};
+			maptype = new string[]{"hybrid","roadmap","satellite"};
 			mapSize = new int[]{640}; //in pixels
 			//GOOGLE ================================================================================
 			//Build a valid Google Maps tile request for the current location 
@@ -626,7 +626,7 @@ public class MapNav : MonoBehaviour
 	//SAMPLE USER INTERFACE. MODIFY OR EXTEND IF NECESSARY =============================================================
 	void OnGUI () {
 		//Map type toggle button
-		if (GUI.Button(new Rect(200, 0, 100, 50), maptype[index])){
+		if (GUI.Button(new Rect(200, 0, 70, 30), maptype[index])){
 			if(mapping == false){
 				if(index < maptype.Length-1)
 					index = index+1;

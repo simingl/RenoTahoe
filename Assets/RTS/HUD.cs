@@ -297,7 +297,7 @@ public class HUD : MonoBehaviour {
 		return insideWidth && insideHeight;
 	}
 
-	private bool MouseInBoundsPIP(){
+	public bool MouseInBoundsPIP(){
 		Vector3 mousePos = Input.mousePosition;
 		bool insideWidth = (mousePos.x >= MINIMAP_WIDTH+ SELECTION_BAR_WIDTH + INFO_BAR_WIDHT+ORDERS_BAR_WIDTH) && mousePos.x <= Screen.width;
 		bool insideHeight = mousePos.y >= 0 && mousePos.y < MINIMAP_HEIGHT;

@@ -136,7 +136,7 @@ public class Drone : WorldObject {
 		base.MouseClick(hitObject, hitPoint, controller);
 		//only handle input if owned by a human player and currently selected
 		if(player && player.human && base.isSelected() && Input.GetMouseButton(1)) {
-			if(hitObject.name == "Ground" && hitPoint != ResourceManager.InvalidPosition) {
+			if(hitObject && hitObject.name == "Ground" && hitPoint != ResourceManager.InvalidPosition) {
 				float x = hitPoint.x;
 				//makes sure that the unit stays on top of the surface it is on
 				float y = transform.position.y;
@@ -176,6 +176,14 @@ public class Drone : WorldObject {
 		CalculateBounds();
 	}
 
+	public void StopMove(){
+		base.StopMove ();
+		targetRotation = transform.rotation;
+		destination = transform.position;
+		rotating = false;
+		moving = false;
+	}
+
 	private void drawRaycastLine(){
 		Vector3 groundHit = new Vector3 (transform.position.x, 0, transform.position.z);
 		lineRaycast.SetPosition (0, transform.position);
@@ -183,16 +191,17 @@ public class Drone : WorldObject {
 
 		if (rotating || moving) {
 			lineMove.enabled = true;
-			Vector3 targetGroundHit = new Vector3 (destination.x, 1, destination.z);
+			Vector3 targetGroundHit = new Vector3 (destination.x, 0.01f, destination.z);
 			lineMove.SetPosition (0, transform.position);
 			lineMove.SetPosition (1, targetGroundHit);
 
 			destinationMark.gameObject.SetActive(true);
 			destinationMark.position = targetGroundHit;
-
+			destinationMark.transform.parent = null;
 		} else {
 			lineMove.enabled = false;
 			destinationMark.gameObject.SetActive(false);
+			destinationMark.transform.parent = transform;
 		}
 	}
 

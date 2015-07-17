@@ -7,11 +7,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 {
     [RequireComponent(typeof (NavMeshAgent))]
     [RequireComponent(typeof (ThirdPersonCharacter))]
+
     public class AICharacterControl : MonoBehaviour
     {
         public NavMeshAgent agent { get; private set; } // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
         public Transform target; // target to aim for
+
+		public GameObject[] waypoints = null;
 
         // Use this for initialization
         private void Start()
@@ -22,6 +25,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 	        agent.updateRotation = false;
 	        agent.updatePosition = true;
+
+			waypoints = GameObject.FindGameObjectsWithTag("Waypoint");
+
+			target = waypoints[UnityEngine.Random.Range(0,waypoints.Length)].transform;
         }
 
 		private float timer = 0;

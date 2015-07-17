@@ -51,6 +51,10 @@ public class WorldObject : MonoBehaviour {
 		}
 	}
 
+	public virtual void StopMove(){
+
+	}
+
 	private void ChangeSelection(WorldObject worldObject, Player controller) {
 		controller.cleanSelectedObject();
 		controller.addSelectedObject(worldObject);
