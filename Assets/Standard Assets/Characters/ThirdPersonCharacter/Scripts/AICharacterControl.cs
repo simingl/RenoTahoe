@@ -16,6 +16,9 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		public GameObject[] waypoints = null;
 
+		public AudioClip callForHelp;
+		public bool canCallForHelp = true;
+
         // Use this for initialization
         private void Start()
         {
@@ -73,6 +76,31 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			float z = UnityEngine.Random.Range(-1*w, h);
 			
 			return new Vector3 (x,1,z);
+		}
+
+		public void OnTriggerEnter (Collider other)
+		{
+			Debug.Log (other.gameObject.name.ToString());
+			int delay = 9;
+			StartCoroutine(CallForHelp(delay, other));
+			
+			
+		}
+		public void OnTriggerStay (Collider other)
+		{
+			int delay = 9;
+			StartCoroutine(CallForHelp(delay, other));
+		}
+		public IEnumerator CallForHelp(int delay, Collider other)
+		{
+			if (other.tag == "Drone" && canCallForHelp) 
+			{
+				AudioSource.PlayClipAtPoint(callForHelp, transform.position, 0.3f);
+				canCallForHelp = false;
+				yield return new WaitForSeconds(delay);
+				canCallForHelp = true;
+				
+			}
 		}
     }
 }
