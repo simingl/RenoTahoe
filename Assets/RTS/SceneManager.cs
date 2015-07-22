@@ -42,7 +42,6 @@ public class SceneManager : MonoBehaviour {
 			waterPoints[i]= generateRandomPosition(width, height);
 		}
 
-		InitialScene ();
 	}
 
 	void InitialScene (){

@@ -60,6 +60,7 @@
      <Compile Include="Assets\MAPNAV\Scripts\MapNav.cs" />
      <Compile Include="Assets\MAPNAV\Scripts\SetGeolocation.cs" />
      <Compile Include="Assets\RTS\AudioManager.cs" />
+     <Compile Include="Assets\RTS\ConfigManager.cs" />
      <Compile Include="Assets\RTS\Enums.cs" />
      <Compile Include="Assets\RTS\HUD.cs" />
      <Compile Include="Assets\RTS\Player.cs" />

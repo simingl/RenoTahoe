@@ -80,7 +80,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 		public void OnTriggerEnter (Collider other)
 		{
-			Debug.Log (other.gameObject.name.ToString());
 			int delay = 9;
 			StartCoroutine(CallForHelp(delay, other));
 			

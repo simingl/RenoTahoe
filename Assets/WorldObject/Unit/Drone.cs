@@ -42,6 +42,8 @@ public class Drone : WorldObject {
 	private Projector projector;
 	private Camera camera_1st_view, camera_3rd_view, camera_hover_view;
 
+	private Rigidbody rigidbody;
+
 	public Drone(){
 		type = WorldObjectType.Unit;
 		cellphones = new Stack<Cellphone>();
@@ -50,6 +52,10 @@ public class Drone : WorldObject {
 
 	protected override void Awake() {
 		base.Awake();
+
+
+		rigidbody = this.GetComponent<Rigidbody> ();
+		//rigidBody.Sleep ();
 
 		this.canvas = GameObject.FindObjectOfType<Canvas> ();
 		//Initialize to random color
@@ -60,6 +66,9 @@ public class Drone : WorldObject {
 		batterySlider.transform.SetParent (canvas.transform);
 		batterySlider.transform.localScale = Vector3.one;
 		batterySlider.gameObject.SetActive(false);
+
+		//setup the destination mark
+		destinationMark = this.transform.FindChild("DestinationMark");
 
 		this.camera_1st_view = (Camera)(this.transform.FindChild ("camera_1st_view").gameObject).GetComponent<Camera>();
 		this.camera_3rd_view = (Camera)(this.transform.FindChild ("camera_3rd_view").gameObject).GetComponent<Camera>();
@@ -78,8 +87,7 @@ public class Drone : WorldObject {
 		//find the top mesh and render it
 		transform.FindChild ("mesh").FindChild ("group_top").GetComponent<Renderer>().material.color = this.color;
 
-		//setup the destination mark
-		destinationMark = this.transform.FindChild("DestinationMark");
+
 		//setup the line from object to the ground
 		lineRaycast = this.GetComponent<LineRenderer> ();
 		lineRaycast.useWorldSpace = true;
@@ -96,6 +104,9 @@ public class Drone : WorldObject {
 	
 	protected override void Update () {
 		base.Update();
+
+		rigidbody.velocity = Vector3.zero;
+		rigidbody.angularVelocity = Vector3.zero;
 
 		if (Input.GetMouseButtonUp (0) && player.hud.MouseInBounds() && !EventSystem.current.IsPointerOverGameObject () && HUD.selection.width * HUD.selection.height > 10) {
 			Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
@@ -317,4 +328,6 @@ public class Drone : WorldObject {
 
 		}
 	}
+
+
 }

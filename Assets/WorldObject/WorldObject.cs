@@ -85,4 +85,10 @@ public class WorldObject : MonoBehaviour {
 	public bool isSelected(){
 		return player.isSelected (this);
 	}
+
+	public void centerMainCamera(){
+		Vector3 camPos = this.transform.position;
+		camPos.y = Camera.main.transform.position.y;
+		Camera.main.transform.position = camPos;
+	}
 }

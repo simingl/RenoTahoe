@@ -57,11 +57,22 @@ public class UserInput : MonoBehaviour {
 		if (vertical != 0) {
 			Vector3 newPos = rb.transform.forward * vertical * 0.1f;
 			rb.transform.position += newPos;
+
+			newPos.x = Mathf.Clamp(rb.transform.position.x, ResourceManager.MaxEast,  ResourceManager.MaxWest);
+			newPos.y = rb.transform.position.y;
+			newPos.z = Mathf.Clamp(rb.transform.position.z, ResourceManager.MaxSouth,  ResourceManager.MaxNorth);
+			rb.transform.position = newPos;
 		}
 
 		if (jump != 0) {
 			Vector3 newPos = rb.transform.up * jump * 0.1f;
 			rb.transform.position += newPos;
+
+			newPos.x = rb.transform.position.x;
+			newPos.y = Mathf.Clamp(rb.transform.position.y, ResourceManager.MaxBottom,  ResourceManager.MaxTop);
+			newPos.z = rb.transform.position.z;
+			rb.transform.position = newPos;
+
 		}
 	}
 	private void MoveCameraByMouse() {
@@ -118,7 +129,7 @@ public class UserInput : MonoBehaviour {
 		if (Input.GetKey (KeyCode.LeftControl) && Input.GetKey (KeyCode.LeftShift)) {
 			if(Input.GetMouseButtonUp(0)){
 				Vector3 hitPoint = FindHitPoint();
-				hitPoint.y = 2;
+				hitPoint.y = 4;
 				this.player.sceneManager.CreateDrone(hitPoint);
 			}
 		}

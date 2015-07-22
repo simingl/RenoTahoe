@@ -27,8 +27,6 @@ public class CameraPIP : MonoBehaviour {
 						} else if (worldObject is Vehicle) {
 							((Vehicle)worldObject).setColor (Color.green);
 						}
-					} else {
-						Debug.Log ("Hit nothing!");
 					}
 				}
 			}

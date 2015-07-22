@@ -173,7 +173,8 @@ public class HUD : MonoBehaviour {
 							this.player.toggleSelectObject(obj);
 						}else{
 							this.player.setSelectedObject(obj);
-							this.player.changePOV.switchCamera(CameraType.Camera_Third_View);
+							obj.centerMainCamera();
+							//this.player.changePOV.switchCamera(CameraType.Camera_Third_View);
 						}
 					}
 				}
@@ -183,7 +184,8 @@ public class HUD : MonoBehaviour {
 							this.player.toggleSelectObject(obj);
 						}else{
 							this.player.setSelectedObject(obj);
-							this.player.changePOV.switchCamera(CameraType.Camera_Third_View);
+							obj.centerMainCamera();
+							//this.player.changePOV.switchCamera(CameraType.Camera_Third_View);
 						}
 					}
 				}

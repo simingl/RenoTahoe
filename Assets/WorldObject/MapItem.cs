@@ -28,7 +28,7 @@ public class MapItem : MonoBehaviour {
 			this.SetLayerRecursively (mapBounds, MINIMAP_LAYER);
 
 			mapBounds.transform.parent = transform;
-			mapBounds.transform.localScale = Vector3.one * 5;
+			mapBounds.transform.localScale = Vector3.one * 20;
 			mapBounds.transform.rotation = transform.rotation;
 			
 			Vector3 forwardaxis = transform.TransformDirection (Vector3.forward);

@@ -20,6 +20,13 @@ namespace RTS {
 		public static float MaxCameraWidth { get { return 500; } }
 		public static float MinCameraLength { get { return -500; } }
 		public static float MaxCameraLength { get { return 500; } }
+		public static float MaxBottom{get {return 2;}}
+		public static float MaxTop{get {return 10;}}
+		public static float MaxNorth{get {return 100;}}
+		public static float MaxSouth{get {return -100;}}
+		public static float MaxEast{get {return -100;}}
+		public static float MaxWest{get {return 100;}}
+
 
 		private static Vector3 invalidPosition = new Vector3(-99999, -99999, -99999);
 		public static Vector3 InvalidPosition { get { return invalidPosition; } }
@@ -33,7 +40,8 @@ namespace RTS {
 		public static void StoreSelectBoxItems(GUISkin skin) {
 			selectBoxSkin = skin;
 		}
+
+
+
 	}
-
-
 }
