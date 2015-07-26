@@ -78,21 +78,26 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			return new Vector3 (x,1,z);
 		}
 
+		//Drone enters NPC's call for help spehere trigger -> Call for help
 		public void OnTriggerEnter (Collider other)
 		{
-			Debug.Log (other.gameObject.name.ToString());
 			int delay = 9;
 			StartCoroutine(CallForHelp(delay, other));
 			
 			
 		}
+
+		//Drone enters NPC's call for help spehere trigger -> Call for help
 		public void OnTriggerStay (Collider other)
 		{
 			int delay = 9;
 			StartCoroutine(CallForHelp(delay, other));
 		}
+
 		public IEnumerator CallForHelp(int delay, Collider other)
 		{
+			//Play audio clip if drone enters NPC's call for help trigger and
+			//they NPC isn't currently already playing audio
 			if (other.tag == "Drone" && canCallForHelp) 
 			{
 				AudioSource.PlayClipAtPoint(callForHelp, transform.position, 0.3f);
