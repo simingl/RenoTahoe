@@ -64,7 +64,7 @@ public class Player : MonoBehaviour {
 	}
 
 	public List<WorldObject> getSelectedObjects(){
-		return selectedObjects;
+		return new List<WorldObject>( selectedObjects);
 	}
 
 	public bool isSelected(WorldObject obj){

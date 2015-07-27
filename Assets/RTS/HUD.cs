@@ -195,7 +195,7 @@ public class HUD : MonoBehaviour {
 	private void DrawInfoBar(){
 		int offset = MINIMAP_WIDTH + SELECTION_BAR_WIDTH;
 
-		GUI.color = Color.yellow;
+		//GUI.color = Color.yellow;
 		GUI.skin = ordersSkin;
 		GUI.BeginGroup(new Rect(0, Screen.height - INFO_BAR_HEIGHT, Screen.width, INFO_BAR_HEIGHT));
 		GUI.Box(new Rect(MINIMAP_WIDTH + SELECTION_BAR_WIDTH,0,INFO_BAR_WIDHT,INFO_BAR_HEIGHT),"");
