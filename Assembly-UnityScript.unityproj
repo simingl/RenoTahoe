@@ -46,6 +46,11 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\52SpecialEffectPack\Animation&amp;Script\AnimationSpin.js" />
+     <Compile Include="Assets\52SpecialEffectPack\Animation&amp;Script\DestroyEffect.js" />
+     <Compile Include="Assets\52SpecialEffectPack\Animation&amp;Script\MouseOrbit.js" />
+     <Compile Include="Assets\52SpecialEffectPack\Animation&amp;Script\ParticleMove.js" />
+     <Compile Include="Assets\52SpecialEffectPack\Animation&amp;Script\ShowAllEffect.js" />
      <Compile Include="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Standard Assets\Character Controllers\Sources\Scripts\CharacterMotor.js" />
      <Compile Include="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Standard Assets\Character Controllers\Sources\Scripts\FPSInputController.js" />
      <Compile Include="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Standard Assets\Image Effects (Pro Only)\Bloom.js" />
