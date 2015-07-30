@@ -21,9 +21,11 @@ public class HUD : MonoBehaviour {
 	private static int INFO_BAR_HEIGHT = SELECTION_BAR_HEIGHT, INFO_BAR_WIDHT ;
 
 	private static int RESOURCE_DAYNIGHT_TOGGLE_WIDTH = 100;
-	private static int RESOURCE_NAME_WIDTH = 200;
+	private static int RESOURCE_NAME_WIDTH = 100;
 	private static int RESOURCE_LOCATION_WIDTH = 100;
 	private static int RESOURCE_DRONE_HEIGHT_WIDTH = 100;
+	private static int RESOURCE_DRONE_SPEED_WIDTH = 100;
+	private static int RESOURCE_DRONE_ORIENT_WIDTH = 100;
 	private static int RESOURCE_BATTERY_WIDTH = 100;
 	private static int RESOURCE_CELL_WIDTH = 100;
 	private static int RESOURCE_WATER_WIDTH = 100;
@@ -55,6 +57,8 @@ public class HUD : MonoBehaviour {
 
 	public bool isSelectedByClick;
 
+
+
 	void Start () {
 		int WIDTH = Screen.width;
 		int HEIGHT = Screen.height;
@@ -71,13 +75,15 @@ public class HUD : MonoBehaviour {
 		player = transform.root.GetComponent< Player >();
 		sun = GameObject.FindGameObjectWithTag ("Sun");
 
-		RESOURCE_DAYNIGHT_TOGGLE_WIDTH = (int)(0.54*WIDTH);;
-		RESOURCE_NAME_WIDTH = (int)(0.08*WIDTH);;
+		RESOURCE_DAYNIGHT_TOGGLE_WIDTH = (int)(0.34*WIDTH);;
+		RESOURCE_NAME_WIDTH = (int)(0.1*WIDTH);;
 		RESOURCE_LOCATION_WIDTH = (int)(0.1*WIDTH);
-		RESOURCE_DRONE_HEIGHT_WIDTH = (int)(0.06*WIDTH);
-		RESOURCE_BATTERY_WIDTH = (int)(0.07*WIDTH);
-		RESOURCE_CELL_WIDTH = (int)(0.04*WIDTH);
-		RESOURCE_WATER_WIDTH = (int)(0.06*WIDTH);
+		RESOURCE_DRONE_HEIGHT_WIDTH = (int)(0.1*WIDTH);	
+		RESOURCE_DRONE_SPEED_WIDTH = (int)(0.1*WIDTH);;
+		RESOURCE_DRONE_ORIENT_WIDTH = (int)(0.1*WIDTH);;
+		RESOURCE_BATTERY_WIDTH = (int)(0.05*WIDTH);
+		RESOURCE_CELL_WIDTH = (int)(0.05*WIDTH);
+		RESOURCE_WATER_WIDTH = (int)(0.05*WIDTH);
 
 		ResourceManager.StoreSelectBoxItems(selectBoxSkin);
 	}
@@ -98,6 +104,8 @@ public class HUD : MonoBehaviour {
 		MouseDragSelection();
 	}
 
+
+
 	private void DrawResourceBar() {
 		GUI.skin = resourceSkin;
 		GUI.BeginGroup(new Rect(0,0,Screen.width,RESOURCE_BAR_HEIGHT));
@@ -113,8 +121,14 @@ public class HUD : MonoBehaviour {
 			string name = obj.objectName; 
 			string cellinfo = "Cell * ";
 			string waterinfo = "Water * ";
-			string location = "Location: (" + (int)(obj.transform.position.x) + ", " + (int)(obj.transform.position.z) + ")";
-			string height = "Height: "+ (int)(obj.transform.position.y);
+			string location = "Location: (" + obj.transform.position.x.ToString("0.0") + ", " + obj.transform.position.z.ToString("0.0") + ")";
+			string height = "Height: "+ obj.transform.position.y.ToString("0.0");
+			string speed  = "Speed: "+ ((Drone)obj).speed.ToString("0.0");
+
+			float angle = 0.0F;
+			Vector3 axis = Vector3.zero;
+			obj.transform.rotation.ToAngleAxis(out angle, out axis);
+			string orient = "Orientation: " + angle.ToString("0.0")+"'";
 			string battery = "";
 			if (obj is Drone) {
 				Drone unit = (Drone)obj;
@@ -135,6 +149,14 @@ public class HUD : MonoBehaviour {
 			GUI.Label(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), height);
 			//DrawOutline(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), height, this.resourceSkin.GetStyle("large"), Color.white, Color.black);
 			offset += RESOURCE_DRONE_HEIGHT_WIDTH;
+
+			GUI.Label(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), speed);
+			//DrawOutline(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), height, this.resourceSkin.GetStyle("large"), Color.white, Color.black);
+			offset += RESOURCE_DRONE_SPEED_WIDTH;
+
+			GUI.Label(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), orient);
+			//DrawOutline(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), height, this.resourceSkin.GetStyle("large"), Color.white, Color.black);
+			offset += RESOURCE_DRONE_ORIENT_WIDTH;
 
 			GUI.Label(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), battery);
 			//DrawOutline(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), battery, this.resourceSkin.GetStyle("large"), Color.yellow, Color.green);

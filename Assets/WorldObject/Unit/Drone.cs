@@ -44,6 +44,10 @@ public class Drone : WorldObject {
 
 	private Rigidbody rigidbody;
 
+	public float speed = 0f;
+	Vector3 lastPosition = Vector3.zero;
+	float lastUpdated = 0.0f;
+
 	public Drone(){
 		type = WorldObjectType.Unit;
 		cellphones = new Stack<Cellphone>();
@@ -105,9 +109,6 @@ public class Drone : WorldObject {
 	protected override void Update () {
 		base.Update();
 
-		rigidbody.velocity = Vector3.zero;
-		rigidbody.angularVelocity = Vector3.zero;
-
 		if (Input.GetMouseButtonUp (0) && player.hud.MouseInBounds() && !EventSystem.current.IsPointerOverGameObject () && HUD.selection.width * HUD.selection.height > 10) {
 			Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
 			camPos.y = Screen.height - camPos.y;
@@ -127,7 +128,17 @@ public class Drone : WorldObject {
 
 		this.CalculateBattery ();
 	}
-	
+
+	void FixedUpdate(){
+		this.lastUpdated += Time.deltaTime;
+		if (lastUpdated >= 0.5) {
+			speed = (transform.position - lastPosition).magnitude*5;
+			lastPosition = transform.position;
+
+			lastUpdated = 0.0f;
+		}
+	}
+
 	protected override void OnGUI() {
 		base.OnGUI();
 		batterySlider.value = this.currentBattery;
