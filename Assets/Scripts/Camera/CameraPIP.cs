@@ -23,7 +23,8 @@ public class CameraPIP : MonoBehaviour {
 					if (worldObject) {
 						worldObject.GetComponent<MapItem> ().setColor (Color.green);
 						if (worldObject is NPC) {
-							((NPC)worldObject).setColor (Color.green);
+							//((NPC)worldObject).setColor (Color.green);
+							((NPC)worldObject).setMarker ();
 							//GO HERE TO CREATE THE MARKER UNDER THE VEHICLE
 						} else if (worldObject is Vehicle) {
 							//((Vehicle)worldObject).setColor (Color.green);

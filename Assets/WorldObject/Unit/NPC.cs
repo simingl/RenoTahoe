@@ -7,14 +7,15 @@ public class NPC : WorldObject {
 	public Texture red;
 	public Texture green;
 
-	private GameObject mark;
+	public GameObject marker;
+	//private GameObject mark;
 
 	protected virtual void Start () {
 		base.Start ();
-
+		marker = transform.Find ("NPCMarker").gameObject;
 		//rend = transform.FindChild("EthanBody").GetComponent<Renderer>();
 		//rend.material.SetTexture (0,red);
-
+		/*
 		mark = GameObject.CreatePrimitive (PrimitiveType.Cube);
 		mark.layer = gameObject.layer;
 		mark.GetComponent<Collider> ().enabled = false;
@@ -33,5 +34,16 @@ public class NPC : WorldObject {
 	public void setRed(){
 		//rend.material.SetTexture (0,red);;
 	}
+	*/
 
+}
+	public void setMarker ()
+	{
+		marker.SetActive (true);
+	}
+	
+	public void disableMarker ()
+	{
+		marker.SetActive (false);
+	}
 }
