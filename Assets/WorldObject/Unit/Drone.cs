@@ -77,7 +77,7 @@ public class Drone : WorldObject {
 
 		//find the top mesh and render it
 		transform.FindChild ("mesh").FindChild ("group_top").GetComponent<Renderer>().material.color = this.color;
-
+	
 		//setup the destination mark
 		destinationMark = this.transform.FindChild("DestinationMark");
 		//setup the line from object to the ground

@@ -2,13 +2,15 @@
 using System.Collections;
 
 public class Vehicle : WorldObject {
-	private GameObject mark;
+	//private GameObject mark;
+	public GameObject marker;
 
 	protected virtual void Start () {
 		base.Start ();
 		
 		//rend = transform.FindChild("599_gtb").FindChild("599_gtb_MeshPart0").GetComponent<Renderer>();
-
+		//GO HERE TO CREATE AN ICON UNDER THE VEHICLE
+		/*
 		mark = GameObject.CreatePrimitive (PrimitiveType.Cube);
 		mark.layer = gameObject.layer;
 		mark.GetComponent<Collider> ().enabled = false;
@@ -17,12 +19,24 @@ public class Vehicle : WorldObject {
 		mark.transform.localScale = Vector3.one * 3f;
 		mark.transform.localPosition = new Vector3 (0, 5f, 0);
 		mark.transform.rotation = gameObject.transform.rotation;
-		mark.GetComponent<Renderer> ().material.color = Color.red;
+		mark.GetComponent<Renderer> ().material.color = Color.blue;
+		*/
+		marker = transform.Find ("CarMarker").gameObject;
 	}
+	/*
 	public void setColor(Color color){
 		mark.GetComponent<Renderer> ().material.color = color;
 	}
-	
+	*/
+	public void setMarker ()
+	{
+		marker.SetActive (true);
+	}
+
+	public void disableMarker ()
+	{
+		marker.SetActive (false);
+	}
 	public void setRed(){
 
 	}
