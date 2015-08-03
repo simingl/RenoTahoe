@@ -96,7 +96,9 @@ public class MapItem : MonoBehaviour {
 	}
 
 	public void setColor(Color color){
-		mapBounds.SetActive(true);
-		mapBounds.GetComponent<Renderer> ().material.color = color;
+		if (mapBounds) {
+			mapBounds.SetActive (true);
+			mapBounds.GetComponent<Renderer> ().material.color = color;
+		}
 	}
 }

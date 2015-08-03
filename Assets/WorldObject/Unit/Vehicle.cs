@@ -7,7 +7,7 @@ public class Vehicle : WorldObject {
 	protected virtual void Start () {
 		base.Start ();
 		
-		//rend = transform.FindChild("599_gtb").FindChild("599_gtb_MeshPart0").GetComponent<Renderer>();
+		this._isSelectable = false;
 
 		mark = GameObject.CreatePrimitive (PrimitiveType.Cube);
 		mark.layer = gameObject.layer;

@@ -12,8 +12,7 @@ public class NPC : WorldObject {
 	protected virtual void Start () {
 		base.Start ();
 
-		//rend = transform.FindChild("EthanBody").GetComponent<Renderer>();
-		//rend.material.SetTexture (0,red);
+		this._isSelectable = false;
 
 		mark = GameObject.CreatePrimitive (PrimitiveType.Cube);
 		mark.layer = gameObject.layer;
@@ -26,12 +25,6 @@ public class NPC : WorldObject {
 		mark.GetComponent<Renderer> ().material.color = Color.red;
 	}
 	public void setColor(Color color){
-		//rend.material.SetTexture (0,green);
 		mark.GetComponent<Renderer> ().material.color = color;
 	}
-
-	public void setRed(){
-		//rend.material.SetTexture (0,red);;
-	}
-
 }

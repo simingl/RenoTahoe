@@ -14,12 +14,19 @@ public class WorldObject : MonoBehaviour {
 
 	protected Rect playingArea = new Rect(0.0f, 0.0f, 0.0f, 0.0f);
 
+	protected bool _isSelectable;
+
+	public float speed = 0f;
+	private Vector3 lastPosition = Vector3.zero;
+	private float lastUpdated = 0.0f;
+
 	protected virtual void Awake() {
 		selectionBounds = ResourceManager.InvalidBounds;
 		CalculateBounds();
 	}
 	
 	protected virtual void Start () {
+		this._isSelectable = true;
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
 		this.playingArea = player.hud.GetPlayingArea ();
 	}
@@ -28,7 +35,17 @@ public class WorldObject : MonoBehaviour {
 
 
 	}
-	
+
+	void FixedUpdate(){
+		this.lastUpdated += Time.deltaTime;
+		if (lastUpdated >= 0.5) {
+			speed = (transform.position - lastPosition).magnitude*5;
+			lastPosition = transform.position;
+			
+			lastUpdated = 0.0f;
+		}
+	}
+
 	protected virtual void OnGUI() {
 		if (this.isSelected() && this.player.changePOV.activeCamera == null) {
 			DrawSelection ();
@@ -43,11 +60,15 @@ public class WorldObject : MonoBehaviour {
 	}
 
 	public virtual void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller) {
+		//ignore non-selectable objects
+		if (!this._isSelectable)
+			return;
+
 		//only handle input if currently selected
 		if(this.isSelected() && hitObject && hitObject.name != "Ground") {
 			WorldObject worldObject = hitObject.GetComponent< WorldObject >();
 			//clicked on another selectable object
-			if(worldObject) ChangeSelection(worldObject, controller);
+			//if(worldObject) ChangeSelection(worldObject, controller);
 		}
 	}
 
@@ -91,4 +112,12 @@ public class WorldObject : MonoBehaviour {
 		camPos.y = Camera.main.transform.position.y;
 		Camera.main.transform.position = camPos;
 	}
+
+	public bool isSelectable(){
+		return _isSelectable;
+	}
+
+	public void OnCollisionExit(Collision collisionInfo){
+		this.gameObject.GetComponent<Rigidbody> ().velocity = Vector3.zero;
+	} 
 }

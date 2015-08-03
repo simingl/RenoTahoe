@@ -55,10 +55,6 @@ public class HUD : MonoBehaviour {
 
 	private Camera camera_minimap;
 
-	public bool isSelectedByClick;
-
-
-
 	void Start () {
 		int WIDTH = Screen.width;
 		int HEIGHT = Screen.height;
@@ -123,7 +119,7 @@ public class HUD : MonoBehaviour {
 			string waterinfo = "Water * ";
 			string location = "Location: (" + obj.transform.position.x.ToString("0.0") + ", " + obj.transform.position.z.ToString("0.0") + ")";
 			string height = "Height: "+ obj.transform.position.y.ToString("0.0");
-			string speed  = "Speed: "+ ((Drone)obj).speed.ToString("0.0");
+			string speed  = "Speed: "+ obj.speed.ToString("0.0");
 
 			float angle = 0.0F;
 			Vector3 axis = Vector3.zero;

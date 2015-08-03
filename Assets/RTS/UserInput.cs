@@ -47,12 +47,26 @@ public class UserInput : MonoBehaviour {
 			}
 		}
 	}
-	
+
+	void RotatingObject2(Rigidbody rb, float horizontal){
+		Vector3 horizontalAxis = rb.transform.TransformDirection(Vector3.up);
+		rb.transform.RotateAround(rb.transform.position, horizontalAxis, horizontal);
+	}
+
+	void MovingObject2(Rigidbody rb, float jump, float vertical){
+		Vector3 newVelocity = rb.transform.forward * vertical;
+
+		rb.velocity += newVelocity*0.1f;
+		if (rb.gameObject.name == "drone") {
+			Debug.Log (rb.velocity + ", " + rb.transform.forward);
+		}
+	}
+
 	void RotatingObject(Rigidbody rb, float horizontal){
 		Vector3 leftaxis = rb.transform.TransformDirection(Vector3.up);
 		rb.transform.RotateAround(rb.transform.position, leftaxis, horizontal);
 	}
-	
+
 	void MovingObject(Rigidbody rb, float jump, float vertical){
 		if (vertical != 0) {
 			Vector3 newPos = rb.transform.forward * vertical * 0.1f;
@@ -72,7 +86,6 @@ public class UserInput : MonoBehaviour {
 			newPos.y = Mathf.Clamp(rb.transform.position.y, ResourceManager.MaxBottom,  ResourceManager.MaxTop);
 			newPos.z = rb.transform.position.z;
 			rb.transform.position = newPos;
-
 		}
 	}
 	private void MoveCameraByMouse() {
@@ -142,7 +155,7 @@ public class UserInput : MonoBehaviour {
 			if(hitObject && hitPoint != ResourceManager.InvalidPosition) {
 				if(hitObject.name!="Ground") {
 					WorldObject worldObject = hitObject.GetComponent< WorldObject >();
-					if(worldObject) {
+					if(worldObject && worldObject.isSelectable()) {
 						if(Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)){
 							player.addSelectedObject(worldObject);
 						}else{

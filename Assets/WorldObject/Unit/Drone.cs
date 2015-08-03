@@ -44,9 +44,7 @@ public class Drone : WorldObject {
 
 	private Rigidbody rigidbody;
 
-	public float speed = 0f;
-	Vector3 lastPosition = Vector3.zero;
-	float lastUpdated = 0.0f;
+
 
 	public Drone(){
 		type = WorldObjectType.Unit;
@@ -109,7 +107,7 @@ public class Drone : WorldObject {
 	protected override void Update () {
 		base.Update();
 
-		if (Input.GetMouseButtonUp (0) && player.hud.MouseInBounds() && !EventSystem.current.IsPointerOverGameObject () && HUD.selection.width * HUD.selection.height > 10) {
+		if (Input.GetMouseButtonUp (0) && !EventSystem.current.IsPointerOverGameObject () && HUD.selection.width * HUD.selection.height > 10) {
 			Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
 			camPos.y = Screen.height - camPos.y;
 			//camPos.y = CameraManagement.InvertMouseY(camPos.y);
@@ -129,15 +127,7 @@ public class Drone : WorldObject {
 		this.CalculateBattery ();
 	}
 
-	void FixedUpdate(){
-		this.lastUpdated += Time.deltaTime;
-		if (lastUpdated >= 0.5) {
-			speed = (transform.position - lastPosition).magnitude*5;
-			lastPosition = transform.position;
 
-			lastUpdated = 0.0f;
-		}
-	}
 
 	protected override void OnGUI() {
 		base.OnGUI();
@@ -158,7 +148,7 @@ public class Drone : WorldObject {
 		base.MouseClick(hitObject, hitPoint, controller);
 		//only handle input if owned by a human player and currently selected
 		if(player && player.human && base.isSelected() && Input.GetMouseButton(1)) {
-			if(hitObject && hitObject.name == "Ground" && hitPoint != ResourceManager.InvalidPosition) {
+			if(hitPoint != ResourceManager.InvalidPosition) {
 				float x = hitPoint.x;
 				//makes sure that the unit stays on top of the surface it is on
 				float y = transform.position.y;
