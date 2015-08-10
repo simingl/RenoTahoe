@@ -40,7 +40,7 @@ public class Drone : WorldObject {
 	private int MAX_WATER = 5;
 
 	private Projector projector;
-	private Camera camera_1st_view, camera_3rd_view, camera_hover_view;
+	private Camera camera_1st, camera_down;
 
 	private Rigidbody rigidbody;
 
@@ -72,13 +72,11 @@ public class Drone : WorldObject {
 		//setup the destination mark
 		destinationMark = this.transform.FindChild("DestinationMark");
 
-		this.camera_1st_view = (Camera)(this.transform.FindChild ("camera_1st_view").gameObject).GetComponent<Camera>();
-		this.camera_3rd_view = (Camera)(this.transform.FindChild ("camera_3rd_view").gameObject).GetComponent<Camera>();
-		this.camera_hover_view = (Camera)(this.transform.FindChild ("camera_hover_view").gameObject).GetComponent<Camera>();
+		this.camera_1st = (Camera)(this.transform.FindChild ("camera_1st_view").gameObject).GetComponent<Camera>();
+		this.camera_down = (Camera)(this.transform.FindChild ("camera_hover_view").gameObject).GetComponent<Camera>();
 
-		this.camera_1st_view.depth = PIP_DEPTH_DEACTIVE;
-		this.camera_3rd_view.depth = PIP_DEPTH_DEACTIVE;
-		this.camera_hover_view.depth = PIP_DEPTH_DEACTIVE;
+		this.camera_1st.depth = PIP_DEPTH_DEACTIVE;
+		this.camera_down.depth = PIP_DEPTH_DEACTIVE;
 
 		this.SetPIPCameraActive (false);
 	}
@@ -127,8 +125,6 @@ public class Drone : WorldObject {
 		this.CalculateBattery ();
 	}
 
-
-
 	protected override void OnGUI() {
 		base.OnGUI();
 		batterySlider.value = this.currentBattery;
@@ -138,9 +134,8 @@ public class Drone : WorldObject {
 			batterySlider.gameObject.SetActive (true);
 		} else {
 			batterySlider.gameObject.SetActive (false);
-			this.camera_1st_view.depth = PIP_DEPTH_DEACTIVE;
-			this.camera_3rd_view.depth = PIP_DEPTH_DEACTIVE;
-			this.camera_hover_view.depth = PIP_DEPTH_DEACTIVE;
+			this.camera_1st.depth = PIP_DEPTH_DEACTIVE;
+			this.camera_down.depth = PIP_DEPTH_DEACTIVE;
 		}
 	}
 
@@ -158,6 +153,10 @@ public class Drone : WorldObject {
 			}
 		}
 	}
+
+    public Camera getCameraFirstPerson() {
+        return this.camera_1st;
+    }
 
 	public void StartMove(Vector3 destination) {
 		this.destination = destination;
@@ -307,28 +306,17 @@ public class Drone : WorldObject {
 	}
 
 	public void SetPIPCameraActive(bool isActive){
-		this.camera_1st_view.enabled = isActive;
-		this.camera_3rd_view.enabled = isActive;
-		this.camera_hover_view.enabled = isActive;
+		this.camera_1st.enabled = isActive;
+		this.camera_down.enabled = isActive;
 	}
 
 	public void showPIP(int i){
 		if (i == 0) {
-			this.camera_1st_view.depth = PIP_DEPTH_ACTIVE;
-			this.camera_3rd_view.depth = PIP_DEPTH_DEACTIVE;
-			this.camera_hover_view.depth = PIP_DEPTH_DEACTIVE;
-		} else if (i == 1) {
-			this.camera_1st_view.depth = PIP_DEPTH_DEACTIVE;
-			this.camera_3rd_view.depth = PIP_DEPTH_ACTIVE;
-			this.camera_hover_view.depth = PIP_DEPTH_DEACTIVE;
-
+			this.camera_1st.depth = PIP_DEPTH_ACTIVE;
+			this.camera_down.depth = PIP_DEPTH_DEACTIVE;
 		} else if (i == 2) {
-			this.camera_1st_view.depth = PIP_DEPTH_DEACTIVE;
-			this.camera_3rd_view.depth = PIP_DEPTH_DEACTIVE;
-			this.camera_hover_view.depth = PIP_DEPTH_ACTIVE;
-
+			this.camera_1st.depth = PIP_DEPTH_DEACTIVE;
+			this.camera_down.depth = PIP_DEPTH_ACTIVE;
 		}
 	}
-
-
 }

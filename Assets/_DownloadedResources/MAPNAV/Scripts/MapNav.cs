@@ -375,7 +375,7 @@ public class MapNav : MonoBehaviour
 			tempLon = fixLon;
 		} else {
 			//Add possible values to maptype and mapsize arrays (GOOGLE)
-			maptype = new string[]{"hybrid","roadmap","satellite"};
+			maptype = new string[]{"satellite","hybrid","roadmap"};
 			mapSize = new int[]{640}; //in pixels
 			//GOOGLE ================================================================================
 			//Build a valid Google Maps tile request for the current location 

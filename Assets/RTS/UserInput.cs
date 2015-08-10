@@ -146,6 +146,17 @@ public class UserInput : MonoBehaviour {
 				this.player.sceneManager.CreateDrone(hitPoint);
 			}
 		}
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            if (Input.GetMouseButtonUp(0))
+            {
+                Vector3 hitPoint = FindHitPoint();
+                //hitPoint.y = 4;
+                //this.player.sceneManager.CreateDrone(hitPoint);
+            }
+        }
+        
 	}
 
 	private void LeftMouseClick() {

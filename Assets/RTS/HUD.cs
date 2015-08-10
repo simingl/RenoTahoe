@@ -361,6 +361,11 @@ public class HUD : MonoBehaviour {
 		}
 	}
 
+    private void showCameraTopRight(Drone drone) {
+        Camera cam = drone.getCameraFirstPerson();
+        cam.enabled = true;
+    }
+
 	private void DrawPIPBar(){
 		if (player.getSelectedObjects ().Count > 0) {
 			WorldObject wo = player.getSelectedObjects()[0];
@@ -371,9 +376,6 @@ public class HUD : MonoBehaviour {
 
 				if (GUI.Button (new Rect (offset_w, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), "1")) {
 					drone.showPIP(0);
-				}
-				if (GUI.Button (new Rect (offset_w + PIP_BTN_WIDTH, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), "2")) {
-					drone.showPIP(1);
 				}
 				if (GUI.Button (new Rect (offset_w + PIP_BTN_WIDTH * 2, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), "3")) {
 					drone.showPIP(2);
@@ -402,4 +404,5 @@ public class HUD : MonoBehaviour {
 		GUI.Label(position, text, style);
 		style = backupStyle;
 	}
+
 }

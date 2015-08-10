@@ -21,6 +21,5 @@ namespace RTS {
 		public string ReadSetting(string key){
 			return this.appSettings[key];
 		}
-
 	}
 }
