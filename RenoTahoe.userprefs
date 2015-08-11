@@ -1,32 +1,52 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_DownloadedResources\MAPNAV\Scripts\MapNav.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Camera\CameraPIP.cs">
     <Files>
-      <File FileName="Assets\RTS\HUD.cs" Line="355" Column="36" />
-      <File FileName="Assets\WorldObject\WorldObject.cs" Line="81" Column="31" />
-      <File FileName="Assets\RTS\SceneManager.cs" Line="12" Column="25" />
-      <File FileName="Assets\RTS\UserInput.cs" Line="146" Column="38" />
+      <File FileName="Assets\RTS\ConfigManager.cs" Line="22" Column="3" />
+      <File FileName="Assets\RTS\HUD.cs" Line="1" Column="1" />
+      <File FileName="Assets\WorldObject\WorldObject.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\SceneManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\UserInput.cs" Line="1" Column="1" />
       <File FileName="Assets\RTS\ResourceManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\MapItem.cs" Line="105" Column="4" />
-      <File FileName="Assets\RTS\Player.cs" Line="22" Column="40" />
-      <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="110" Column="34" />
-      <File FileName="Assets\WorldObject\Unit\NPC.cs" Line="20" Column="3" />
+      <File FileName="Assets\WorldObject\MapItem.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\Player.cs" Line="1" Column="1" />
+      <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="10" Column="9" />
+      <File FileName="Assets\WorldObject\Unit\NPC.cs" Line="1" Column="1" />
       <File FileName="Assets\WorldObject\Unit\Vehicle.cs" Line="1" Column="1" />
-      <File FileName="Assets\OutlineScript.cs" Line="20" Column="14" />
-      <File FileName="Assets\Scripts\Camera\CameraPIP.cs" Line="24" Column="1" />
-      <File FileName="Assets\CarNavMeshAI.cs" Line="77" Column="1" />
-      <File FileName="Assets\_DownloadedResources\MAPNAV\Scripts\MapNav.cs" Line="371" Column="74" />
+      <File FileName="Assets\OutlineScript.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Camera\CameraPIP.cs" Line="20" Column="3" />
+      <File FileName="Assets\CarNavMeshAI.cs" Line="1" Column="1" />
+      <File FileName="Assets\_DownloadedResources\MAPNAV\Scripts\MapNav.cs" Line="359" Column="3" />
+      <File FileName="Assets\RTS\Enums.cs" Line="11" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True">
-          <Node name="Assembly-CSharp" expanded="True" />
+        <State expanded="True">
+          <Node name="Assembly-CSharp" expanded="True">
+            <Node name="_DownloadedResources" expanded="True">
+              <Node name="MAPNAV" expanded="True">
+                <Node name="Scripts" expanded="True" />
+              </Node>
+            </Node>
+            <Node name="RTS" expanded="True" />
+            <Node name="Scripts" expanded="True">
+              <Node name="Camera" expanded="True">
+                <Node name="CameraPIP.cs" selected="True" />
+              </Node>
+              <Node name="Drone" expanded="True" />
+            </Node>
+            <Node name="WorldObject" expanded="True">
+              <Node name="Unit" expanded="True" />
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\Scripts\Camera\CameraPIP.cs" line="72" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

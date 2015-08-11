@@ -7,8 +7,8 @@ using System.Collections.Generic;
 using RTS;
 
 public class Drone : WorldObject {
-	private const int PIP_DEPTH_ACTIVE = 2;
-	private const int PIP_DEPTH_DEACTIVE = -1;
+	public const int PIP_DEPTH_ACTIVE = 2;
+	public const int PIP_DEPTH_DEACTIVE = -1;
 	public Color color;  
 
 	protected bool moving, rotating;
@@ -100,6 +100,8 @@ public class Drone : WorldObject {
 		lineMove.materials = lineRaycast.materials;
 		lineMove.SetColors (Color.green, Color.green);
 		lineMove.SetWidth (0.3f,0.3f);
+
+        ConfigManager.getInstance().ReadSetting("");
 	}
 	
 	protected override void Update () {

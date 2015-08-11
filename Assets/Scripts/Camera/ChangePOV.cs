@@ -62,8 +62,6 @@ public class ChangePOV : MonoBehaviour {
 			foreach (Camera cam in cameras) {
 				if (ct == CameraType.Camera_First_View && cam.tag == RTS.Tags.CAM_FIRST_VIEW) { 
 					return cam;
-				} else if (ct == CameraType.Camera_Third_View && cam.tag == RTS.Tags.CAM_THIRD_VIEW) { 
-					return cam;
 				} else if (ct == CameraType.Camera_Hover_View && cam.tag == RTS.Tags.CAM_HOVER_VIEW) {
 					return cam;
 				}

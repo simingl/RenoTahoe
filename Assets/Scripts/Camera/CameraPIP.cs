@@ -13,8 +13,11 @@ public class CameraPIP : MonoBehaviour {
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
 	}
 
-	// Update is called once per frame
 	void Update () {
+		if (cam.depth != Drone.PIP_DEPTH_ACTIVE) {
+			return;
+		}
+
 		if (Input.GetMouseButton (0) && player.hud.MouseInBoundsPIP ()) {
 			GameObject hitObject = FindHitObject ();
 			if (hitObject) {
