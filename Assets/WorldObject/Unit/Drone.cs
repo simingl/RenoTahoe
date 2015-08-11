@@ -129,7 +129,13 @@ public class Drone : WorldObject {
 
 	protected override void OnGUI() {
 		base.OnGUI();
+
+		Rect selectBox = WorkManager.CalculateSelectionBox(selectionBounds, playingArea);
+		float width_ratio = selectBox.width/50f;   //50 is the width of the slider defined in prefabs
+		batterySlider.transform.localScale = new Vector3(width_ratio+0.1f, 1,1);
+
 		batterySlider.value = this.currentBattery;
+
 		batterySlider.gameObject.SetActive (player.isSelected(this));
 
 		if (base.isSelected() && player.GetComponent<ChangePOV> ().activeCamera == null) {
@@ -321,4 +327,5 @@ public class Drone : WorldObject {
 			this.camera_down.depth = PIP_DEPTH_ACTIVE;
 		}
 	}
+	
 }

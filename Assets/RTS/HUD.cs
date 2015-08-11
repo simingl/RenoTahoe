@@ -8,6 +8,12 @@ using RTS;
 public class HUD : MonoBehaviour {
 	public GUISkin resourceSkin, ordersSkin, selectBoxSkin, selectionBarSkin,selectBtnSkin;
 
+	public Texture drone_2d, drone_2d_h;
+
+	public Texture drone_cam_front, drone_cam_down;
+	
+	public Button cellBtn;
+
 	private const int RESOURCE_BAR_HEIGHT = 30;
 	private const int LINE_HEIGHT = 20;
 
@@ -30,8 +36,8 @@ public class HUD : MonoBehaviour {
 	private static int RESOURCE_CELL_WIDTH = 100;
 	private static int RESOURCE_WATER_WIDTH = 100;
 
-	private const int PIP_BTN_WIDTH = 20;
-	private const int PIP_BTN_HEIGHT = 18;
+	private const int PIP_BTN_WIDTH = 30;
+	private const int PIP_BTN_HEIGHT = 30;
 
 	private const int ROW_MAX = 6;
 
@@ -48,10 +54,7 @@ public class HUD : MonoBehaviour {
 	public static Rect selection = new Rect(0,0,0,0);
 	private Vector3 startClick = -Vector3.one;
 
-	public Texture drone_2d;
-	public Texture drone_2d_h;
 
-	public Button cellBtn;
 
 	private Camera camera_minimap;
 
@@ -371,13 +374,13 @@ public class HUD : MonoBehaviour {
 			WorldObject wo = player.getSelectedObjects()[0];
 			if(wo is Drone){
 				Drone drone = (Drone)wo;
-				int offset_w = MINIMAP_WIDTH + ORDERS_BAR_WIDTH + INFO_BAR_WIDHT + SELECTION_BAR_WIDTH;
+				int offset_w = MINIMAP_WIDTH + ORDERS_BAR_WIDTH + INFO_BAR_WIDHT + SELECTION_BAR_WIDTH+3;
 				int offset_h = Screen.height - MINIMAP_HEIGHT;
 
-				if (GUI.Button (new Rect (offset_w, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), "1")) {
+				if (GUI.Button (new Rect (offset_w, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), drone_cam_front)) {
 					drone.showPIP(0);
 				}
-				if (GUI.Button (new Rect (offset_w + PIP_BTN_WIDTH * 2, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), "3")) {
+				if (GUI.Button (new Rect (offset_w + PIP_BTN_WIDTH, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), drone_cam_down)) {
 					drone.showPIP(2);
 				}
 			}
