@@ -149,11 +149,16 @@ public class UserInput : MonoBehaviour {
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            if (Input.GetMouseButtonUp(0))
+            if (Input.GetMouseButtonUp(1))
             {
-                Vector3 hitPoint = FindHitPoint();
-                //hitPoint.y = 4;
-                //this.player.sceneManager.CreateDrone(hitPoint);
+				GameObject hitObject = FindHitObject();
+				if(hitObject.tag == "Drone"){
+					Drone drone = hitObject.GetComponent<Drone>();
+					//Camera cam = drone.getCameraFirstPerson();
+					//cam.rect = new Rect(new Vector2(0.8f, 0.8f), new Vector2(0.1f, 0.2f));
+					//cam.depth = 2;
+					//cam.gameObject.SetActive(true);
+				}
             }
         }
         

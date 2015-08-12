@@ -41,6 +41,30 @@ namespace RTS {
 			selectBoxSkin = skin;
 		}
 
+		private const Rect PIPCameraPosition  = new Rect (new Vector2 (0.8f, 0), new Vector2 (0.2f, 0.33f));
+		public static Rect getPIPCameraPosition(){
+			return PIPCameraPosition;
+		}
+
+		private const Rect PIPCameraPosition2 = new Rect (new Vector2 (0.8f, 0.8f), new Vector2 (0.1f, 0.2f));
+
+		private static int cameraIndex = 0;
+		private static Rect[] cameraPositions = new Rect[6];
+		public static void init(){
+			cameraPositions[0] = new Rect (new Vector2 (0.8f, 0.8f), new Vector2 (0.1f, 0.2f));
+			cameraPositions[1] = new Rect (new Vector2 (0.9f, 0.8f), new Vector2 (0.1f, 0.2f));
+			cameraPositions[2] = new Rect (new Vector2 (0.8f, 0.6f), new Vector2 (0.1f, 0.2f));
+			cameraPositions[3] = new Rect (new Vector2 (0.9f, 0.6f), new Vector2 (0.1f, 0.2f));
+			cameraPositions[4] = new Rect (new Vector2 (0.8f, 0.4f), new Vector2 (0.1f, 0.2f));
+			cameraPositions[5] = new Rect (new Vector2 (0.9f, 0.4f), new Vector2 (0.1f, 0.2f));
+		}
+
+		public static Rect getAvailableCameraPosition(){
+			if (cameraIndex == cameraPositions.Length) {
+				cameraIndex = 0;
+			}
+			return cameraPositions[cameraIndex];
+		}
 
 
 	}

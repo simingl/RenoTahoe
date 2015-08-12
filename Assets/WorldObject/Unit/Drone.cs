@@ -100,8 +100,6 @@ public class Drone : WorldObject {
 		lineMove.materials = lineRaycast.materials;
 		lineMove.SetColors (Color.green, Color.green);
 		lineMove.SetWidth (0.3f,0.3f);
-
-        ConfigManager.getInstance().ReadSetting("");
 	}
 	
 	protected override void Update () {
@@ -139,7 +137,9 @@ public class Drone : WorldObject {
 		batterySlider.gameObject.SetActive (player.isSelected(this));
 
 		if (base.isSelected() && player.GetComponent<ChangePOV> ().activeCamera == null) {
-			batterySlider.gameObject.SetActive (true);
+			if(batterySlider.gameObject.active == false){
+				batterySlider.gameObject.SetActive (true);
+			}
 		} else {
 			batterySlider.gameObject.SetActive (false);
 			this.camera_1st.depth = PIP_DEPTH_DEACTIVE;
