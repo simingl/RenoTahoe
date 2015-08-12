@@ -76,10 +76,6 @@ public class WorldObject : MonoBehaviour {
 
 	}
 
-	private void ChangeSelection(WorldObject worldObject, Player controller) {
-		controller.cleanSelectedObject();
-		controller.addSelectedObject(worldObject);
-	}
 	public void DrawSelection() {
 		GUI.skin = ResourceManager.SelectBoxSkin;
 		Rect selectBox = WorkManager.CalculateSelectionBox(selectionBounds, playingArea);

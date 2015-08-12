@@ -146,26 +146,21 @@ public class UserInput : MonoBehaviour {
 				this.player.sceneManager.CreateDrone(hitPoint);
 			}
 		}
-
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            if (Input.GetMouseButtonUp(1))
-            {
-				GameObject hitObject = FindHitObject();
-				if(hitObject.tag == "Drone"){
-					Drone drone = hitObject.GetComponent<Drone>();
-					//Camera cam = drone.getCameraFirstPerson();
-					//cam.rect = new Rect(new Vector2(0.8f, 0.8f), new Vector2(0.1f, 0.2f));
-					//cam.depth = 2;
-					//cam.gameObject.SetActive(true);
-				}
-            }
-        }
-        
 	}
 
 	private void LeftMouseClick() {
-		if(player.hud.MouseInBounds()) {
+		if (Input.GetKey(KeyCode.LeftShift))
+		{
+			GameObject hitObject = FindHitObject();
+			if(hitObject.tag == "Drone"){
+				Drone drone = hitObject.GetComponent<Drone>();
+				Camera cam = drone.getCameraFront();
+				if(cam.depth !=Drone.PIP_DEPTH_ACTIVE){
+					cam.rect = ResourceManager.getInstance().getAvailableCameraPosition(cam);
+					cam.depth = Drone.PIP_DEPTH_ACTIVE;
+				}
+			}
+		}else if(player.hud.MouseInBounds()) {
 			GameObject hitObject = FindHitObject();
 			Vector3 hitPoint = FindHitPoint();
 			if(hitObject && hitPoint != ResourceManager.InvalidPosition) {

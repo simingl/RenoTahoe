@@ -30,17 +30,12 @@ public class Player : MonoBehaviour {
 
 		if (obj == this.selectedObjects [0] && obj is Drone) {
 			Drone drone = (Drone)obj;
-			drone.SetPIPCameraActive(true);
-			drone.showPIP(0);
+			drone.showPIPCameraFront();
 		}
 	}
 
 	public void setSelectedObject(WorldObject obj){
-		foreach(WorldObject selectedObj in selectedObjects){
-			if(selectedObj is Drone){
-				((Drone)selectedObj).SetPIPCameraActive(false);
-			}
-		}
+
 		this.cleanSelectedObject ();
 		this.addSelectedObject (obj);
 	}
@@ -55,11 +50,16 @@ public class Player : MonoBehaviour {
 	public void removeSelectedObject(WorldObject obj){
 		selectedObjects.Remove (obj);
 		if (obj is Drone) {
-			((Drone)obj).SetPIPCameraActive(false);
+			((Drone)obj).Unselect();
 		}
 	}
 
 	public void cleanSelectedObject(){
+		foreach(WorldObject selectedObj in selectedObjects){
+			if(selectedObj is Drone){
+				((Drone)selectedObj).Unselect();
+			}
+		}
 		selectedObjects.Clear ();
 	}
 

@@ -364,28 +364,27 @@ public class HUD : MonoBehaviour {
 		}
 	}
 
-    private void showCameraTopRight(Drone drone) {
-        Camera cam = drone.getCameraFirstPerson();
-        cam.enabled = true;
-    }
-
 	private void DrawPIPBar(){
 		if (player.getSelectedObjects ().Count > 0) {
-			WorldObject wo = player.getSelectedObjects()[0];
-			if(wo is Drone){
+			WorldObject wo = player.getSelectedObjects () [0];
+			if (wo is Drone) {
 				Drone drone = (Drone)wo;
-				int offset_w = MINIMAP_WIDTH + ORDERS_BAR_WIDTH + INFO_BAR_WIDHT + SELECTION_BAR_WIDTH+3;
+				int offset_w = MINIMAP_WIDTH + ORDERS_BAR_WIDTH + INFO_BAR_WIDHT + SELECTION_BAR_WIDTH + 3;
 				int offset_h = Screen.height - MINIMAP_HEIGHT;
 
-				if (GUI.Button (new Rect (offset_w, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), drone_cam_front)) {
-					drone.showPIP(0);
-				}
-				if (GUI.Button (new Rect (offset_w + PIP_BTN_WIDTH, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), drone_cam_down)) {
-					drone.showPIP(2);
+				if (drone.getCameraFront ().depth == Drone.PIP_DEPTH_ACTIVE) {
+					if (GUI.Button (new Rect (offset_w, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), drone_cam_front)) {
+						drone.togglePIPCamera ();
+					}
+				} else if (drone.getCameraDown ().depth == Drone.PIP_DEPTH_ACTIVE) {
+					if (GUI.Button (new Rect (offset_w, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), drone_cam_down)) {
+						drone.togglePIPCamera ();
+					}
 				}
 			}
 		}
 	}
+
 	public static float InvertMouseY(float y){
 		return Screen.height - y;
 	}

@@ -1,8 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace RTS {
-	public static class ResourceManager {
+	public class ResourceManager{
+		private static ResourceManager instance = null;
+
+		public static ResourceManager getInstance(){
+			if (instance == null) {
+				instance = new ResourceManager();
+			}
+			return instance;
+		}
+
+		private ResourceManager(){
+			init ();
+		}
+
 		public static float ScrollSpeed { get { 
 				if(Input.GetKey(KeyCode.LeftShift)){
 					return 10;
@@ -41,31 +55,36 @@ namespace RTS {
 			selectBoxSkin = skin;
 		}
 
-		private const Rect PIPCameraPosition  = new Rect (new Vector2 (0.8f, 0), new Vector2 (0.2f, 0.33f));
-		public static Rect getPIPCameraPosition(){
+		private Rect PIPCameraPosition  = new Rect (new Vector2 (0.8f, 0), new Vector2 (0.2f, 0.33f));
+		public Rect getPIPCameraPosition(){
 			return PIPCameraPosition;
 		}
 
-		private const Rect PIPCameraPosition2 = new Rect (new Vector2 (0.8f, 0.8f), new Vector2 (0.1f, 0.2f));
-
 		private static int cameraIndex = 0;
-		private static Rect[] cameraPositions = new Rect[6];
-		public static void init(){
-			cameraPositions[0] = new Rect (new Vector2 (0.8f, 0.8f), new Vector2 (0.1f, 0.2f));
-			cameraPositions[1] = new Rect (new Vector2 (0.9f, 0.8f), new Vector2 (0.1f, 0.2f));
-			cameraPositions[2] = new Rect (new Vector2 (0.8f, 0.6f), new Vector2 (0.1f, 0.2f));
-			cameraPositions[3] = new Rect (new Vector2 (0.9f, 0.6f), new Vector2 (0.1f, 0.2f));
-			cameraPositions[4] = new Rect (new Vector2 (0.8f, 0.4f), new Vector2 (0.1f, 0.2f));
-			cameraPositions[5] = new Rect (new Vector2 (0.9f, 0.4f), new Vector2 (0.1f, 0.2f));
-		}
+		private Rect[] cameraPositions = new Rect[6];
+		private Dictionary<Rect, Camera> cameras  = new Dictionary<Rect, Camera>();
 
-		public static Rect getAvailableCameraPosition(){
+		public Rect getAvailableCameraPosition(Camera cam){
 			if (cameraIndex == cameraPositions.Length) {
 				cameraIndex = 0;
 			}
-			return cameraPositions[cameraIndex];
+			Rect rect = cameraPositions [cameraIndex++];
+			if(cameras.ContainsKey(rect) && cameras[rect].rect != this.getPIPCameraPosition()){
+				cameras [rect] .depth = Drone.PIP_DEPTH_DEACTIVE;
+			}
+
+			cameras [rect] = cam;
+			return rect;
 		}
 
+		private void init(){
+			cameraPositions[0] = new Rect (new Vector2 (0.8f, 0.80f), new Vector2 (0.1f, 0.15f));
+			cameraPositions[1] = new Rect (new Vector2 (0.9f, 0.80f), new Vector2 (0.1f, 0.15f));
+			cameraPositions[2] = new Rect (new Vector2 (0.8f, 0.65f), new Vector2 (0.1f, 0.15f));
+			cameraPositions[3] = new Rect (new Vector2 (0.9f, 0.65f), new Vector2 (0.1f, 0.15f));
+			cameraPositions[4] = new Rect (new Vector2 (0.8f, 0.50f), new Vector2 (0.1f, 0.15f));
+			cameraPositions[5] = new Rect (new Vector2 (0.9f, 0.50f), new Vector2 (0.1f, 0.15f));
+		}
 
 	}
 }

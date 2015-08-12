@@ -7,14 +7,16 @@ public class CameraPIP : MonoBehaviour {
  	public GUISkin mySkin;
 	private Player player;
 	private Camera cam;
+	private Drone drone;
 
 	void Start(){
 		cam = this.GetComponent<Camera>();
+		drone = this.transform.parent.gameObject.GetComponent<Drone> ();
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
 	}
 
 	void Update () {
-		if (cam.depth != Drone.PIP_DEPTH_ACTIVE) {
+		if (cam.depth != Drone.PIP_DEPTH_ACTIVE && !this.MouseInBoundsPIP() ) {
 			return;
 		}
 
@@ -47,9 +49,29 @@ public class CameraPIP : MonoBehaviour {
 	}
 
 	void OnGUI(){
-		if (cam.depth != -1) {
+		if (cam.depth != Drone.PIP_DEPTH_DEACTIVE ) {
 			GUI.skin = mySkin;
 			GUI.Box (new Rect (cam.pixelRect.x, (Screen.height - cam.pixelRect.yMax), cam.pixelWidth, cam.pixelHeight), "");
+
+			//draw drone icon on the top right of the camera
+			if(cam.rect != ResourceManager.getInstance().getPIPCameraPosition()){
+				if(GUI.Button(new Rect (cam.pixelRect.x + cam.pixelWidth-20, (Screen.height - cam.pixelRect.yMax), 20, 20), "x")){
+					cam.depth = Drone.PIP_DEPTH_DEACTIVE;
+				}
+			}
+
+			//draw drone icon on the top right of the camera
+			Color color = drone.color;
+			Texture droneTexture = player.hud.drone_2d;
+			GUI.color = color;
+			GUI.DrawTexture(new Rect (cam.pixelRect.x + cam.pixelWidth-60, (Screen.height - cam.pixelRect.yMax), 40, 20), player.hud.drone_2d);
+
+			//double click PIP camera to select the cooresponding drone
+			Event e = Event.current;
+			if (e.isMouse && e.type == EventType.MouseDown && e.clickCount == 2 &&  this.MouseInBoundsPIP())
+			{
+				player.setSelectedObject(drone);
+			}
 		}
 	}
 
@@ -72,5 +94,12 @@ public class CameraPIP : MonoBehaviour {
 		RaycastHit hit;
 		if(Physics.Raycast(ray, out hit)) return hit.point;
 		return ResourceManager.InvalidPosition;
+	}
+
+	private bool MouseInBoundsPIP(){
+		Vector3 mousePos = Input.mousePosition;
+		bool insideWidth = mousePos.x >= cam.pixelRect.x && mousePos.x <= cam.pixelRect.x+cam.pixelWidth;
+		bool insideHeight = mousePos.y >= cam.pixelRect.y && mousePos.y < cam.pixelRect.yMax;
+		return insideWidth && insideHeight;
 	}
 }

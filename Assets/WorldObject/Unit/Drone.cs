@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using RTS;
 
 public class Drone : WorldObject {
+	public Texture cameraIcon;
 	public const int PIP_DEPTH_ACTIVE = 2;
 	public const int PIP_DEPTH_DEACTIVE = -1;
 	public Color color;  
@@ -40,7 +41,7 @@ public class Drone : WorldObject {
 	private int MAX_WATER = 5;
 
 	private Projector projector;
-	private Camera camera_1st, camera_down;
+	private Camera camera_front, camera_down;
 
 	private Rigidbody rigidbody;
 
@@ -55,9 +56,7 @@ public class Drone : WorldObject {
 	protected override void Awake() {
 		base.Awake();
 
-
 		rigidbody = this.GetComponent<Rigidbody> ();
-		//rigidBody.Sleep ();
 
 		this.canvas = GameObject.FindObjectOfType<Canvas> ();
 		//Initialize to random color
@@ -72,13 +71,11 @@ public class Drone : WorldObject {
 		//setup the destination mark
 		destinationMark = this.transform.FindChild("DestinationMark");
 
-		this.camera_1st = (Camera)(this.transform.FindChild ("camera_1st_view").gameObject).GetComponent<Camera>();
+		this.camera_front = (Camera)(this.transform.FindChild ("camera_1st_view").gameObject).GetComponent<Camera>();
 		this.camera_down = (Camera)(this.transform.FindChild ("camera_hover_view").gameObject).GetComponent<Camera>();
 
-		this.camera_1st.depth = PIP_DEPTH_DEACTIVE;
+		this.camera_front.depth = PIP_DEPTH_DEACTIVE;
 		this.camera_down.depth = PIP_DEPTH_DEACTIVE;
-
-		this.SetPIPCameraActive (false);
 	}
 
 	protected override void Start () {
@@ -128,12 +125,11 @@ public class Drone : WorldObject {
 	protected override void OnGUI() {
 		base.OnGUI();
 
+		//reset the width of the battery bar
 		Rect selectBox = WorkManager.CalculateSelectionBox(selectionBounds, playingArea);
 		float width_ratio = selectBox.width/50f;   //50 is the width of the slider defined in prefabs
 		batterySlider.transform.localScale = new Vector3(width_ratio+0.1f, 1,1);
-
 		batterySlider.value = this.currentBattery;
-
 		batterySlider.gameObject.SetActive (player.isSelected(this));
 
 		if (base.isSelected() && player.GetComponent<ChangePOV> ().activeCamera == null) {
@@ -142,8 +138,10 @@ public class Drone : WorldObject {
 			}
 		} else {
 			batterySlider.gameObject.SetActive (false);
-			this.camera_1st.depth = PIP_DEPTH_DEACTIVE;
-			this.camera_down.depth = PIP_DEPTH_DEACTIVE;
+		}
+
+		if (this.camera_front.depth == PIP_DEPTH_ACTIVE || this.camera_down.depth == PIP_DEPTH_ACTIVE) {
+			DrawCameraIcon ();
 		}
 	}
 
@@ -162,10 +160,12 @@ public class Drone : WorldObject {
 		}
 	}
 
-    public Camera getCameraFirstPerson() {
-        return this.camera_1st;
+    public Camera getCameraFront() {
+        return this.camera_front;
     }
-
+	public Camera getCameraDown() {
+		return this.camera_down;
+	}
 	public void StartMove(Vector3 destination) {
 		this.destination = destination;
 		targetRotation = Quaternion.LookRotation (destination - transform.position);
@@ -313,19 +313,34 @@ public class Drone : WorldObject {
 		return waters.Count;
 	}
 
-	public void SetPIPCameraActive(bool isActive){
-		this.camera_1st.enabled = isActive;
-		this.camera_down.enabled = isActive;
+	public void showPIPCameraFront(){
+		this.camera_front.rect = ResourceManager.getInstance ().getPIPCameraPosition();
+		this.camera_front.depth = PIP_DEPTH_ACTIVE;
+		this.camera_down.depth = PIP_DEPTH_DEACTIVE;
 	}
 
-	public void showPIP(int i){
-		if (i == 0) {
-			this.camera_1st.depth = PIP_DEPTH_ACTIVE;
-			this.camera_down.depth = PIP_DEPTH_DEACTIVE;
-		} else if (i == 2) {
-			this.camera_1st.depth = PIP_DEPTH_DEACTIVE;
-			this.camera_down.depth = PIP_DEPTH_ACTIVE;
-		}
+	public void togglePIPCamera(){
+		float tmp = this.camera_front.depth;
+		this.camera_front.depth = this.camera_down.depth;
+		this.camera_down.depth= tmp;
 	}
-	
+
+	public void Unselect(){
+		if (this.camera_front.rect == ResourceManager.getInstance ().getPIPCameraPosition ()) {
+			this.camera_front.depth = PIP_DEPTH_DEACTIVE;
+		}
+		if (this.camera_down.rect == ResourceManager.getInstance ().getPIPCameraPosition ()) {
+			this.camera_down.depth = PIP_DEPTH_DEACTIVE;
+		}
+
+	}
+
+	private void DrawCameraIcon(){
+		GUI.skin = ResourceManager.SelectBoxSkin;
+		Rect selectBox = WorkManager.CalculateSelectionBox(selectionBounds, playingArea);
+		GUI.BeginGroup(playingArea);
+		Rect cameraBox = new Rect (selectBox.x+selectBox.width-5, selectBox.y, 15, 15);
+		GUI.DrawTexture(cameraBox, cameraIcon);
+		GUI.EndGroup();
+	}
 }
