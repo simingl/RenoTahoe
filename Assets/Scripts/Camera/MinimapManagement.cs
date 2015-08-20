@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
+
 public class MinimapManagement : MonoBehaviour {
 	private Camera mainCam;
 	private Camera minimapCam;
@@ -9,10 +11,14 @@ public class MinimapManagement : MonoBehaviour {
 
 	private Player player;
 
+	void Awake(){
+
+	}
 	// Use this for initialization
 	void Start () {
 		mainCam = Camera.main;
 		minimapCam = this.GetComponent<Camera> ();
+
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
 	}
 	
@@ -25,10 +31,18 @@ public class MinimapManagement : MonoBehaviour {
 				mainCam.transform.position = new Vector3(hit.point.x, mainCam.transform.position.y, hit.point.z);
 			}
 		}
+
+
 	}
 
-	void OnGUI(){
+
+
+
+
+	void OnGUI()
+	{
 		GUI.skin = skin;
 		GUI.Box (new Rect (minimapCam.pixelRect.x, (Screen.height - minimapCam.pixelRect.yMax), minimapCam.pixelWidth, minimapCam.pixelHeight), "");
 	}
+
 }

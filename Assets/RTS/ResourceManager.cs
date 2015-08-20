@@ -28,8 +28,9 @@ namespace RTS {
 		public static float RotateSpeed { get { return 100; } }
 		public static int ScrollWidth { get { return 15; } }
 
-		public static float MinCameraHeight { get { return 30; } }
-		public static float MaxCameraHeight { get { return 2000; } }
+		public static float MinCameraSize { get { return 10; } }
+		public static float MaxCameraSize { get { return 50; } }
+
 		public static float MinCameraWidth { get { return -500; } }
 		public static float MaxCameraWidth { get { return 500; } }
 		public static float MinCameraLength { get { return -500; } }

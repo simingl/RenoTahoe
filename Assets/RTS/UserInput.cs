@@ -108,7 +108,10 @@ public class UserInput : MonoBehaviour {
 		}
 
 		//away from ground movement
-		Camera.main.orthographicSize -= ResourceManager.ScrollSpeed * Input.GetAxis("Mouse ScrollWheel");
+		Camera.main.orthographicSize -= ResourceManager.ScrollSpeed * Input.GetAxis ("Mouse ScrollWheel");
+		float minCameraSize = ResourceManager.MinCameraSize;
+		float maxCameraSize = ResourceManager.MaxCameraSize;
+		Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, minCameraSize, maxCameraSize);
 		//movement += Camera.main.transform.forward * ResourceManager.ScrollSpeed * Input.GetAxis("Mouse ScrollWheel");;
 
 		//calculate desired camera position based on received input
@@ -125,8 +128,12 @@ public class UserInput : MonoBehaviour {
 		if(destination != origin) {
 			Camera.main.transform.position = Vector3.MoveTowards(origin, destination, Time.deltaTime * ResourceManager.ScrollSpeed*10);
 		}
+
+		Camera.main.GetComponent<CameraMain>().ClampCam();
 	}
-	
+
+
+
 	private void RotateCamera() {
 		
 	}
