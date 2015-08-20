@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class SceneManager : MonoBehaviour {
 	private const int MAX_DRONE = 16;
 
+	public GameObject ground;
 	public GameObject tree;
 	public GameObject fire;
 	public GameObject cellphone;

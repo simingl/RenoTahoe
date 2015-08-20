@@ -543,7 +543,7 @@ public class MapNav : MonoBehaviour
 							cam.Translate(-Input.GetAxis("Mouse X") * dragSpeed * 0.7f, -Input.GetAxis("Mouse Y") * dragSpeed * 0.7f, 0);
 						
 						//Clamp the camera position to avoid displaying any off the map areas
-						ClampCam();
+						//ClampCam();
 					}
 				}
 				#endif
