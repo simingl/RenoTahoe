@@ -16,10 +16,6 @@ public class CameraPIP : MonoBehaviour {
 	}
 
 	void Update () {
-		if (cam.depth != Drone.PIP_DEPTH_ACTIVE && !this.MouseInBoundsPIP() ) {
-			return;
-		}
-
 		if (Input.GetMouseButton (0) && player.hud.MouseInBoundsPIP ()) {
 			GameObject hitObject = FindHitObject ();
 			if (hitObject) {
@@ -35,7 +31,9 @@ public class CameraPIP : MonoBehaviour {
 					}
 				}
 			}
-		} else if (Input.GetMouseButtonDown (1) && player.hud.MouseInBoundsPIP () && player.getSelectedObjects().Count > 0) {
+		} else if (Input.GetMouseButtonDown (1) && player.hud.MouseInBoundsPIP () && cam.depth == Drone.PIP_DEPTH_ACTIVE
+		           && player.getSelectedObjects().Count > 0 && player.getSelectedObjects()[0] == drone) {
+
 			GameObject hitObject = FindHitObject();
 			Vector3 hitPoint = FindHitPoint();
 			
@@ -78,7 +76,7 @@ public class CameraPIP : MonoBehaviour {
 	private GameObject FindHitObject() {
 		LayerMask entitylayerMask = (1 << 11);   //Entity layer, npc and vehicle
 		LayerMask groundlayerMask = (1 << 12);    //ground layer, ground
-		Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+		Ray ray = this.cam.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 		if (Physics.Raycast (ray, out hit, 20f, entitylayerMask)) {
 			return hit.collider.gameObject;
@@ -90,7 +88,7 @@ public class CameraPIP : MonoBehaviour {
 	}
 
 	private Vector3 FindHitPoint() {
-		Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+		Ray ray = this.cam.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 		if(Physics.Raycast(ray, out hit)) return hit.point;
 		return ResourceManager.InvalidPosition;
