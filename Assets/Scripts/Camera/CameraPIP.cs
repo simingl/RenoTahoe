@@ -16,7 +16,7 @@ public class CameraPIP : MonoBehaviour {
 	}
 
 	void Update () {
-		if (Input.GetMouseButton (0) && player.hud.MouseInBoundsPIP ()) {
+		if (Input.GetMouseButton (0) && player.hud.MouseInBoundsPIP () && cam.depth == Drone.PIP_DEPTH_ACTIVE) {
 			GameObject hitObject = FindHitObject ();
 			if (hitObject) {
 				if (hitObject.name != "Ground") {
