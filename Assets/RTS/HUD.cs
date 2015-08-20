@@ -345,7 +345,7 @@ public class HUD : MonoBehaviour {
 	}
 
 	private void MouseDragSelection(){
-		if (Input.GetMouseButtonDown (0)) {
+		if (Input.GetMouseButtonDown (0) && !MouseInBoundsMinimap()) {
 			startClick = Input.mousePosition;
 		} else if(Input.GetMouseButtonUp(0)){
 			startClick = -Vector3.one;
