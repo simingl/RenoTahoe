@@ -10,6 +10,8 @@ public class Vehicle : WorldObject {
 		
 		this._isSelectable = false;
 
+		this.scoreValue = 200;
+
 		mark = GameObject.CreatePrimitive (PrimitiveType.Cube);
 		mark.layer = gameObject.layer;
 		mark.GetComponent<Collider> ().enabled = false;
@@ -27,6 +29,7 @@ public class Vehicle : WorldObject {
 	public void Mark(){
 		mark.GetComponent<Renderer> ().material.color = Color.green;
 		SetLayerRecursively (gameObject, gameObject.layer, ResourceManager.LayerEntitiesCommon);
+		ScoreManager.score += this.scoreValue;
 	}
 
 

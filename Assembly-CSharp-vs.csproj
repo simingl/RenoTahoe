@@ -56,6 +56,7 @@
      <Compile Include="Assets\RTS\Player.cs" />
      <Compile Include="Assets\RTS\ResourceManager.cs" />
      <Compile Include="Assets\RTS\SceneManager.cs" />
+     <Compile Include="Assets\RTS\ScoreManager.cs" />
      <Compile Include="Assets\RTS\Timer.cs" />
      <Compile Include="Assets\RTS\UserInput.cs" />
      <Compile Include="Assets\RTS\WorkManager.cs" />

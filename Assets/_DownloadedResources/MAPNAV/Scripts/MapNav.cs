@@ -487,37 +487,36 @@ public class MapNav : MonoBehaviour
 	}
 
 	void Update(){
-		if(ready){	
-			if(!simGPS){
-				//Smoothly move pointer to updated position
-				currentUserPos.x = user.position.x;
-				currentUserPos.x = Mathf.Lerp (user.position.x, newUserPos.x, 2.0f*Time.deltaTime);
-				currentUserPos.z = user.position.z;
-				currentUserPos.z = Mathf.Lerp (user.position.z, newUserPos.z, 2.0f*Time.deltaTime);
-				user.position = new Vector3(currentUserPos.x, user.position.y, currentUserPos.z);
-
-				//Update rotation
-				if(System.Math.Abs(user.eulerAngles.y-heading) >= 5){
-					float newAngle = Mathf.SmoothDampAngle(user.eulerAngles.y, heading, ref yVelocity, smooth);
-					user.eulerAngles = new Vector3(user.eulerAngles.x, newAngle, user.eulerAngles.z);
-				}
-			}
-			else{
-				//When GPS Emulator is enabled, user position is controlled by keyboard input.
-				if(mapping == false){
-					//Use keyboard input to move the player
-					if (Input.GetKey ("up") || Input.GetKey ("w")){
-						user.transform.Translate(Vector3.forward*speed*Time.deltaTime);
-					}
-					if (Input.GetKey ("down") || Input.GetKey ("s")){
-						user.transform.Translate(-Vector3.forward*speed*Time.deltaTime);
-					}
-					//rotate pointer when pressing Left and Right arrow keys
-					user.Rotate(Vector3.up, Input.GetAxis("Horizontal")*80*Time.deltaTime);
-				}
-			}	
-		}
-		
+//		if(ready){	
+//			if(!simGPS){
+//				//Smoothly move pointer to updated position
+//				currentUserPos.x = user.position.x;
+//				currentUserPos.x = Mathf.Lerp (user.position.x, newUserPos.x, 2.0f*Time.deltaTime);
+//				currentUserPos.z = user.position.z;
+//				currentUserPos.z = Mathf.Lerp (user.position.z, newUserPos.z, 2.0f*Time.deltaTime);
+//				user.position = new Vector3(currentUserPos.x, user.position.y, currentUserPos.z);
+//
+//				//Update rotation
+//				if(System.Math.Abs(user.eulerAngles.y-heading) >= 5){
+//					float newAngle = Mathf.SmoothDampAngle(user.eulerAngles.y, heading, ref yVelocity, smooth);
+//					user.eulerAngles = new Vector3(user.eulerAngles.x, newAngle, user.eulerAngles.z);
+//				}
+//			}
+//			else{
+//				//When GPS Emulator is enabled, user position is controlled by keyboard input.
+//				if(mapping == false){
+//					//Use keyboard input to move the player
+//					if (Input.GetKey ("up") || Input.GetKey ("w")){
+//						user.transform.Translate(Vector3.forward*speed*Time.deltaTime);
+//					}
+//					if (Input.GetKey ("down") || Input.GetKey ("s")){
+//						user.transform.Translate(-Vector3.forward*speed*Time.deltaTime);
+//					}
+//					//rotate pointer when pressing Left and Right arrow keys
+//					user.Rotate(Vector3.up, Input.GetAxis("Horizontal")*80*Time.deltaTime);
+//				}
+//			}	
+//		}		
 		if(mapping && !mapDisabled){
 			//get download progress while images are still downloading
 			if(www != null)
