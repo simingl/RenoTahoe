@@ -95,6 +95,7 @@ namespace RTS {
 		public static int LayerEntities{get {return 11;}}
 		public static int LayerGround{get {return 12;}}
 		public static int LayerEntitiesCommon{get {return 13;}}
+		public static int LayerMainCamerea{get {return 14;}}
 
 	}
 }
