@@ -36,12 +36,14 @@ public class CameraMain : MonoBehaviour
 	void Awake ()
 	{
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
-		ground = GameObject.FindGameObjectWithTag ("Ground");
 		cam = transform;
 		mycam = Camera.main;
 		MiniMapCamera = GameObject.FindGameObjectWithTag ("Camera_minimap").GetComponent<Camera>();
 	}
 
+	void Start(){
+		ground = player.sceneManager.transform.FindChild("Ground").gameObject;
+	}
 	public void ClampCam(){
 		Transform mymap = ground.transform;
 		
