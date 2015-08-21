@@ -13,9 +13,14 @@ public class CameraPIP : MonoBehaviour {
 		cam = this.GetComponent<Camera>();
 		drone = this.transform.parent.gameObject.GetComponent<Drone> ();
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
+
+
 	}
 
 	void Update () {
+		if (cam.tag == "Camera_1st_view") {
+			cam.transform.GetChild (0).gameObject.GetComponent<MeshFilter> ().mesh = CameraExtention.GenerateFrustumMesh (cam);
+		}
 		if (Input.GetMouseButton (0) && player.hud.MouseInBoundsPIP () && cam.depth == Drone.PIP_DEPTH_ACTIVE) {
 			GameObject hitObject = FindHitObject ();
 			if (hitObject) {
@@ -100,4 +105,6 @@ public class CameraPIP : MonoBehaviour {
 		bool insideHeight = mousePos.y >= cam.pixelRect.y && mousePos.y < cam.pixelRect.yMax;
 		return insideWidth && insideHeight;
 	}
+
+
 }

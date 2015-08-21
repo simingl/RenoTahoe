@@ -59,6 +59,7 @@
      <Compile Include="Assets\RTS\Timer.cs" />
      <Compile Include="Assets\RTS\UserInput.cs" />
      <Compile Include="Assets\RTS\WorkManager.cs" />
+     <Compile Include="Assets\Scripts\Camera\CameraExtention.cs" />
      <Compile Include="Assets\Scripts\Camera\CameraMain.cs" />
      <Compile Include="Assets\Scripts\Camera\CameraPIP.cs" />
      <Compile Include="Assets\Scripts\Camera\ChangePOV.cs" />
