@@ -97,5 +97,6 @@ namespace RTS {
 		public static int LayerEntitiesCommon{get {return 13;}}
 		public static int LayerMainCamerea{get {return 14;}}
 
+		public static int DroneBatteryLife {get {return 18*60;}}
 	}
 }

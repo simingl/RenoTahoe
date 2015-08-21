@@ -15,7 +15,6 @@ public class Drone : WorldObject {
 	protected bool moving, rotating;
 	public float moveSpeed, rotateSpeed;
 
-	public float startBattery = 100;
 	public float currentBattery = 100;
 	public float batteryUsage = 0.1f;
 
@@ -56,6 +55,7 @@ public class Drone : WorldObject {
 	protected override void Awake() {
 		base.Awake();
 
+		currentBattery = ResourceManager.DroneBatteryLife;
 		rigidbody = this.GetComponent<Rigidbody> ();
 
 		this.canvas = GameObject.FindObjectOfType<Canvas> ();
@@ -231,7 +231,7 @@ public class Drone : WorldObject {
 
 	private void CalculateBattery(){
 		if (this.currentBattery > 0) {
-			this.currentBattery -= Time.deltaTime * this.batteryUsage;
+			this.currentBattery -= Time.deltaTime;
 		}
 	}
 
