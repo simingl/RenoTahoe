@@ -116,4 +116,15 @@ public class WorldObject : MonoBehaviour {
 	public void OnCollisionExit(Collision collisionInfo){
 		this.gameObject.GetComponent<Rigidbody> ().velocity = Vector3.zero;
 	} 
+
+	public void SetLayerRecursively( GameObject obj, int oldLayer, int newLayer )
+	{
+		if (obj.layer == oldLayer) {
+			obj.layer = newLayer;
+		}
+		foreach(Transform child in obj.transform )
+		{
+			SetLayerRecursively( child.gameObject, oldLayer, newLayer );
+		}
+	}
 }

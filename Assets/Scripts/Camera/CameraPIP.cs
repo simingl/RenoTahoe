@@ -24,9 +24,9 @@ public class CameraPIP : MonoBehaviour {
 					if (worldObject) {
 						worldObject.GetComponent<MapItem> ().setColor (Color.green);
 						if (worldObject is NPC) {
-							((NPC)worldObject).setColor (Color.green);
+							((NPC)worldObject).Mark ();
 						} else if (worldObject is Vehicle) {
-							((Vehicle)worldObject).setColor (Color.green);
+							((Vehicle)worldObject).Mark();
 						}
 					}
 				}

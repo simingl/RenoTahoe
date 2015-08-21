@@ -43,6 +43,7 @@ namespace RTS {
 		public static float MaxWest{get {return 100;}}
 
 
+
 		private static Vector3 invalidPosition = new Vector3(-99999, -99999, -99999);
 		public static Vector3 InvalidPosition { get { return invalidPosition; } }
 
@@ -86,6 +87,14 @@ namespace RTS {
 			cameraPositions[4] = new Rect (new Vector2 (0.8f, 0.50f), new Vector2 (0.1f, 0.15f));
 			cameraPositions[5] = new Rect (new Vector2 (0.9f, 0.50f), new Vector2 (0.1f, 0.15f));
 		}
+
+		//Layers
+		public static int LayerMiniMap{get {return 8;}}
+		public static int LayerPIPCamera{get {return 9;}}
+		public static int LayerRoad{get {return 10;}}
+		public static int LayerEntities{get {return 11;}}
+		public static int LayerGround{get {return 12;}}
+		public static int LayerEntitiesCommon{get {return 13;}}
 
 	}
 }
