@@ -3,16 +3,15 @@ using System.Collections;
 using RTS;
 
 public class NPC : WorldObject {
-
 	private Renderer rend;
 	public Texture red;
 	public Texture green;
-
 	private GameObject mark;
 
-	protected virtual void Start () {
+	override protected void Start () {
 		base.Start ();
 
+		this.scoreValue = 1000;
 		this._isSelectable = false;
 
 		mark = GameObject.CreatePrimitive (PrimitiveType.Cube);
@@ -32,5 +31,6 @@ public class NPC : WorldObject {
 	public void Mark(){
 		mark.GetComponent<Renderer> ().material.color = Color.green;
 		SetLayerRecursively (gameObject, gameObject.layer, ResourceManager.LayerEntitiesCommon);
+		ScoreManager.score += this.scoreValue;
 	}
 }

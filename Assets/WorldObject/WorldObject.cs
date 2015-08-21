@@ -4,7 +4,7 @@ using RTS;
 
 public class WorldObject : MonoBehaviour {
 	public WorldObjectType type;
-
+	public int scoreValue = 1000;
 	public string objectName;
 
 	protected Player player;
