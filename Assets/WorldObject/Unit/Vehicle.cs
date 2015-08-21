@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using RTS;
 
 public class Vehicle : WorldObject {
 	private GameObject mark;
@@ -23,7 +24,10 @@ public class Vehicle : WorldObject {
 		mark.GetComponent<Renderer> ().material.color = color;
 	}
 	
-	public void setRed(){
-
+	public void Mark(){
+		mark.GetComponent<Renderer> ().material.color = Color.green;
+		SetLayerRecursively (gameObject, gameObject.layer, ResourceManager.LayerEntitiesCommon);
 	}
+
+
 }

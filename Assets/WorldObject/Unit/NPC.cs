@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using RTS;
 
 public class NPC : WorldObject {
 
@@ -26,5 +27,10 @@ public class NPC : WorldObject {
 	}
 	public void setColor(Color color){
 		mark.GetComponent<Renderer> ().material.color = color;
+	}
+
+	public void Mark(){
+		mark.GetComponent<Renderer> ().material.color = Color.green;
+		SetLayerRecursively (gameObject, gameObject.layer, ResourceManager.LayerEntitiesCommon);
 	}
 }

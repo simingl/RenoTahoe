@@ -70,7 +70,7 @@ public class MapItem : MonoBehaviour {
 			mapBounds.transform.localPosition = new Vector3 (0, 0, 0);
 			mapBounds.GetComponent<Renderer> ().material.color = Color.green;
 		}else if (worldObj is Vehicle) {
-			mapBounds = GameObject.CreatePrimitive (PrimitiveType.Cube);
+			mapBounds = GameObject.CreatePrimitive (PrimitiveType.Capsule);
 			mapBounds.layer = MINIMAP_LAYER;
 			mapBounds.GetComponent<Collider> ().enabled = false;
 			
