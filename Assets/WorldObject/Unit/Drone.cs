@@ -120,6 +120,12 @@ public class Drone : WorldObject {
 		else if(moving) MakeMove();
 
 		this.CalculateBattery ();
+
+		if (this.currentStatus == STATUS.LANDING) {
+			this.Landing ();
+		} else if (this.currentStatus == STATUS.TAKEOFF) {
+			this.TakeOffing();
+		}
 	}
 
 	protected override void OnGUI() {
@@ -342,5 +348,35 @@ public class Drone : WorldObject {
 		Rect cameraBox = new Rect (selectBox.x+selectBox.width-5, selectBox.y, 15, 15);
 		GUI.DrawTexture(cameraBox, cameraIcon);
 		GUI.EndGroup();
+	}
+
+	public void Land(){
+		this.currentStatus = STATUS.LANDING;
+	}
+
+	public void TakeOff(){
+		this.currentStatus = STATUS.TAKEOFF;
+	}
+
+	private void Landing(){
+		Vector3 low = this.FindHitPoint (this.camera_front, this.transform);
+		if (this.rigidbody.transform.position.y >= low.y  + 0.5 ) {
+			Vector3 newpos = this.rigidbody.transform.position;
+			newpos.y -= Time.deltaTime;
+			this.rigidbody.transform.position = newpos;
+		} else {
+			currentStatus = STATUS.IDLE;
+		}
+	}
+
+	private void TakeOffing(){
+		Vector3 low = this.FindHitPoint (this.camera_front, this.transform);
+		if (this.rigidbody.transform.position.y <= low.y  + 2.5 ) {
+			Vector3 newpos = this.rigidbody.transform.position;
+			newpos.y += Time.deltaTime;
+			this.rigidbody.transform.position = newpos;
+		} else {
+			currentStatus = STATUS.IDLE;
+		}
 	}
 }
