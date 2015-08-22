@@ -270,13 +270,14 @@ public class HUD : MonoBehaviour {
 					Drone unit = (Drone)obj;
 					text += " - battery: "+unit.currentBattery;
 				}
-				if(GUI.Button (new Rect(offset+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Load Cell")){
+				if(GUI.Button (new Rect(offset+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Landing")){
 					Drone unit = (Drone)obj;
-					unit.LoadCell();
+					//unit.LoadCell();
+					unit.Land();
 				}
-				if(GUI.Button (new Rect(offset + ACTION_BTN_WIDTH+5+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Drop Cell")){
+				if(GUI.Button (new Rect(offset + ACTION_BTN_WIDTH+5+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Take Off")){
 					Drone unit = (Drone)obj;
-					unit.DropCell();
+					unit.TakeOff();
 				}
 
 				if(GUI.Button (new Rect(offset+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5+ACTION_BTN_HEIGHT,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Load Water")){

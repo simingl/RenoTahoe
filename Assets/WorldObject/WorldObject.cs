@@ -8,7 +8,7 @@ public class WorldObject : MonoBehaviour {
 	public string objectName;
 
 	protected Player player;
-	protected string[] actions = {};
+	protected enum STATUS {IDLE, TAKEOFF, LANDING, CRASHING, RECHARGING};
 
 	protected Bounds selectionBounds;
 
@@ -17,10 +17,14 @@ public class WorldObject : MonoBehaviour {
 	protected bool _isSelectable;
 
 	public float speed = 0f;
+	protected STATUS currentStatus;
+
 	private Vector3 lastPosition = Vector3.zero;
 	private float lastUpdated = 0.0f;
 
 	protected virtual void Awake() {
+		currentStatus = STATUS.IDLE;
+
 		selectionBounds = ResourceManager.InvalidBounds;
 		CalculateBounds();
 	}
@@ -52,10 +56,6 @@ public class WorldObject : MonoBehaviour {
 		}
 	}
 
-	public string[] GetActions() {
-		return actions;
-	}
-	
 	public virtual void PerformAction(string actionToPerform) {
 	}
 
@@ -127,4 +127,12 @@ public class WorldObject : MonoBehaviour {
 			SetLayerRecursively( child.gameObject, oldLayer, newLayer );
 		}
 	}
+
+	public Vector3 FindHitPoint(Camera cam, Transform tr) {
+		Ray ray = cam.ScreenPointToRay(tr.position);
+		RaycastHit hit;
+		if(Physics.Raycast(ray, out hit)) return hit.point;
+		return ResourceManager.InvalidPosition;
+	}
+	
 }
