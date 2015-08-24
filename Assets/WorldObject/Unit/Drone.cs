@@ -12,7 +12,6 @@ public class Drone : WorldObject {
 	public const int PIP_DEPTH_DEACTIVE = -1;
 	public Color color;  
 
-	protected bool moving, rotating;
 	public float moveSpeed, rotateSpeed;
 
 	public float currentBattery = 100;
@@ -44,7 +43,7 @@ public class Drone : WorldObject {
 
 	private Rigidbody rigidbody;
 
-
+	private StationCharger charger;
 
 	public Drone(){
 		type = WorldObjectType.Unit;
@@ -105,7 +104,6 @@ public class Drone : WorldObject {
 		if (Input.GetMouseButtonUp (0) && !EventSystem.current.IsPointerOverGameObject () && HUD.selection.width * HUD.selection.height > 10) {
 			Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
 			camPos.y = Screen.height - camPos.y;
-			//camPos.y = CameraManagement.InvertMouseY(camPos.y);
 			if( HUD.selection.Contains(camPos) ){
 				this.player.addSelectedObject(this);
 			}
@@ -116,16 +114,33 @@ public class Drone : WorldObject {
 
 		this.drawRaycastLine ();
 
-		if(rotating) TurnToTarget();
-		else if(moving) MakeMove();
+		switch (this.currentTask) {
+		case TASK.RECHARGING:
+			this.Recharging();
+			break;
+		}
+
+		switch (this.currentStatus) {
+		case STATUS.TAKEOFF:
+			this.TakeOffing();
+			break;
+		case STATUS.ROTATING:
+			this.TurnToTarget ();
+			break;
+		case STATUS.MOVING:
+			this.MakeMove();
+			break;
+		case STATUS.LANDING:
+			this.Landing();
+			break;
+		case STATUS.DEAD:
+			this.Landing();
+			break;
+		}
+
+
 
 		this.CalculateBattery ();
-
-		if (this.currentStatus == STATUS.LANDING) {
-			this.Landing ();
-		} else if (this.currentStatus == STATUS.TAKEOFF) {
-			this.TakeOffing();
-		}
 	}
 
 	protected override void OnGUI() {
@@ -174,9 +189,14 @@ public class Drone : WorldObject {
 	}
 	public void StartMove(Vector3 destination) {
 		this.destination = destination;
+
 		targetRotation = Quaternion.LookRotation (destination - transform.position);
-		rotating = true;
-		moving = false;
+		if (this.currentStatus == STATUS.LANDED || this.currentStatus == STATUS.CHARGING) {
+			this.currentStatus = STATUS.TAKEOFF;
+		} else {
+			this.destination.y = transform.position.y;
+			this.currentStatus = STATUS.ROTATING;
+		}
 	}
 
 	protected override void DrawSelectionBox(Rect rect){
@@ -189,15 +209,16 @@ public class Drone : WorldObject {
 		//sometimes it gets stuck exactly 180 degrees out in the calculation and does nothing, this check fixes that
 		Quaternion inverseTargetRotation = new Quaternion(-targetRotation.x, -targetRotation.y, -targetRotation.z, -targetRotation.w);
 		if(transform.rotation == targetRotation || transform.rotation == inverseTargetRotation) {
-			rotating = false;
-			moving = true;
+			this.currentStatus = STATUS.MOVING;
 		}
 		CalculateBounds();
 	}
 
 	private void MakeMove() {
 		transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * moveSpeed);
-		if(transform.position == destination) moving = false;
+		if (transform.position == destination) {
+			this.currentStatus = STATUS.IDLE;
+		}
 		CalculateBounds();
 	}
 
@@ -205,8 +226,7 @@ public class Drone : WorldObject {
 		base.StopMove ();
 		targetRotation = transform.rotation;
 		destination = transform.position;
-		rotating = false;
-		moving = false;
+		this.currentStatus = STATUS.IDLE;
 	}
 
 	private void drawRaycastLine(){
@@ -214,7 +234,7 @@ public class Drone : WorldObject {
 		lineRaycast.SetPosition (0, transform.position);
 		lineRaycast.SetPosition (1, groundHit);
 
-		if (rotating || moving) {
+		if (this.currentStatus == STATUS.ROTATING || this.currentStatus== STATUS.MOVING) {
 			lineMove.enabled = true;
 			Vector3 targetGroundHit = new Vector3 (destination.x, 0.01f, destination.z);
 			lineMove.SetPosition (0, transform.position);
@@ -236,8 +256,21 @@ public class Drone : WorldObject {
 	}
 
 	private void CalculateBattery(){
-		if (this.currentBattery > 0) {
+		//Recharging battery
+		if (this.currentStatus == STATUS.CHARGING && this.currentBattery < ResourceManager.DroneBatteryLife) {
+			float chargingSpeed = (float)ResourceManager.DroneBatteryLife/(float)ResourceManager.DroneBatteryCharging;
+			this.currentBattery += Time.deltaTime * chargingSpeed;
+			return;
+		}
+
+		//Battery usage
+		if (this.currentStatus != STATUS.CHARGING &&  this.currentBattery > 0) {
 			this.currentBattery -= Time.deltaTime;
+		} else if (this.currentBattery <= 0) {
+			if(this.currentStatus != STATUS.LANDING){
+				this.destination = transform.position;
+				this.currentStatus = STATUS.DEAD;
+			}
 		}
 	}
 
@@ -355,28 +388,66 @@ public class Drone : WorldObject {
 	}
 
 	public void TakeOff(){
-		this.currentStatus = STATUS.TAKEOFF;
+		if (this.currentBattery > 0) {
+			this.currentStatus = STATUS.TAKEOFF;
+		}
 	}
 
 	private void Landing(){
 		Vector3 low = this.FindHitPoint (this.camera_front, this.transform);
-		if (this.rigidbody.transform.position.y >= low.y  + 0.5 ) {
+		if (this.rigidbody.transform.position.y >= low.y + 0.5) {
 			Vector3 newpos = this.rigidbody.transform.position;
 			newpos.y -= Time.deltaTime;
 			this.rigidbody.transform.position = newpos;
+		} else if (this.currentBattery <= 0) {
+			currentStatus = STATUS.DEAD;
 		} else {
-			currentStatus = STATUS.IDLE;
+			currentStatus = STATUS.LANDED;
 		}
 	}
 
 	private void TakeOffing(){
 		Vector3 low = this.FindHitPoint (this.camera_front, this.transform);
-		if (this.rigidbody.transform.position.y <= low.y  + 2.5 ) {
+		if (this.rigidbody.transform.position.y <= low.y + 3.5) {
 			Vector3 newpos = this.rigidbody.transform.position;
 			newpos.y += Time.deltaTime;
 			this.rigidbody.transform.position = newpos;
-		} else {
+		} else if (!IsArrivedIn2D()) {
+			this.destination.y = transform.position.y;
+			this.StartMove(this.destination);
+		} else if (destination == transform.position) {
 			currentStatus = STATUS.IDLE;
 		}
+	}
+
+	private void Recharging(){
+		if (IsArrivedIn2D ()) {
+			if(this.currentStatus == STATUS.IDLE){
+				this.currentStatus = STATUS.LANDING;
+			} else if(this.currentStatus == STATUS.LANDED){
+				this.currentStatus = STATUS.CHARGING;
+				this.currentTask = TASK.NULL;
+			}
+		}
+	}
+
+	public void Recharge(){
+		StationCharger sc = this.player.stationManager.getNearestAvailabeCharger (transform.position);
+		if (sc != null) {
+			this.charger = sc;
+			this.destination = sc.transform.position;
+			this.currentTask = TASK.RECHARGING;
+			this.currentStatus = STATUS.TAKEOFF;
+			sc.Occupy(this);
+		} else {
+			Debug.Log("No availble charger.");
+		}
+	}
+
+	private bool IsArrivedIn2D(){
+		if(Mathf.Abs(this.destination.x - transform.position.x) < 0.01f && Mathf.Abs(this.destination.z - transform.position.z) < 0.01f){
+			return true;
+		}
+		return false;
 	}
 }

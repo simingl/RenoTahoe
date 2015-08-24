@@ -12,6 +12,7 @@ public class Player : MonoBehaviour {
 	public AudioManager audioManager;
 	public ChangePOV changePOV;
 	public SceneManager sceneManager;
+	public StationManager stationManager;
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +21,7 @@ public class Player : MonoBehaviour {
 		audioManager = this.GetComponent<AudioManager> ();
 		changePOV = this.GetComponent<ChangePOV> ();
 		sceneManager = GameObject.FindObjectOfType<SceneManager> ();
+		stationManager = GameObject.FindObjectOfType<StationManager> ();
 	}
 
 	public void addSelectedObject(WorldObject obj){

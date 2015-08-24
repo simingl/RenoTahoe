@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class CameraMain : MonoBehaviour
 {
 	public GUISkin skin;
+	public Vector3 initial_position;
 
 	private GameObject ground;
 	private Player player;           // Reference to the player's transform.
@@ -37,6 +38,10 @@ public class CameraMain : MonoBehaviour
 	{
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
 		cam = transform;
+		if (initial_position.x != 0 && initial_position.z != 0) {
+			initial_position.y = transform.position.y;
+			transform.position = initial_position;
+		}
 		mycam = Camera.main;
 		MiniMapCamera = GameObject.FindGameObjectWithTag ("Camera_minimap").GetComponent<Camera>();
 	}

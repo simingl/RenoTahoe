@@ -8,7 +8,8 @@ public class WorldObject : MonoBehaviour {
 	public string objectName;
 
 	protected Player player;
-	protected enum STATUS {IDLE, TAKEOFF, LANDING, CRASHING, RECHARGING};
+	public enum STATUS {LANDED, IDLE, TAKEOFF, LANDING, CRASHING, ROTATING, MOVING, DEAD, CHARGING};
+	public enum TASK {NULL, RECHARGING}
 
 	protected Bounds selectionBounds;
 
@@ -17,13 +18,15 @@ public class WorldObject : MonoBehaviour {
 	protected bool _isSelectable;
 
 	public float speed = 0f;
-	protected STATUS currentStatus;
+	public STATUS currentStatus;
+	public TASK currentTask;
 
 	private Vector3 lastPosition = Vector3.zero;
 	private float lastUpdated = 0.0f;
 
 	protected virtual void Awake() {
-		currentStatus = STATUS.IDLE;
+		currentStatus = STATUS.LANDED;
+		currentTask = TASK.NULL;
 
 		selectionBounds = ResourceManager.InvalidBounds;
 		CalculateBounds();
@@ -54,9 +57,6 @@ public class WorldObject : MonoBehaviour {
 		if (this.isSelected() && this.player.changePOV.activeCamera == null) {
 			DrawSelection ();
 		}
-	}
-
-	public virtual void PerformAction(string actionToPerform) {
 	}
 
 	public virtual void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller) {
