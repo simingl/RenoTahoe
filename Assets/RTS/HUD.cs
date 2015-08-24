@@ -33,7 +33,7 @@ public class HUD : MonoBehaviour {
 	private static int RESOURCE_DRONE_SPEED_WIDTH = 100;
 	private static int RESOURCE_DRONE_ORIENT_WIDTH = 100;
 	private static int RESOURCE_BATTERY_WIDTH = 100;
-	private static int RESOURCE_CELL_WIDTH = 100;
+	private static int RESOURCE_STATUS_WIDTH = 100;
 	private static int RESOURCE_WATER_WIDTH = 100;
 
 	private const int PIP_BTN_WIDTH = 30;
@@ -74,15 +74,14 @@ public class HUD : MonoBehaviour {
 		player = transform.root.GetComponent< Player >();
 		sun = GameObject.FindGameObjectWithTag ("Sun");
 
-		RESOURCE_DAYNIGHT_TOGGLE_WIDTH = (int)(0.34*WIDTH);;
+		RESOURCE_DAYNIGHT_TOGGLE_WIDTH = (int)(0.3*WIDTH);;
 		RESOURCE_NAME_WIDTH = (int)(0.1*WIDTH);;
 		RESOURCE_LOCATION_WIDTH = (int)(0.1*WIDTH);
 		RESOURCE_DRONE_HEIGHT_WIDTH = (int)(0.1*WIDTH);	
 		RESOURCE_DRONE_SPEED_WIDTH = (int)(0.1*WIDTH);;
 		RESOURCE_DRONE_ORIENT_WIDTH = (int)(0.1*WIDTH);;
-		RESOURCE_BATTERY_WIDTH = (int)(0.05*WIDTH);
-		RESOURCE_CELL_WIDTH = (int)(0.05*WIDTH);
-		RESOURCE_WATER_WIDTH = (int)(0.05*WIDTH);
+		RESOURCE_BATTERY_WIDTH = (int)(0.1*WIDTH);
+		RESOURCE_STATUS_WIDTH = (int)(0.1*WIDTH);
 
 		ResourceManager.StoreSelectBoxItems(selectBoxSkin);
 	}
@@ -118,8 +117,7 @@ public class HUD : MonoBehaviour {
 
 			WorldObject obj = player.getSelectedObjects()[0];
 			string name = obj.objectName; 
-			string cellinfo = "Cell * ";
-			string waterinfo = "Water * ";
+			string status = "Status: ";
 			string location = "Location: (" + obj.transform.position.x.ToString("0.0") + ", " + obj.transform.position.z.ToString("0.0") + ")";
 			string height = "Height: "+ obj.transform.position.y.ToString("0.0");
 			string speed  = "Speed: "+ obj.speed.ToString("0.0");
@@ -131,9 +129,8 @@ public class HUD : MonoBehaviour {
 			string battery = "";
 			if (obj is Drone) {
 				Drone unit = (Drone)obj;
-				battery += "Battery: " + (int)(unit.currentBattery)+"%";
-				cellinfo += unit.GetCellCount();
-				waterinfo += unit.GetWaterCount();
+				battery += "Battery: " + (int)(unit.currentBattery)/60+" min " + ((int)unit.currentBattery)%60 + " sec.";
+				status += unit.currentStatus;
 			}
 			GUI.DrawTexture(new Rect(offset, 5 ,40,20), this.drone_2d);
 			offset +=40;
@@ -161,10 +158,8 @@ public class HUD : MonoBehaviour {
 			//DrawOutline(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), battery, this.resourceSkin.GetStyle("large"), Color.yellow, Color.green);
 			offset += RESOURCE_BATTERY_WIDTH;
 
-			GUI.Label(new Rect(offset,5,Screen.width,ORDERS_BAR_HEIGHT), cellinfo);
+			GUI.Label(new Rect(offset,5,Screen.width,ORDERS_BAR_HEIGHT), status);
 			//DrawOutline(new Rect(offset,5,Screen.width,ORDERS_BAR_HEIGHT), cellinfo, this.resourceSkin.GetStyle("large"), Color.yellow, Color.green);
-			offset += RESOURCE_CELL_WIDTH;
-			GUI.Label(new Rect(offset,5,Screen.width,ORDERS_BAR_HEIGHT), waterinfo);
 			//DrawOutline(new Rect(offset,5,Screen.width,ORDERS_BAR_HEIGHT), waterinfo, this.resourceSkin.GetStyle("large"), Color.yellow, Color.green);
 		}
 		dayNightToggle = GUI.Toggle(new Rect(5, 5, RESOURCE_DAYNIGHT_TOGGLE_WIDTH, RESOURCE_BAR_HEIGHT), dayNightToggle, "Day/Night");
@@ -222,27 +217,7 @@ public class HUD : MonoBehaviour {
 		GUI.Box(new Rect(MINIMAP_WIDTH + SELECTION_BAR_WIDTH,0,INFO_BAR_WIDHT,INFO_BAR_HEIGHT),"");
 		GUI.EndGroup();
 
-		return;
 
-		List<WorldObject> objs = player.getSelectedObjects();
-		for (int i =0; i<objs.Count; i++) {
-			WorldObject obj = objs [i];
-			string text = obj.objectName; 
-			string cellinfo = "Cell * ";
-			string waterinfo = "Water * ";
-			text += "  - loc: (" + obj.transform.position.x + ", " + obj.transform.position.z + "), H: " + obj.transform.position.y;
-			if (obj is Drone) {
-				Drone unit = (Drone)obj;
-				text += " - battery: " + unit.currentBattery;
-				cellinfo += unit.GetCellCount();
-				waterinfo += unit.GetWaterCount();
-			}
-			GUI.DrawTexture(new Rect(offset,Screen.height - INFO_BAR_HEIGHT + i*LINE_HEIGHT*2 ,40,20), this.drone_2d);
-			GUI.Label(new Rect(offset+MARGIN,Screen.height - INFO_BAR_HEIGHT + i*LINE_HEIGHT*2 ,Screen.width,ORDERS_BAR_HEIGHT), text);
-
-			GUI.Label(new Rect(offset+MARGIN,Screen.height - INFO_BAR_HEIGHT + LINE_HEIGHT  + i*LINE_HEIGHT*2,Screen.width,ORDERS_BAR_HEIGHT), cellinfo);
-			GUI.Label(new Rect(offset+MARGIN+MARGIN,Screen.height - INFO_BAR_HEIGHT + LINE_HEIGHT  + i*LINE_HEIGHT*2,Screen.width,ORDERS_BAR_HEIGHT), waterinfo);
-		}
 	}
 
 	private void DrawOrdersBar() {
@@ -280,9 +255,9 @@ public class HUD : MonoBehaviour {
 					unit.TakeOff();
 				}
 
-				if(GUI.Button (new Rect(offset+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5+ACTION_BTN_HEIGHT,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Load Water")){
+				if(GUI.Button (new Rect(offset+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5+ACTION_BTN_HEIGHT,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Recharge")){
 					Drone unit = (Drone)obj;
-					unit.LoadWater();
+					unit.Recharge();
 				}
 				if(GUI.Button (new Rect(offset + ACTION_BTN_WIDTH+5+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5+ACTION_BTN_HEIGHT,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Drop Water")){
 					Drone unit = (Drone)obj;

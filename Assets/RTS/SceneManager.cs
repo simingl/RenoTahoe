@@ -26,6 +26,7 @@ public class SceneManager : MonoBehaviour {
 	private Player player;
 	void Awake(){
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
+
 	}
 
 	void Start(){
