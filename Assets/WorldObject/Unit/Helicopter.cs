@@ -15,10 +15,13 @@ public class Helicopter :  WorldObject {
 	private int width = 100;
 	private int height = 100;
 
+	private GameObject fire;
+
 	private bool rotating, moving;
 
 	void Awake(){
 		regenTime = cycle;
+		fire = transform.FindChild ("fire").gameObject;
 	}
 
 	protected virtual void Start () {
@@ -26,7 +29,7 @@ public class Helicopter :  WorldObject {
 		
 		this._isSelectable = false;
 		
-		this.scoreValue = 200;
+		this.scoreValue = 5000;
 		
 		mark = GameObject.CreatePrimitive (PrimitiveType.Cube);
 		mark.layer = ResourceManager.LayerMiniMap;
@@ -41,17 +44,11 @@ public class Helicopter :  WorldObject {
 		this.StartMove(generateRandomPosition (width, height));
 	}
 
-	public void setColor(Color color){
-		mark.GetComponent<Renderer> ().material.color = color;
-	}
-	
-	public void Mark(){
-		mark.GetComponent<Renderer> ().material.color = Color.green;
-		SetLayerRecursively (gameObject, gameObject.layer, ResourceManager.LayerEntitiesCommon);
-		ScoreManager.score += this.scoreValue;
-	}
-
 	void Update(){
+		if (this.currentStatus == STATUS.CRASHING || this.currentStatus == STATUS.DEAD)
+			return;
+
+
 		if (regenTime <= 0) {
 			regenTime = cycle;
 			this.StartMove(this.generateRandomPosition (width, height));
@@ -96,4 +93,26 @@ public class Helicopter :  WorldObject {
 		
 		return new Vector3 (x,4,z);
 	}
+
+	public void OnCollisionEnter(Collision collisionInfo){
+		GameObject go = collisionInfo.gameObject;
+		Drone drone = go.GetComponent<Drone> ();
+		
+		if (drone != null && !this.isDead()) {
+			this.Crashing();
+		}
+	} 
+
+	private void Crashing(){
+			this.GetComponent<Rigidbody> ().useGravity = true;
+			this.GetComponent<Rigidbody> ().velocity = Vector3.zero;
+			this.GetComponent<Animator> ().enabled = false;
+			fire.SetActive (true);
+			this.destination = transform.position;
+			this.currentStatus = STATUS.DEAD;
+
+			ScoreManager.score -= this.scoreValue;
+	}
+
+
 }

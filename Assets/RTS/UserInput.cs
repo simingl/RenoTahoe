@@ -39,7 +39,10 @@ public class UserInput : MonoBehaviour {
 				WorldObject wo = player.getSelectedObjects()[0];
 				wo.CalculateBounds();
 				if(wo is Drone) {
-					((Drone)wo).StopMove();
+					Drone drone = (Drone)wo;
+					if(drone.isDead()) return;
+
+					drone.StopMove();
 				}
 				Rigidbody rb = wo.gameObject.GetComponent<Rigidbody> ();
 				this.RotatingObject(rb, horizontal);
@@ -190,10 +193,18 @@ public class UserInput : MonoBehaviour {
 			Vector3 hitPoint = FindHitPoint();
 
 			if(player.getSelectedObjects().Count > 0){
+				bool playAudio = false;
 				foreach(WorldObject obj in player.getSelectedObjects()){
-					obj.MouseClick(hitObject, hitPoint, player);
+					if(obj is Drone){
+						Drone drone = (Drone)obj;
+						if(drone.isDead()) continue;
+
+						obj.MouseClick(hitObject, hitPoint, player);
+						playAudio = true;
+					}
 				}
-				this.player.audioManager.playUnitMoveToSound();
+				if(playAudio) this.player.audioManager.playUnitMoveToSound();
+
 			}
 		}
 	}
