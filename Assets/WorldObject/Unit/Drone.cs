@@ -45,15 +45,20 @@ public class Drone : WorldObject {
 
 	private StationCharger charger;
 
+	private GameObject fire;
+
 	public Drone(){
+		scoreValue = 500;
 		type = WorldObjectType.Unit;
 		cellphones = new Stack<Cellphone>();
 		waters = new Stack<WaterBottle>();
+		this.destination = ResourceManager.InvalidPosition;
 	}
 
 	protected override void Awake() {
 		base.Awake();
 
+		fire = transform.FindChild ("fire").gameObject;
 		currentBattery = ResourceManager.DroneBatteryLife;
 		rigidbody = this.GetComponent<Rigidbody> ();
 
@@ -101,6 +106,9 @@ public class Drone : WorldObject {
 	protected override void Update () {
 		base.Update();
 
+		if (this.currentStatus == STATUS.DEAD)
+			return;
+
 		if (Input.GetMouseButtonUp (0) && !EventSystem.current.IsPointerOverGameObject () && HUD.selection.width * HUD.selection.height > 10) {
 			Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
 			camPos.y = Screen.height - camPos.y;
@@ -131,9 +139,6 @@ public class Drone : WorldObject {
 			this.MakeMove();
 			break;
 		case STATUS.LANDING:
-			this.Landing();
-			break;
-		case STATUS.DEAD:
 			this.Landing();
 			break;
 		}
@@ -261,8 +266,9 @@ public class Drone : WorldObject {
 			return;
 		}
 
+
 		//Battery usage
-		if (this.currentStatus != STATUS.CHARGING &&  this.currentBattery > 0) {
+		if (this.currentStatus != STATUS.CHARGING && this.currentStatus != STATUS.LANDED && this.currentBattery > 0) {
 			this.currentBattery -= Time.deltaTime;
 		} else if (this.currentBattery <= 0) {
 			if(this.currentStatus != STATUS.LANDING){
@@ -397,7 +403,7 @@ public class Drone : WorldObject {
 			Vector3 newpos = this.rigidbody.transform.position;
 			newpos.y -= Time.deltaTime;
 			this.rigidbody.transform.position = newpos;
-		} else if (this.currentBattery <= 0) {
+		} else if (this.currentBattery <= 0 || this.currentStatus == STATUS.DEAD) {
 			currentStatus = STATUS.DEAD;
 		} else {
 			currentStatus = STATUS.LANDED;
@@ -410,7 +416,7 @@ public class Drone : WorldObject {
 			Vector3 newpos = this.rigidbody.transform.position;
 			newpos.y += Time.deltaTime;
 			this.rigidbody.transform.position = newpos;
-		} else if (!IsArrivedIn2D()) {
+		} else if (this.destination != ResourceManager.InvalidPosition && !IsArrivedIn2D()) {
 			this.destination.y = transform.position.y;
 			this.StartMove(this.destination);
 		} else if (destination == transform.position) {
@@ -427,6 +433,14 @@ public class Drone : WorldObject {
 				this.currentTask = TASK.NULL;
 			}
 		}
+	}
+
+	private void Crashing(){
+		this.fire.SetActive (true);
+		this.rigidbody.useGravity = true;
+		this.rigidbody.velocity = Vector3.zero;
+		this.currentStatus = STATUS.DEAD;
+		ScoreManager.score -= scoreValue;
 	}
 
 	public void Recharge(){
@@ -448,4 +462,15 @@ public class Drone : WorldObject {
 		}
 		return false;
 	}
+
+	public void OnCollisionEnter(Collision collisionInfo){
+		GameObject go = collisionInfo.gameObject;
+		Helicopter heli = go.GetComponent<Helicopter> ();
+
+		if (heli != null && !this.isDead()) {
+			Crashing();
+		}
+	} 
+
+
 }

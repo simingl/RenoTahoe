@@ -1,23 +1,25 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\RTS\SceneManager.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\WorldObject\Unit\Helicopter.cs">
     <Files>
-      <File FileName="Assets\RTS\SceneManager.cs" Line="18" Column="25" />
-      <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="1" Column="1" />
+      <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="51" Column="18" />
+      <File FileName="Assets\RTS\SceneManager.cs" Line="2" Column="18" />
       <File FileName="Assets\RTS\HUD.cs" Line="1" Column="1" />
       <File FileName="Assets\RTS\ResourceManager.cs" Line="1" Column="1" />
       <File FileName="Assets\RTS\ConfigManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\AudioManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\WorldObject.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\AudioManager.cs" Line="13" Column="36" />
+      <File FileName="Assets\WorldObject\WorldObject.cs" Line="103" Column="1" />
       <File FileName="Assets\WorldObject\MapItem.cs" Line="1" Column="1" />
-      <File FileName="Assets\_DownloadedResources\MAPNAV\Scripts\MapNav.cs" Line="92" Column="23" />
+      <File FileName="Assets\_DownloadedResources\MAPNAV\Scripts\MapNav.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Camera\CameraMain.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Camera\MinimapManagement.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Camera\CameraExtention.cs" Line="1" Column="1" />
       <File FileName="Assets\RTS\ScoreManager.cs" Line="1" Column="1" />
       <File FileName="Assets\Standard Assets\Characters\ThirdPersonCharacter\Scripts\AICharacterControl.cs" Line="1" Column="1" />
       <File FileName="Assets\RTS\StationManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\Building\StationCharger.cs" Line="23" Column="17" />
+      <File FileName="Assets\WorldObject\Building\StationCharger.cs" Line="1" Column="1" />
+      <File FileName="Assets\WorldObject\Unit\Helicopter.cs" Line="47" Column="1" />
+      <File FileName="Assets\RTS\UserInput.cs" Line="206" Column="19" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -28,12 +30,12 @@
                 <Node name="Scripts" expanded="True" />
               </Node>
             </Node>
-            <Node name="RTS" expanded="True">
-              <Node name="SceneManager.cs" selected="True" />
-            </Node>
+            <Node name="RTS" expanded="True" />
             <Node name="WorldObject" expanded="True">
               <Node name="Building" expanded="True" />
-              <Node name="Unit" expanded="True" />
+              <Node name="Unit" expanded="True">
+                <Node name="Helicopter.cs" selected="True" />
+              </Node>
             </Node>
           </Node>
         </State>
@@ -43,7 +45,7 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\RTS\StationManager.cs" line="26" />
-      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\WorldObject\Unit\Drone.cs" line="435" />
+      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\WorldObject\Unit\Drone.cs" line="442" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

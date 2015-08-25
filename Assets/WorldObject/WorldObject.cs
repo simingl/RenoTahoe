@@ -9,7 +9,7 @@ public class WorldObject : MonoBehaviour {
 
 	protected Player player;
 	public enum STATUS {LANDED, IDLE, TAKEOFF, LANDING, CRASHING, ROTATING, MOVING, DEAD, CHARGING};
-	public enum TASK {NULL, RECHARGING}
+	public enum TASK {NULL, RECHARGING, CRASH}
 
 	protected Bounds selectionBounds;
 
@@ -134,5 +134,7 @@ public class WorldObject : MonoBehaviour {
 		if(Physics.Raycast(ray, out hit)) return hit.point;
 		return ResourceManager.InvalidPosition;
 	}
-	
+	public bool isDead(){
+		return this.currentStatus == STATUS.DEAD;
+	}
 }

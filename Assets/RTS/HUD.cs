@@ -259,10 +259,10 @@ public class HUD : MonoBehaviour {
 					Drone unit = (Drone)obj;
 					unit.Recharge();
 				}
-				if(GUI.Button (new Rect(offset + ACTION_BTN_WIDTH+5+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5+ACTION_BTN_HEIGHT,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Drop Water")){
-					Drone unit = (Drone)obj;
-					unit.DropWater();
-				}
+//				if(GUI.Button (new Rect(offset + ACTION_BTN_WIDTH+5+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5+ACTION_BTN_HEIGHT,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Drop Water")){
+//					Drone unit = (Drone)obj;
+//					unit.DropWater();
+//				}
 			}
 		}
 	}
