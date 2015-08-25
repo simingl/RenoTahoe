@@ -138,8 +138,6 @@ public class Drone : WorldObject {
 			break;
 		}
 
-
-
 		this.CalculateBattery ();
 	}
 
