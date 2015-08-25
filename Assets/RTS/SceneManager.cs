@@ -8,9 +8,10 @@ public class SceneManager : MonoBehaviour {
 	public GameObject ground;
 	public GameObject tree;
 	public GameObject fire;
-	public GameObject cellphone;
-	public GameObject water;
+	//public GameObject cellphone;
+	//public GameObject water;
 	public GameObject drone;
+	public GameObject helicopter;
 
 	private List<WorldObject> allEntities = new List<WorldObject> ();
 
@@ -19,14 +20,15 @@ public class SceneManager : MonoBehaviour {
 	private Vector3[] treePoints;
 	private Vector3[] firePoints;
 	private Vector3[] cellPoints;
-	private Vector3[] waterPoints;
+	private Vector3[] heliPoints;
 
-	private int width = 300, height = 300;
+	private int width = 80, height = 80;
+	private Transform container;
 
 	private Player player;
 	void Awake(){
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
-
+		container = gameObject.transform.FindChild ("Helicopters");
 	}
 
 	void Start(){
@@ -35,47 +37,34 @@ public class SceneManager : MonoBehaviour {
 		treePoints = new Vector3[number];
 		firePoints = new Vector3[number];
 		cellPoints = new Vector3[number];
-		waterPoints = new Vector3[number];
+		heliPoints = new Vector3[number];
 
 		for (int i= 0;i<number;i++) {
-			treePoints[i] = generateRandomPosition(width, height);
-			firePoints[i] = generateRandomPosition(width, height);
-			cellPoints[i] = generateRandomPosition(width, height);
-			waterPoints[i]= generateRandomPosition(width, height);
+			treePoints[i] = generateRandomPosition();
+			firePoints[i] = generateRandomPosition();
+			cellPoints[i] = generateRandomPosition();
+			heliPoints[i]= generateRandomPosition();
 		}
-
+		InitialScene ();
 	}
 
 	void InitialScene (){
-		return;
 		for (int i = 0; i< number;i++) {
 			//Instantiate (tree, treePoints[i], new Quaternion(0,0,0,0));
 			//GameObject newfire = (GameObject)Instantiate (fire, firePoints[i], new Quaternion(1,1,0,1));
-			GameObject newcellgo = (GameObject)Instantiate (cellphone, cellPoints[i], new Quaternion(0,0,0,1));
-			Renderer r = newcellgo.GetComponent<Renderer>();
-			r.material.color = Color.red;
-			WorldObject newcell = newcellgo.GetComponent<WorldObject>();
-			this.allEntities.Add(newcell);
+			GameObject heligo = (GameObject)Instantiate (helicopter, heliPoints[i], new Quaternion(0,0,0,1));
+			heligo.transform.parent = container;
+			WorldObject heli = heligo.GetComponent<WorldObject>();
+			this.allEntities.Add(heli);
 		}
-
-		for (int i = 0; i< number;i++) {
-			//Instantiate (tree, treePoints[i], new Quaternion(0,0,0,0));
-			//GameObject newfire = (GameObject)Instantiate (fire, firePoints[i], new Quaternion(1,1,0,1));
-			GameObject newwatergo = (GameObject)Instantiate (water, waterPoints[i], new Quaternion(0,0,0,1));
-			Renderer r = newwatergo.GetComponent<Renderer>();
-			r.material.color = Color.yellow;
-			WorldObject newwater = newwatergo.GetComponent<WorldObject>();
-			this.allEntities.Add(newwater);
-		}
-
 	}
 
 
-	private Vector3 generateRandomPosition(int w, int h){
+	public Vector3 generateRandomPosition(){
 		float x = Random.Range(-1*width, height);
 		float z = Random.Range(-1*width, height);
 
-		return new Vector3 (x,1,z);
+		return new Vector3 (x,4,z);
 	}
 
 	public List<WorldObject> getWorldObjects(Vector3 position, float range){
