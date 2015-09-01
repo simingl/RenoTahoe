@@ -86,8 +86,7 @@ public class Drone : WorldObject {
 		base.Start();
 
 		//find the top mesh and render it
-		transform.FindChild ("mesh").FindChild ("group_top").GetComponent<Renderer>().material.color = this.color;
-
+		this.setColor (color);
 
 		//setup the line from object to the ground
 		lineRaycast = this.GetComponent<LineRenderer> ();
@@ -273,7 +272,7 @@ public class Drone : WorldObject {
 		} else if (this.currentBattery <= 0) {
 			if(this.currentStatus != STATUS.LANDING){
 				this.destination = transform.position;
-				this.currentStatus = STATUS.DEAD;
+				this.Dieing();
 			}
 		}
 	}
@@ -404,7 +403,7 @@ public class Drone : WorldObject {
 			newpos.y -= Time.deltaTime;
 			this.rigidbody.transform.position = newpos;
 		} else if (this.currentBattery <= 0 || this.currentStatus == STATUS.DEAD) {
-			currentStatus = STATUS.DEAD;
+			this.Dieing();
 		} else {
 			currentStatus = STATUS.LANDED;
 		}
@@ -439,7 +438,7 @@ public class Drone : WorldObject {
 		this.fire.SetActive (true);
 		this.rigidbody.useGravity = true;
 		this.rigidbody.velocity = Vector3.zero;
-		this.currentStatus = STATUS.DEAD;
+		this.Dieing ();
 		ScoreManager.score -= scoreValue;
 	}
 
@@ -472,5 +471,19 @@ public class Drone : WorldObject {
 		}
 	} 
 
+	public void Dieing(){
+		this.currentStatus = STATUS.DEAD;
+		this.setColor (Color.gray);
+		this._isSelectable = false;
+		this.player.removeSelectedObject (this);
+	}
+
+	public void setColor(Color col){
+		this.color = col;
+		//find the top mesh and render it
+		transform.FindChild ("mesh").FindChild ("group_top").GetComponent<Renderer>().material.color = this.color;
+
+
+	}
 
 }

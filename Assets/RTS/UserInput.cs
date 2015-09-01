@@ -164,6 +164,7 @@ public class UserInput : MonoBehaviour {
 			GameObject hitObject = FindHitObject();
 			if(hitObject.tag == "Drone"){
 				Drone drone = hitObject.GetComponent<Drone>();
+				if (drone.isDead()) return;
 				Camera cam = drone.getCameraFront();
 				if(cam.depth !=Drone.PIP_DEPTH_ACTIVE){
 					cam.rect = ResourceManager.getInstance().getAvailableCameraPosition(cam);
