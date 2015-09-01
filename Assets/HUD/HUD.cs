@@ -188,18 +188,16 @@ public class HUD : MonoBehaviour {
 						}else{
 							this.player.setSelectedObject(obj);
 							obj.centerMainCamera();
-							//this.player.changePOV.switchCamera(CameraType.Camera_Third_View);
 						}
 					}
 				}
-				else{
-					if(GUI.Button(new Rect(MINIMAP_WIDTH+ col*SELECT_BAR_BTN_WIDTH,Screen.height - SELECTION_BAR_HEIGHT + row* SELECT_BAR_BTN_HEIGHT ,SELECT_BAR_BTN_WIDTH,SELECT_BAR_BTN_HEIGHT), drone_2d)){
+				else {
+					if(GUI.Button(new Rect(MINIMAP_WIDTH+ col*SELECT_BAR_BTN_WIDTH,Screen.height - SELECTION_BAR_HEIGHT + row* SELECT_BAR_BTN_HEIGHT ,SELECT_BAR_BTN_WIDTH,SELECT_BAR_BTN_HEIGHT), drone_2d) && obj.isSelectable()){
 						if(Input.GetKey(KeyCode.LeftControl)){
 							this.player.toggleSelectObject(obj);
 						}else{
 							this.player.setSelectedObject(obj);
 							obj.centerMainCamera();
-							//this.player.changePOV.switchCamera(CameraType.Camera_Third_View);
 						}
 					}
 				}
