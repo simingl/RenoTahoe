@@ -1,45 +1,14 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\HUD\HUD.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\WorldObject\Unit\Drone.cs">
     <Files>
-      <File FileName="Assets\HUD\ExitDialog.cs" Line="24" Column="3" />
-      <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\SceneManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\ResourceManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\ConfigManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\AudioManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\WorldObject.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\MapItem.cs" Line="1" Column="1" />
-      <File FileName="Assets\_DownloadedResources\MAPNAV\Scripts\MapNav.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Camera\CameraMain.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Camera\MinimapManagement.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Camera\CameraExtention.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\ScoreManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\Characters\ThirdPersonCharacter\Scripts\AICharacterControl.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\StationManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\Building\StationCharger.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\Unit\Helicopter.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\UserInput.cs" Line="1" Column="1" />
-      <File FileName="Assets\HUD\HUD.cs" Line="1" Column="1" />
+      <File FileName="Assets\HUD\DrawLine.cs" Line="27" Column="10" />
+      <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="311" Column="1" />
+      <File FileName="Assets\RTS\SceneManager.cs" Line="55" Column="101" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="Assembly-CSharp" expanded="True">
-            <Node name="HUD" expanded="True" />
-            <Node name="RTS" expanded="True" />
-          </Node>
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\RTS\StationManager.cs" line="26" />
-      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\WorldObject\Unit\Drone.cs" line="442" />
-      <Breakpoint file="E:\MyGitHub\RenoTahoe\Assets\HUD\ExitDialog.cs" line="33" />
-      <Breakpoint file="E:\MyGitHub\RenoTahoe\Assets\HUD\ExitDialog.cs" line="29" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

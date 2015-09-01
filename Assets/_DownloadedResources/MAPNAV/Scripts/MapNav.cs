@@ -106,7 +106,6 @@ public class MapNav : MonoBehaviour
 	private float dragSpeed;
 	private Rect viewArea;
 	private float targetOrtoSize;
-	private bool firstTime = true;
 	private Vector2 focusScreenPoint;
 	private Vector3 focusWorldPoint; 
 

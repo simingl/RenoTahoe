@@ -9,7 +9,7 @@ public class WorldObject : MonoBehaviour {
 
 	protected Player player;
 	public enum STATUS {LANDED, IDLE, TAKEOFF, LANDING, CRASHING, ROTATING, MOVING, DEAD, CHARGING};
-	public enum TASK {NULL, RECHARGING, CRASH}
+	public enum TASK {NULL, RECHARGING, CRASH, ROUTE}
 
 	protected Bounds selectionBounds;
 
@@ -63,13 +63,6 @@ public class WorldObject : MonoBehaviour {
 		//ignore non-selectable objects
 		if (!this._isSelectable)
 			return;
-
-		//only handle input if currently selected
-		if(this.isSelected() && hitObject && hitObject.name != "Ground") {
-			WorldObject worldObject = hitObject.GetComponent< WorldObject >();
-			//clicked on another selectable object
-			//if(worldObject) ChangeSelection(worldObject, controller);
-		}
 	}
 
 	public virtual void StopMove(){
