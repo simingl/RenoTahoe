@@ -69,6 +69,7 @@
      <Compile Include="Assets\Scripts\Camera\MinimapManagement.cs" />
      <Compile Include="Assets\Scripts\Drone\DroneController.cs" />
      <Compile Include="Assets\WorldObject\Building\StationCharger.cs" />
+     <Compile Include="Assets\WorldObject\DronePhysics.cs" />
      <Compile Include="Assets\WorldObject\MapItem.cs" />
      <Compile Include="Assets\WorldObject\Resource\Cellphone.cs" />
      <Compile Include="Assets\WorldObject\Resource\WaterBottle.cs" />

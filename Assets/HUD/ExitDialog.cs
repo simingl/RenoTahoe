@@ -28,6 +28,7 @@ public class ExitDialog : MonoBehaviour {
 	}
 
 	void OnGUI () {
+		return;
 		if (Input.GetKey (KeyCode.Escape)) {
 			this.GuiOn = true;
 		}

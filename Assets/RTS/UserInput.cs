@@ -192,15 +192,18 @@ public class UserInput : MonoBehaviour {
 		if(player.hud.MouseInBounds() && !Input.GetKey(KeyCode.LeftAlt) && player.getSelectedObjects().Count>0) {
 			GameObject hitObject = FindHitObject();
 			Vector3 hitPoint = FindHitPoint();
-
 			if(player.getSelectedObjects().Count > 0){
 				bool playAudio = false;
 				foreach(WorldObject obj in player.getSelectedObjects()){
 					if(obj is Drone){
 						Drone drone = (Drone)obj;
 						if(drone.isDead()) continue;
-
-						obj.MouseClick(hitObject, hitPoint, player);
+						if(Input.GetKey(KeyCode.LeftShift)){
+							drone.addWayPoint(hitPoint);
+							drone.currentTask = WorldObject.TASK.ROUTE;
+						}else{
+							obj.MouseClick(hitObject, hitPoint, player);
+						}
 						playAudio = true;
 					}
 				}
