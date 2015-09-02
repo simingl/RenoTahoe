@@ -50,7 +50,6 @@
      <Compile Include="Assets\HUD\ExitDialog.cs" />
      <Compile Include="Assets\HUD\HUD.cs" />
      <Compile Include="Assets\MovementScript.cs" />
-     <Compile Include="Assets\OutlineScript.cs" />
      <Compile Include="Assets\RTS\AudioManager.cs" />
      <Compile Include="Assets\RTS\ConfigManager.cs" />
      <Compile Include="Assets\RTS\Enums.cs" />

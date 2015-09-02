@@ -118,7 +118,7 @@ public class HUD : MonoBehaviour {
 			string status = "Status: ";
 			string location = "Location: (" + obj.transform.position.x.ToString("0.0") + ", " + obj.transform.position.z.ToString("0.0") + ")";
 			string height = "Height: "+ obj.transform.position.y.ToString("0.0");
-			string speed  = "Speed: "+ obj.speed.ToString("0.0");
+			string speed  = "Speed: ";
 
 			float angle = 0.0F;
 			Vector3 axis = Vector3.zero;
@@ -129,6 +129,7 @@ public class HUD : MonoBehaviour {
 				Drone unit = (Drone)obj;
 				battery += "Battery: " + (int)(unit.currentBattery)/60+" min " + ((int)unit.currentBattery)%60 + " sec.";
 				status += unit.currentStatus;
+				speed  += unit.speed.ToString("0.0");
 			}
 			GUI.DrawTexture(new Rect(offset, 5 ,40,20), this.drone_2d);
 			offset +=40;

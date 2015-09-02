@@ -5,7 +5,7 @@ using RTS;
 public class Vehicle : WorldObject {
 	private GameObject mark;
 
-	protected virtual void Start () {
+	override protected void Start () {
 		base.Start ();
 		
 		this._isSelectable = false;
