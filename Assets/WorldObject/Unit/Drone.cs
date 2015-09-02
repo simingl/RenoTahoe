@@ -13,7 +13,12 @@ public class Drone : WorldObject {
 	public const int PIP_DEPTH_DEACTIVE = -1;
 	public Color color;  
 
+	public float speed = 0f;
+	private float minSpeed = 0f;
+	private float maxSpeed = 2f;
 	public float moveSpeed, rotateSpeed;
+	private float acceleration = 0.3f;
+	private float turnSpeed = 0.3f;
 
 	public float currentBattery = 100;
 	public float batteryUsage = 0.1f;
@@ -43,7 +48,7 @@ public class Drone : WorldObject {
 	private Projector projector;
 	private Camera camera_front, camera_down;
 
-	private Rigidbody rigidbody;
+	private Rigidbody rb;
 
 	private StationCharger charger;
 
@@ -63,7 +68,7 @@ public class Drone : WorldObject {
 
 		fire = transform.FindChild ("fire").gameObject;
 		currentBattery = ResourceManager.DroneBatteryLife;
-		rigidbody = this.GetComponent<Rigidbody> ();
+		rb = this.GetComponent<Rigidbody> ();
 
 		this.canvas = GameObject.FindObjectOfType<Canvas> ();
 		//Initialize to random color
@@ -94,15 +99,6 @@ public class Drone : WorldObject {
 		//setup the line from object to the ground
 		lineRaycast = this.GetComponent<LineRenderer> ();
 		lineRaycast.useWorldSpace = true;
-
-		//setup the line from object to the destination
-		lineMoveContainer = new GameObject ("LineMoveTo");
-		lineMoveContainer.AddComponent<LineRenderer> ();
-		lineMove = lineMoveContainer.GetComponent<LineRenderer> ();
-		lineMove.useWorldSpace = true;
-		lineMove.materials = lineRaycast.materials;
-		lineMove.SetColors (Color.green, Color.green);
-		lineMove.SetWidth (0.3f,0.3f);
 	}
 	
 	protected override void Update () {
@@ -122,7 +118,9 @@ public class Drone : WorldObject {
 			}
 		}
 
-		this.drawRaycastLine ();
+		this.HandleKeyboardControl ();
+
+		//this.drawRaycastLine ();
 		this.drawRouteLine ();
 
 		switch (this.currentTask) {
@@ -138,11 +136,8 @@ public class Drone : WorldObject {
 		case STATUS.TAKEOFF:
 			this.TakeOffing();
 			break;
-		case STATUS.ROTATING:
-			this.TurnToTarget ();
-			break;
 		case STATUS.MOVING:
-			this.MakeMove();
+			this.MakeRotateMove();
 			break;
 		case STATUS.LANDING:
 			this.Landing();
@@ -206,7 +201,7 @@ public class Drone : WorldObject {
 			this.currentStatus = STATUS.TAKEOFF;
 		} else {
 			//this.destination.y = transform.position.y;
-			this.currentStatus = STATUS.ROTATING;
+			this.currentStatus = STATUS.MOVING;
 		}
 	}
 
@@ -221,7 +216,7 @@ public class Drone : WorldObject {
 			this.currentStatus = STATUS.TAKEOFF;
 		} else {
 			//this.destination.y = transform.position.y;
-			this.currentStatus = STATUS.ROTATING;
+			this.currentStatus = STATUS.MOVING;
 		}
 	}
 
@@ -230,31 +225,70 @@ public class Drone : WorldObject {
 		this.drawBatteryBar (rect);
 	}
 
-	private void TurnToTarget() {
-		transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed);
-		//sometimes it gets stuck exactly 180 degrees out in the calculation and does nothing, this check fixes that
-		Quaternion inverseTargetRotation = new Quaternion(-targetRotation.x, -targetRotation.y, -targetRotation.z, -targetRotation.w);
-		if(transform.rotation == targetRotation || transform.rotation == inverseTargetRotation) {
-			this.currentStatus = STATUS.MOVING;
+	private void MakeRotateMove() {
+		if (this.destination.Count > 0) {
+			Vector3 dest = this.destination.Peek ();
+			dest.y = transform.position.y;
+
+			float distance = Vector3.Distance (dest, transform.position);
+			//heading
+			Quaternion targetRotation = Quaternion.LookRotation (dest - transform.position);
+			transform.rotation = Quaternion.RotateTowards (transform.rotation, targetRotation, this.turnSpeed);
+
+			//speed
+			if (distance / speed <= speed / acceleration) {
+				speed -= acceleration * Time.deltaTime;
+			} else {
+				speed += acceleration * Time.deltaTime;
+			}
+			speed = Mathf.Clamp (speed, minSpeed, maxSpeed);
+			transform.Translate (0, 0, speed * Time.deltaTime);
+
+			if (this.IsArrivedIn2D (dest)) {
+				speed = 0f;
+				Vector3 d = this.destination.Dequeue ();
+				if (this.routelines.ContainsKey (d)) {
+					Object.Destroy (this.routelines [d]);
+					this.routelines.Remove (d);
+				}
+				this.currentStatus = STATUS.IDLE;
+			}
+
+			CalculateBounds ();
 		}
-		CalculateBounds();
 	}
 
-	private void MakeMove() {
-		Vector3 dest = this.destination.Peek ();
-		dest.y = transform.position.y;
+	private void HandleKeyboardControl(){
+		if (!player.isSelected (this))
+			return;
 
-		transform.position = Vector3.MoveTowards(transform.position, dest, Time.deltaTime * moveSpeed);
+		Vector3 leftaxis = transform.TransformDirection(Vector3.up);
+		transform.RotateAround(transform.position, leftaxis, Input.GetAxis ("Horizontal")*0.5f);
+		
+		// Sail
+		speed += Input.GetAxis ("Vertical") * acceleration * Time.deltaTime*10;
+		speed = Mathf.Clamp (speed, minSpeed, maxSpeed);
 
-		if (this.IsArrivedIn2D(dest)) {
-			Vector3 d = this.destination.Dequeue();
-			if(this.routelines.ContainsKey(d)){
-				Object.Destroy(this.routelines[d]);
-				this.routelines.Remove(d);
-			}
-			this.currentStatus = STATUS.IDLE;
+		//altitude
+		float jump = Input.GetAxis("Jump");
+		if (jump != 0) {
+			this.currentStatus = STATUS.MOVING;
+
+			Vector3 newPos = transform.up * jump * 0.01f;
+			transform.position += newPos;
+			
+			newPos.x = transform.position.x;
+			newPos.y = Mathf.Clamp(rb.transform.position.y, ResourceManager.MaxBottom,  ResourceManager.MaxTop);
+			newPos.z = transform.position.z;
+			transform.position = newPos;
 		}
-		CalculateBounds();
+
+		//move forward
+		if (this.destination.Count <= 0 && speed > 0) {
+			this.currentStatus = STATUS.MOVING;
+			transform.Translate (0, 0, speed * Time.deltaTime);
+			this.CalculateBounds ();
+		}	
 	}
 
 	public void StopMove(){
@@ -268,21 +302,6 @@ public class Drone : WorldObject {
 		Vector3 groundHit = new Vector3 (transform.position.x, 0, transform.position.z);
 		lineRaycast.SetPosition (0, transform.position);
 		lineRaycast.SetPosition (1, groundHit);
-
-		if (this.currentStatus == STATUS.ROTATING || this.currentStatus== STATUS.MOVING) {
-			lineMove.enabled = true;
-			Vector3 targetGroundHit = new Vector3 (destination.Peek().x, 0.01f, destination.Peek().z);
-			lineMove.SetPosition (0, transform.position);
-			lineMove.SetPosition (1, targetGroundHit);
-
-			destinationMark.gameObject.SetActive(true);
-			destinationMark.position = targetGroundHit;
-			destinationMark.transform.parent = null;
-		} else {
-			lineMove.enabled = false;
-			destinationMark.gameObject.SetActive(false);
-			destinationMark.transform.parent = transform;
-		}
 	}
 
 	private void drawRouteLine(){
@@ -292,6 +311,10 @@ public class Drone : WorldObject {
 			if(!this.routelines.ContainsKey(waypoints[0])){
 				GameObject line = this.drawLine(transform.position, waypoints[0]);
 				this.routelines[waypoints[0]] = line;				
+			}else{
+				GameObject line = this.routelines[waypoints[0]];
+				LineRenderer lr = line.GetComponent<LineRenderer> ();
+				lr.SetPosition (0, transform.position);
 			}
 
 			for(int i=1;i<waypoints.Length;i++){
@@ -308,6 +331,7 @@ public class Drone : WorldObject {
 		LineRenderer lr = line.GetComponent<LineRenderer> ();
 		lr.SetPosition (0, org);
 		lr.SetPosition (1, dst);
+		line.layer = ResourceManager.LayerMainCamerea;
 		return line;
 	}
 	private void drawBatteryBar(Rect rect){
@@ -456,10 +480,10 @@ public class Drone : WorldObject {
 
 	private void Landing(){
 		Vector3 low = this.FindHitPoint (this.camera_front, this.transform);
-		if (this.rigidbody.transform.position.y >= low.y + 0.5) {
-			Vector3 newpos = this.rigidbody.transform.position;
+		if (this.rb.transform.position.y >= low.y + 0.5) {
+			Vector3 newpos = this.rb.transform.position;
 			newpos.y -= Time.deltaTime;
-			this.rigidbody.transform.position = newpos;
+			this.rb.transform.position = newpos;
 		} else if (this.currentBattery <= 0 || this.currentStatus == STATUS.DEAD) {
 			this.Dieing();
 		} else {
@@ -469,10 +493,10 @@ public class Drone : WorldObject {
 
 	private void TakeOffing(){
 		Vector3 low = this.FindHitPoint (this.camera_front, this.transform);
-		if (this.rigidbody.transform.position.y <= low.y + 3.5) {
-			Vector3 newpos = this.rigidbody.transform.position;
+		if (this.rb.transform.position.y <= low.y + 3.5) {
+			Vector3 newpos = this.rb.transform.position;
 			newpos.y += Time.deltaTime;
-			this.rigidbody.transform.position = newpos;
+			this.rb.transform.position = newpos;
 		} else if (this.destination.Count > 0 && !IsArrivedIn2D(this.destination.Peek())) {
 			this.StartMove();
 		} else if (this.destination.Count == 0) {
@@ -492,7 +516,7 @@ public class Drone : WorldObject {
 	}
 
 	private void StartMoveInPath(){
-		if (this.destination.Count > 0 && this.currentStatus != STATUS.ROTATING && this.currentStatus != STATUS.MOVING) {
+		if (this.destination.Count > 0 && this.currentStatus != STATUS.MOVING) {
 			StartMove ();
 		} else if(this.destination.Count == 0){
 			this.currentTask = TASK.NULL;
@@ -501,8 +525,8 @@ public class Drone : WorldObject {
 
 	private void Crashing(){
 		this.fire.SetActive (true);
-		this.rigidbody.useGravity = true;
-		this.rigidbody.velocity = Vector3.zero;
+		this.rb.useGravity = true;
+		this.rb.velocity = Vector3.zero;
 		this.Dieing ();
 		ScoreManager.score -= scoreValue;
 	}
@@ -521,7 +545,7 @@ public class Drone : WorldObject {
 	}
 
 	private bool IsArrivedIn2D(Vector3 pos){
-		if(Mathf.Abs(pos.x - transform.position.x) < 0.01f && Mathf.Abs(pos.z - transform.position.z) < 0.01f){
+		if(Mathf.Abs(pos.x - transform.position.x) < 0.5f && Mathf.Abs(pos.z - transform.position.z) < 0.5f){
 			return true;
 		}
 		return false;
@@ -558,6 +582,14 @@ public class Drone : WorldObject {
 			Vector3 dest = this.destination.Dequeue();
 			Object.Destroy(this.routelines[dest]);
 
+		}
+	}
+
+	public Vector3 getCurrentDestination(){
+		if (this.destination.Count > 0) {
+			return this.destination.Peek ();
+		} else {
+			return ResourceManager.InvalidPosition;
 		}
 	}
 }

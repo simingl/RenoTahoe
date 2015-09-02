@@ -8,7 +8,7 @@ public class WorldObject : MonoBehaviour {
 	public string objectName;
 
 	protected Player player;
-	public enum STATUS {LANDED, IDLE, TAKEOFF, LANDING, CRASHING, ROTATING, MOVING, DEAD, CHARGING};
+	public enum STATUS {LANDED, IDLE, TAKEOFF, LANDING, CRASHING, MOVING, DEAD, CHARGING};
 	public enum TASK {NULL, RECHARGING, CRASH, ROUTE}
 
 	protected Bounds selectionBounds;
@@ -17,7 +17,7 @@ public class WorldObject : MonoBehaviour {
 
 	protected bool _isSelectable;
 
-	public float speed = 0f;
+
 	public STATUS currentStatus;
 	public TASK currentTask;
 
@@ -43,15 +43,7 @@ public class WorldObject : MonoBehaviour {
 
 	}
 
-	void FixedUpdate(){
-		this.lastUpdated += Time.deltaTime;
-		if (lastUpdated >= 0.5) {
-			speed = (transform.position - lastPosition).magnitude*5;
-			lastPosition = transform.position;
-			
-			lastUpdated = 0.0f;
-		}
-	}
+
 
 	protected virtual void OnGUI() {
 		if (this.isSelected() && this.player.changePOV.activeCamera == null) {

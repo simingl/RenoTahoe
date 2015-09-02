@@ -30,7 +30,7 @@ public class UserInput : MonoBehaviour {
 		float v = Input.GetAxis ("Vertical");
 		float j = Input.GetAxis ("Jump");
 
-		MoveByInputAxis (h,j,v);
+		//MoveByInputAxis (h,j,v);
 	}
 	
 	void MoveByInputAxis(float horizontal, float jump, float vertical){
