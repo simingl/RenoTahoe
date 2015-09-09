@@ -1,22 +1,23 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\WorldObject\Unit\Drone.cs">
     <Files>
       <File FileName="Assets\HUD\HUD.cs" Line="121" Column="29" />
-      <File FileName="Assets\WorldObject\DronePhysics.cs" Line="59" Column="23" />
-      <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="296" Column="3" />
+      <File FileName="Assets\WorldObject\DronePhysics.cs" Line="1" Column="1" />
+      <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="20" Column="34" />
       <File FileName="Assets\RTS\SceneManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\UserInput.cs" Line="83" Column="3" />
-      <File FileName="Assets\WorldObject\WorldObject.cs" Line="11" Column="70" />
-      <File FileName="c:\lsm\MyGitHub\RenoTahoe\Assets\WorldObject\Unit\Helicopter.cs" Line="47" Column="7" />
-      <File FileName="c:\lsm\MyGitHub\RenoTahoe\Assets\WorldObject\Unit\Vehicle.cs" Line="31" Column="32" />
-      <File FileName="c:\lsm\MyGitHub\RenoTahoe\Assets\HUD\ExitDialog.cs" Line="31" Column="10" />
+      <File FileName="Assets\RTS\UserInput.cs" Line="84" Column="1" />
+      <File FileName="Assets\WorldObject\WorldObject.cs" Line="1" Column="1" />
+      <File FileName="c:\lsm\MyGitHub\RenoTahoe\Assets\WorldObject\Unit\Helicopter.cs" Line="1" Column="1" />
+      <File FileName="c:\lsm\MyGitHub\RenoTahoe\Assets\WorldObject\Unit\Vehicle.cs" Line="1" Column="1" />
+      <File FileName="c:\lsm\MyGitHub\RenoTahoe\Assets\HUD\ExitDialog.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\ResourceManager.cs" Line="39" Column="3" />
+      <File FileName="Assets\CarNavMeshAI.cs" Line="31" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Assembly-CSharp" expanded="True">
-            <Node name="HUD" expanded="True" />
             <Node name="RTS" expanded="True" />
             <Node name="WorldObject" expanded="True">
               <Node name="Unit" expanded="True">
@@ -24,7 +25,6 @@
               </Node>
             </Node>
           </Node>
-          <Node name="Assembly-UnityScript" expanded="True" />
         </State>
       </Pad>
     </Pads>

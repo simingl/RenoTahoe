@@ -25,7 +25,7 @@ public class Drone : WorldObject {
 
 	public int sensingRange = 100;
 
-	private Queue<Vector3> destination;
+	private Queue<Vector3> routePoints;
 	private Dictionary<Vector3, GameObject> routelines;
 	private Quaternion targetRotation;
 	
@@ -59,7 +59,7 @@ public class Drone : WorldObject {
 		type = WorldObjectType.Unit;
 		cellphones = new Stack<Cellphone>();
 		waters = new Stack<WaterBottle>();
-		this.destination = new Queue<Vector3>();
+		this.routePoints = new Queue<Vector3>();
 		routelines = new Dictionary<Vector3, GameObject>();
 	}
 
@@ -193,29 +193,27 @@ public class Drone : WorldObject {
 		return this.camera_down;
 	}
 	public void StartMove() {
-		Vector3 dest = this.destination.Peek ();
+		Vector3 dest = this.routePoints.Peek ();
 		dest.y = transform.position.y;
 
 		targetRotation = Quaternion.LookRotation (dest - transform.position);
 		if (this.currentStatus == STATUS.LANDED || this.currentStatus == STATUS.CHARGING) {
 			this.currentStatus = STATUS.TAKEOFF;
 		} else {
-			//this.destination.y = transform.position.y;
 			this.currentStatus = STATUS.MOVING;
 		}
 	}
 
 	public void StartMove(Vector3 d) {
 		this.clearDestination ();
-		this.destination.Enqueue (d);
-		Vector3 dest = this.destination.Peek();
+		this.routePoints.Enqueue (d);
+		Vector3 dest = this.routePoints.Peek();
 		dest.y = transform.position.y;
 		
 		targetRotation = Quaternion.LookRotation (dest - transform.position);
 		if (this.currentStatus == STATUS.LANDED || this.currentStatus == STATUS.CHARGING) {
 			this.currentStatus = STATUS.TAKEOFF;
 		} else {
-			//this.destination.y = transform.position.y;
 			this.currentStatus = STATUS.MOVING;
 		}
 	}
@@ -226,8 +224,8 @@ public class Drone : WorldObject {
 	}
 
 	private void MakeRotateMove() {
-		if (this.destination.Count > 0) {
-			Vector3 dest = this.destination.Peek ();
+		if (this.routePoints.Count > 0) {
+			Vector3 dest = this.routePoints.Peek ();
 			dest.y = transform.position.y;
 
 			float distance = Vector3.Distance (dest, transform.position);
@@ -246,7 +244,7 @@ public class Drone : WorldObject {
 
 			if (this.IsArrivedIn2D (dest)) {
 				speed = 0f;
-				Vector3 d = this.destination.Dequeue ();
+				Vector3 d = this.routePoints.Dequeue ();
 				if (this.routelines.ContainsKey (d)) {
 					Object.Destroy (this.routelines [d]);
 					this.routelines.Remove (d);
@@ -259,9 +257,6 @@ public class Drone : WorldObject {
 	}
 
 	private void HandleKeyboardControl(){
-		if (!player.isSelected (this))
-			return;
-
 		Vector3 leftaxis = transform.TransformDirection(Vector3.up);
 		transform.RotateAround(transform.position, leftaxis, Input.GetAxis ("Horizontal")*0.5f);
 		
@@ -284,7 +279,7 @@ public class Drone : WorldObject {
 		}
 
 		//move forward
-		if (this.destination.Count <= 0 && speed > 0) {
+		if (this.routePoints.Count <= 0 && speed > 0) {
 			this.currentStatus = STATUS.MOVING;
 			transform.Translate (0, 0, speed * Time.deltaTime);
 			this.CalculateBounds ();
@@ -305,8 +300,8 @@ public class Drone : WorldObject {
 	}
 
 	private void drawRouteLine(){
-		if (this.destination.Count > 0) {
-			Vector3[] waypoints = this.destination.ToArray();
+		if (this.routePoints.Count > 0) {
+			Vector3[] waypoints = this.routePoints.ToArray();
 
 			if(!this.routelines.ContainsKey(waypoints[0])){
 				GameObject line = this.drawLine(transform.position, waypoints[0]);
@@ -353,7 +348,7 @@ public class Drone : WorldObject {
 			this.currentBattery -= Time.deltaTime;
 		} else if (this.currentBattery <= 0) {
 			if(this.currentStatus != STATUS.LANDING){
-				this.destination.Clear();
+				this.routePoints.Clear();
 				this.Dieing();
 			}
 		}
@@ -479,33 +474,34 @@ public class Drone : WorldObject {
 	}
 
 	private void Landing(){
-		Vector3 low = this.FindHitPoint (this.camera_front, this.transform);
-		if (this.rb.transform.position.y >= low.y + 0.5) {
+		if (this.currentStatus != STATUS.LANDED) {
 			Vector3 newpos = this.rb.transform.position;
 			newpos.y -= Time.deltaTime;
 			this.rb.transform.position = newpos;
 		} else if (this.currentBattery <= 0 || this.currentStatus == STATUS.DEAD) {
 			this.Dieing();
-		} else {
-			currentStatus = STATUS.LANDED;
-		}
+		} 
 	}
 
+	float takeOffHeight = 5f;
+	float deltaHeight = 0f;
 	private void TakeOffing(){
-		Vector3 low = this.FindHitPoint (this.camera_front, this.transform);
-		if (this.rb.transform.position.y <= low.y + 3.5) {
+		if (deltaHeight < takeOffHeight) {
 			Vector3 newpos = this.rb.transform.position;
 			newpos.y += Time.deltaTime;
+			deltaHeight+= Time.deltaTime;
 			this.rb.transform.position = newpos;
-		} else if (this.destination.Count > 0 && !IsArrivedIn2D(this.destination.Peek())) {
+		} else if (this.routePoints.Count > 0 && !IsArrivedIn2D(this.routePoints.Peek())) {
 			this.StartMove();
-		} else if (this.destination.Count == 0) {
+			this.deltaHeight = 0;
+		} else if (this.routePoints.Count == 0) {
 			currentStatus = STATUS.IDLE;
+			this.deltaHeight = 0;
 		}
 	}
 
 	private void Recharging(){
-		if (this.destination.Count == 0 || IsArrivedIn2D (this.destination.Peek())) {
+		if (this.routePoints.Count == 0 || IsArrivedIn2D (this.routePoints.Peek())) {
 			if(this.currentStatus == STATUS.IDLE){
 				this.currentStatus = STATUS.LANDING;
 			} else if(this.currentStatus == STATUS.LANDED){
@@ -516,9 +512,9 @@ public class Drone : WorldObject {
 	}
 
 	private void StartMoveInPath(){
-		if (this.destination.Count > 0 && this.currentStatus != STATUS.MOVING) {
+		if (this.routePoints.Count > 0 && this.currentStatus != STATUS.MOVING) {
 			StartMove ();
-		} else if(this.destination.Count == 0){
+		} else if(this.routePoints.Count == 0){
 			this.currentTask = TASK.NULL;
 		}
 	}
@@ -535,7 +531,7 @@ public class Drone : WorldObject {
 		StationCharger sc = this.player.stationManager.getNearestAvailabeCharger (transform.position);
 		if (sc != null) {
 			this.charger = sc;
-			this.destination.Enqueue(sc.transform.position);
+			this.routePoints.Enqueue(sc.transform.position);
 			this.currentTask = TASK.RECHARGING;
 			this.currentStatus = STATUS.TAKEOFF;
 			sc.Occupy(this);
@@ -553,10 +549,11 @@ public class Drone : WorldObject {
 
 	public void OnCollisionEnter(Collision collisionInfo){
 		GameObject go = collisionInfo.gameObject;
-		Helicopter heli = go.GetComponent<Helicopter> ();
-
-		if (heli != null && !this.isDead()) {
-			Crashing();
+		//crash
+		if (go.GetComponent<Helicopter> () != null && !this.isDead ()) {
+			this.Crashing ();
+		} else if (this.currentStatus == STATUS.LANDING &&( go.name == "RenoDestroyed" || go.tag == "StationCharger")) {
+			this.currentStatus = STATUS.LANDED;
 		}
 	} 
 
@@ -574,20 +571,20 @@ public class Drone : WorldObject {
 	}
 
 	public void addWayPoint(Vector3 point){
-		this.destination.Enqueue (point);
+		this.routePoints.Enqueue (point);
 	}
 
 	private void clearDestination(){
-		while (this.destination.Count >0) {
-			Vector3 dest = this.destination.Dequeue();
+		while (this.routePoints.Count >0) {
+			Vector3 dest = this.routePoints.Dequeue();
 			Object.Destroy(this.routelines[dest]);
 
 		}
 	}
 
 	public Vector3 getCurrentDestination(){
-		if (this.destination.Count > 0) {
-			return this.destination.Peek ();
+		if (this.routePoints.Count > 0) {
+			return this.routePoints.Peek ();
 		} else {
 			return ResourceManager.InvalidPosition;
 		}
