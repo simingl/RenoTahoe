@@ -99,5 +99,7 @@ namespace RTS {
 
 		public static int DroneBatteryLife {get {return 18*60;}}
 		public static int DroneBatteryCharging {get {return 5*60;}}
+
+
 	}
 }
