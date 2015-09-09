@@ -1,23 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 using RTS;
+using System.Collections.Generic;
 
 public class Helicopter :  WorldObject {
-	public float moveSpeed = 0.5f;
-	public float rotateSpeed =1f;
+	public float speed = 0f;
+	private float minSpeed = 0f;
+	private float maxSpeed = 1f;
+	public float moveSpeed, rotateSpeed;
+	private float acceleration = 0.3f;
+	private float turnSpeed = 0.3f;
+
 	private GameObject mark;
 
 	private float cycle = 20f;
 	private float regenTime;
 	private Vector3 destination;
-	private Quaternion targetRotation;
-
-	private int width = 100;
-	private int height = 100;
 
 	private GameObject fire;
 
-	private bool rotating, moving;
+	private GameObject[] waypoints;
 
 	void Awake(){
 		regenTime = cycle;
@@ -41,65 +43,95 @@ public class Helicopter :  WorldObject {
 		mark.transform.rotation = gameObject.transform.rotation;
 		mark.GetComponent<Renderer> ().material.color = Color.yellow;
 
-		this.StartMove(generateRandomPosition (width, height));
+		waypoints = GameObject.FindGameObjectsWithTag ("WaypointAir");
+
+
+		this.destination = this.getRandomWayPoint ();
+		this.currentStatus = STATUS.TAKEOFF;
 	}
 
+	private Vector3 getRandomWayPoint(){
+		int wp = (int)(Random.value * waypoints.Length);
+		Vector3 point = waypoints [wp].transform.position;
+		if (Vector3.Distance (point, transform.position) < 1) {
+			return getRandomWayPoint ();
+		} else {
+			return point;
+		}
+	}
 	void Update(){
 		if (this.currentStatus == STATUS.CRASHING || this.currentStatus == STATUS.DEAD)
 			return;
 
 
-		if (regenTime <= 0) {
-			regenTime = cycle;
-			this.StartMove(this.generateRandomPosition (width, height));
-		} else {
-			regenTime -= Time.deltaTime;
-		}
 
-		if (rotating) {
-			this.TurnToTarget();
-		}else if (moving) {
-			this.MakeMove();
-		}
-
-	}
-
-	private void TurnToTarget() {
-		transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotateSpeed);
-		Quaternion inverseTargetRotation = new Quaternion(-targetRotation.x, -targetRotation.y, -targetRotation.z, -targetRotation.w);
-		if(transform.rotation == targetRotation || transform.rotation == inverseTargetRotation) {
-			this.rotating = false;
-			this.moving = true;
+		switch (this.currentStatus) {
+		case STATUS.TAKEOFF:
+			this.TakeOffing();
+			break;
+		case STATUS.MOVING:
+			this.MakeRotateMove();
+			break;
+		case STATUS.LANDING:
+			this.Landing();
+			break;
+		case STATUS.LANDED:
+			this.Rest();
+			break;
 		}
 	}
 
-	private void StartMove(Vector3 dest) {
-		this.destination = dest;
-		targetRotation = Quaternion.LookRotation (destination - transform.position);
-		this.rotating = true;
-		this.moving = false;
+	private void Landing(){
+		if (this.currentStatus != STATUS.LANDED) {
+			Vector3 newpos = transform.position;
+			newpos.y -= Time.deltaTime;
+			transform.position = newpos;
+		} 
 	}
 
-	private void MakeMove() {
-		transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * moveSpeed);
-		if (transform.position == destination) {
-			this.StartMove(this.generateRandomPosition (width, height));
-		}
-	}
-
-	private Vector3 generateRandomPosition(int w, int h){
-		float x = Random.Range(-1*w, h);
-		float z = Random.Range(-1*w, h);
+	float takeOffHeight = 5f;
+	float deltaHeight = 0f;
 		
-		return new Vector3 (x,4,z);
+	private void TakeOffing(){
+		if (deltaHeight < takeOffHeight) {
+			Vector3 newpos = transform.position;
+			newpos.y += Time.deltaTime;
+			deltaHeight += Time.deltaTime;
+			transform.position = newpos;
+			this.currentStatus = STATUS.TAKEOFF;
+		} else if (this.destination != ResourceManager.InvalidPosition && !IsArrivedIn2D(this.destination)) {
+			destination.y = transform.position.y;
+			this.currentStatus = STATUS.MOVING;
+			deltaHeight =0;
+		} 
+	}
+
+	private float maxRestTime = 5f;
+	private float restTime = 0;
+	private void Rest(){
+		if (restTime < maxRestTime) {
+			restTime += Time.deltaTime;
+		} else {
+			restTime = 0;
+			this.destination = this.getRandomWayPoint();
+			this.currentStatus = STATUS.TAKEOFF;
+		}
+	}
+
+	private bool IsArrivedIn2D(Vector3 pos){
+		if(Mathf.Abs(pos.x - transform.position.x) < 0.5f && Mathf.Abs(pos.z - transform.position.z) < 0.5f){
+			return true;
+		}
+		return false;
 	}
 
 	public void OnCollisionEnter(Collision collisionInfo){
 		GameObject go = collisionInfo.gameObject;
-		Drone drone = go.GetComponent<Drone> ();
-		
-		if (drone != null && !this.isDead()) {
-			this.Crashing();
+		//crash
+		if (go.GetComponent<Drone> () != null && !this.isDead ()) {
+			this.Crashing ();
+		} else if (this.currentStatus == STATUS.LANDING &&( go.name == "RenoDestroyed" || go.tag == "WaypointAir")) {
+			this.currentStatus = STATUS.LANDED;
 		}
 	} 
 
@@ -114,5 +146,27 @@ public class Helicopter :  WorldObject {
 			ScoreManager.score -= this.scoreValue;
 	}
 
+	private void MakeRotateMove() {
+		if (this.destination != ResourceManager.InvalidPosition) {
+			float distance = Vector3.Distance (destination, transform.position);
+			//heading
+			Quaternion targetRotation = Quaternion.LookRotation (destination - transform.position);
+			transform.rotation = Quaternion.RotateTowards (transform.rotation, targetRotation, this.turnSpeed);
+			
+			//speed
+			if (distance / speed <= speed / acceleration) {
+				speed -= acceleration * Time.deltaTime;
+			} else {
+				speed += acceleration * Time.deltaTime;
+			}
+			speed = Mathf.Clamp (speed, minSpeed, maxSpeed);
+			transform.Translate (0, 0, speed * Time.deltaTime);
+
+			if (this.IsArrivedIn2D (this.destination)) {
+				speed = 0f;
+				this.currentStatus = STATUS.LANDING;
+			}
+		}
+	}
 
 }
