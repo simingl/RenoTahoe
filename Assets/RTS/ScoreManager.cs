@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using RTS;
 
 public class ScoreManager : MonoBehaviour {
+	//private ConfigManager configManager;
 	public static int score;
 
 	Text text;
@@ -13,11 +15,14 @@ public class ScoreManager : MonoBehaviour {
 	}
 	// Use this for initialization
 	void Start () {
-		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		text.text = "Score: " + score;
+		if (ConfigManager.getInstance().getHUDShowScore ()) {
+			text.text = "Score: " + score;
+		} else {
+			text.text = "";
+		}
 	}
 }

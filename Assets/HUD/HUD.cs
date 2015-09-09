@@ -88,10 +88,19 @@ public class HUD : MonoBehaviour {
 	
 	void OnGUI () {
 		if(player && player.human) {
-			DrawSelectionBar();
-			DrawOrdersBar();
-			DrawResourceBar();
-			DrawInfoBar();
+			if(player.configManager.getHUDShowDroneSelectionBar()){
+				DrawSelectionBar();
+			}
+			if(player.configManager.getHUDShowOrderBar()){
+				DrawOrdersBar();
+			}
+			if(player.configManager.getHUDShowResourceBar()){
+				DrawResourceBar();
+			}
+			if(player.configManager.getHUDShowMessageBar()){
+				DrawInfoBar();
+			}
+
 			DrawPIPBar();
 			SwitchDayNight();
 			DrawMouseDragSelectionBox ();

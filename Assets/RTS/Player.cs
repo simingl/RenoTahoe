@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+using RTS;
 
 public class Player : MonoBehaviour {
 	public string username;
@@ -13,6 +14,7 @@ public class Player : MonoBehaviour {
 	public ChangePOV changePOV;
 	public SceneManager sceneManager;
 	public StationManager stationManager;
+	public ConfigManager configManager;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +24,8 @@ public class Player : MonoBehaviour {
 		changePOV = this.GetComponent<ChangePOV> ();
 		sceneManager = GameObject.FindObjectOfType<SceneManager> ();
 		stationManager = GameObject.FindObjectOfType<StationManager> ();
+
+		configManager = ConfigManager.getInstance();
 	}
 
 	public void addSelectedObject(WorldObject obj){
