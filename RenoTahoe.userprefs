@@ -1,26 +1,30 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\RTS\ConfigManager.cs">
     <Files>
       <File FileName="Assets\CarNavMeshAI.cs" Line="18" Column="3" />
-      <File FileName="Assets\HUD\HUD.cs" Line="1" Column="1" />
+      <File FileName="Assets\HUD\HUD.cs" Line="94" Column="1" />
       <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="28" Column="36" />
-      <File FileName="Assets\RTS\SceneManager.cs" Line="54" Column="1" />
+      <File FileName="Assets\RTS\SceneManager.cs" Line="5" Column="16" />
       <File FileName="Assets\RTS\UserInput.cs" Line="1" Column="1" />
       <File FileName="Assets\WorldObject\WorldObject.cs" Line="1" Column="1" />
       <File FileName="c:\lsm\MyGitHub\RenoTahoe\Assets\WorldObject\Unit\Helicopter.cs" Line="122" Column="48" />
       <File FileName="c:\lsm\MyGitHub\RenoTahoe\Assets\WorldObject\Unit\Vehicle.cs" Line="1" Column="1" />
       <File FileName="c:\lsm\MyGitHub\RenoTahoe\Assets\HUD\ExitDialog.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\ResourceManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\ConfigManager.cs" Line="38" Column="37" />
+      <File FileName="Assets\RTS\ResourceManager.cs" Line="103" Column="1" />
+      <File FileName="Assets\RTS\ConfigManager.cs" Line="10" Column="55" />
+      <File FileName="Assets\RTS\Player.cs" Line="15" Column="11" />
+      <File FileName="Assets\RTS\ScoreManager.cs" Line="20" Column="36" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Assembly-CSharp" expanded="True">
+            <Node name="HUD" expanded="True" />
             <Node name="RTS" expanded="True">
               <Node name="ConfigManager.cs" selected="True" />
             </Node>
+            <Node name="Scripts" expanded="True" />
             <Node name="WorldObject" expanded="True">
               <Node name="Unit" expanded="True" />
             </Node>
@@ -31,7 +35,9 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\RTS\ConfigManager.cs" line="38" />
+      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\RTS\ConfigManager.cs" line="53" />
+      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\RTS\ScoreManager.cs" line="22" />
+      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\RTS\ConfigManager.cs" line="57" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

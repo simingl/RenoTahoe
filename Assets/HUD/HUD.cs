@@ -54,8 +54,6 @@ public class HUD : MonoBehaviour {
 	public static Rect selection = new Rect(0,0,0,0);
 	private Vector3 startClick = -Vector3.one;
 
-
-
 	private Camera camera_minimap;
 
 	void Start () {
@@ -88,16 +86,16 @@ public class HUD : MonoBehaviour {
 	
 	void OnGUI () {
 		if(player && player.human) {
-			if(player.configManager.getHUDShowDroneSelectionBar()){
+			if(ConfigManager.getInstance ().getHUDShowDroneSelectionBar()){
 				DrawSelectionBar();
 			}
-			if(player.configManager.getHUDShowOrderBar()){
+			if(ConfigManager.getInstance ().getHUDShowOrderBar()){
 				DrawOrdersBar();
 			}
-			if(player.configManager.getHUDShowResourceBar()){
+			if(ConfigManager.getInstance ().getHUDShowResourceBar()){
 				DrawResourceBar();
 			}
-			if(player.configManager.getHUDShowMessageBar()){
+			if(ConfigManager.getInstance ().getHUDShowMessageBar()){
 				DrawInfoBar();
 			}
 

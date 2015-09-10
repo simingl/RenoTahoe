@@ -12,7 +12,7 @@ public class CameraMain : MonoBehaviour
 	private Player player;           // Reference to the player's transform.
 	private Transform cam;
 	private Camera mycam;
-	private Camera MiniMapCamera;
+	private Camera minimapCam;
 
 	private Vector2 MiniMapLastPos = Vector2.zero;
 	private int MiniMapOffsetX = 0;
@@ -43,7 +43,7 @@ public class CameraMain : MonoBehaviour
 			transform.position = initial_position;
 		}
 		mycam = Camera.main;
-		MiniMapCamera = GameObject.FindGameObjectWithTag ("Camera_minimap").GetComponent<Camera>();
+		minimapCam = GameObject.FindGameObjectWithTag ("Camera_minimap").GetComponent<Camera>();
 	}
 
 	void Start(){
@@ -53,30 +53,35 @@ public class CameraMain : MonoBehaviour
 		Transform mymap = ground.transform;
 		
 		Vector3 tmp = cam.position;
-		tmp.x = Mathf.Clamp(cam.position.x, 
-		                    mymap.position.x-(mymap.localScale.x*5)+(mycam.ScreenToWorldPoint(new Vector3(mycam.pixelWidth, 0.5f, cam.position.y)).x-mycam.ScreenToWorldPoint(new Vector3(0, 0.5f, cam.position.y)).x)/2, 
-		                    mymap.position.x+(mymap.localScale.x*5)-(mycam.ScreenToWorldPoint(new Vector3(mycam.pixelWidth, 0.5f, cam.position.y)).x-mycam.ScreenToWorldPoint(new Vector3(0, 0.5f, cam.position.y)).x)/2 );
-		tmp.z = Mathf.Clamp(cam.position.z, 
-		                    mymap.position.z-(mymap.localScale.z*5)+(mycam.ScreenToWorldPoint(new Vector3(0.5f, mycam.pixelHeight, cam.position.y)).z-mycam.ScreenToWorldPoint(new Vector3(0.5f, 0, cam.position.y)).z)/2, 
-		                    mymap.position.z+(mymap.localScale.z*5)-(mycam.ScreenToWorldPoint(new Vector3(0.5f, mycam.pixelHeight, cam.position.y)).z-mycam.ScreenToWorldPoint(new Vector3(0.5f, 0, cam.position.y)).z)/2 );				
-		cam.position = tmp;
+		float minX = mymap.position.x - (mymap.localScale.x * 5) + (mycam.ScreenToWorldPoint (new Vector3 (mycam.pixelWidth, 0.5f, cam.position.y)).x - mycam.ScreenToWorldPoint (new Vector3 (0, 0.5f, cam.position.y)).x) / 2;
+		float maxX = mymap.position.x + (mymap.localScale.x * 5) - (mycam.ScreenToWorldPoint (new Vector3 (mycam.pixelWidth, 0.5f, cam.position.y)).x - mycam.ScreenToWorldPoint (new Vector3 (0, 0.5f, cam.position.y)).x) / 2;
+
+		float minZ = mymap.position.z-(mymap.localScale.z*5)+(mycam.ScreenToWorldPoint(new Vector3(0.5f, mycam.pixelHeight, cam.position.y)).z-mycam.ScreenToWorldPoint(new Vector3(0.5f, 0, cam.position.y)).z)/2;
+		float maxZ = mymap.position.z+(mymap.localScale.z*5)-(mycam.ScreenToWorldPoint(new Vector3(0.5f, mycam.pixelHeight, cam.position.y)).z-mycam.ScreenToWorldPoint(new Vector3(0.5f, 0, cam.position.y)).z)/2;				
+		if (minX < maxX && minZ < maxZ) {
+			tmp.x = Mathf.Clamp (cam.position.x, minX, maxX);
+			tmp.z = Mathf.Clamp (cam.position.z, minZ, maxZ);				
+			cam.position = tmp;
+		}
 	}
-
-
 
 	void OnGUI()
 	{
+		this.MiniMapRaycastBox ();
+	}
+
+	private void MiniMapRaycastBox(){
 		MiniMapOffsetX = 0;
-		MiniMapOffsetY = Screen.height - MiniMapCamera.pixelHeight;
-
+		MiniMapOffsetY = Screen.height - minimapCam.pixelHeight;
+		
 		MapBackgroundMask = 1 << 12;  //Ground layer
-
+		
 		//MiniMap Stuff
 		Vector2 MiniMapCurrentPos = new Vector2(Screen.width, Screen.height);
 		if ((MiniMapLastPos - MiniMapCurrentPos).magnitude != 2)
 		{
 			MiniMapLastPos = MiniMapCurrentPos;
-			MiniMapCamera.pixelRect = new Rect(MiniMapOffsetX, Screen.height - MiniMapCamera.pixelHeight - MiniMapOffsetY, MiniMapCamera.pixelWidth, MiniMapCamera.pixelHeight);
+			minimapCam.pixelRect = new Rect(MiniMapOffsetX, Screen.height - minimapCam.pixelHeight - MiniMapOffsetY, minimapCam.pixelWidth, minimapCam.pixelHeight);
 		}
 		
 		Ray ray1 = Camera.main.ViewportPointToRay (new Vector3(0,1,0));
@@ -92,14 +97,14 @@ public class CameraMain : MonoBehaviour
 			ScreenCorner2 = new Vector3(hit2.point.x, hit2.point.y, hit2.point.z);
 		}
 		
-		MiniMapCorner1 = MiniMapCamera.WorldToViewportPoint(ScreenCorner1);
-		MiniMapCorner2 = MiniMapCamera.WorldToViewportPoint(ScreenCorner2);
+		MiniMapCorner1 = minimapCam.WorldToViewportPoint(ScreenCorner1);
+		MiniMapCorner2 = minimapCam.WorldToViewportPoint(ScreenCorner2);
 		
-		MiniMapScreenOffsetX1 = MiniMapCamera.pixelWidth * MiniMapCorner1.x;
-		MiniMapScreenOffsetY1 = MiniMapCamera.pixelHeight * MiniMapCorner1.y;
+		MiniMapScreenOffsetX1 = minimapCam.pixelWidth * MiniMapCorner1.x;
+		MiniMapScreenOffsetY1 = minimapCam.pixelHeight * MiniMapCorner1.y;
 		
-		MiniMapScreenOffsetX2 = MiniMapCamera.pixelWidth * MiniMapCorner2.x;
-		MiniMapScreenOffsetY2 = MiniMapCamera.pixelHeight * MiniMapCorner2.y;
+		MiniMapScreenOffsetX2 = minimapCam.pixelWidth * MiniMapCorner2.x;
+		MiniMapScreenOffsetY2 = minimapCam.pixelHeight * MiniMapCorner2.y;
 		
 		
 		Rect MiniMapWindow = new Rect(MiniMapScreenOffsetX1, Screen.height - MiniMapScreenOffsetY1, MiniMapScreenOffsetX2 - MiniMapScreenOffsetX1, MiniMapScreenOffsetY1 - MiniMapScreenOffsetY2);
