@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class Helicopter :  WorldObject {
 	public float speed = 0f;
 	private float minSpeed = 0f;
-	private float maxSpeed = 1f;
+	private float maxSpeed = 10f;
 	public float moveSpeed, rotateSpeed;
 	private float acceleration = 0.3f;
 	private float turnSpeed = 0.3f;
@@ -89,7 +89,7 @@ public class Helicopter :  WorldObject {
 		} 
 	}
 
-	float takeOffHeight = 5f;
+	float takeOffHeight = 10f;
 	float deltaHeight = 0f;
 		
 	private void TakeOffing(){
