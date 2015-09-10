@@ -73,7 +73,14 @@ public class CameraPIP : MonoBehaviour {
 			Event e = Event.current;
 			if (e.isMouse && e.type == EventType.MouseDown && e.clickCount == 2 &&  this.MouseInBoundsPIP())
 			{
+				if(player.getSelectedObjects().Count >0){
+					Drone selectedDrone = (Drone)player.getSelectedObjects()[0];
+					Camera dfcam = selectedDrone.getCameraFront();
+					ResourceManager.getInstance().setCameraPosition(dfcam, cam.rect);
+					//dfcam.rect = cam.rect;
+				}
 				player.setSelectedObject(drone);
+				e.Use();
 			}
 		}
 	}

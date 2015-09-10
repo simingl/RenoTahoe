@@ -38,7 +38,7 @@ public class Helicopter :  WorldObject {
 		mark.GetComponent<Collider> ().enabled = false;
 		
 		mark.transform.parent = transform;
-		mark.transform.localScale = Vector3.one * 2f;
+		mark.transform.localScale = Vector3.one * 20f;
 		mark.transform.localPosition = new Vector3 (0, 5f, 0);
 		mark.transform.rotation = gameObject.transform.rotation;
 		mark.GetComponent<Renderer> ().material.color = Color.yellow;

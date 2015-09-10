@@ -29,7 +29,7 @@ namespace RTS {
 		public static int ScrollWidth { get { return 15; } }
 
 		public static float MinCameraSize { get { return 10; } }
-		public static float MaxCameraSize { get { return 50; } }
+		public static float MaxCameraSize { get { return 35; } }
 
 		public static float MinCameraWidth { get { return -500; } }
 		public static float MaxCameraWidth { get { return 500; } }
@@ -62,30 +62,50 @@ namespace RTS {
 			return PIPCameraPosition;
 		}
 
-		private static int cameraIndex = 0;
-		private Rect[] cameraPositions = new Rect[6];
+		private Rect[] camPos = new Rect[6];
 		private Dictionary<Rect, Camera> cameras  = new Dictionary<Rect, Camera>();
 
 		public Rect getAvailableCameraPosition(Camera cam){
-			if (cameraIndex == cameraPositions.Length) {
-				cameraIndex = 0;
-			}
-			Rect rect = cameraPositions [cameraIndex++];
-			if(cameras.ContainsKey(rect) && cameras[rect].rect != this.getPIPCameraPosition()){
-				cameras [rect] .depth = Drone.PIP_DEPTH_DEACTIVE;
-			}
+			int vacuum = this.getVacuumCamPos ();
+			if (vacuum != -1) {
+				cameras [camPos [vacuum]] = cam;
+				return camPos [vacuum];
+			} else {
+				Rect rect = camPos [camPos.Length -1];
+				if (cameras [rect].rect != PIPCameraPosition) {
+					cameras [rect] .depth = Drone.PIP_DEPTH_DEACTIVE;
+				}else{
+					cameras.Remove(rect);
+				}
 
-			cameras [rect] = cam;
-			return rect;
+				cameras [rect] = cam;
+				return rect;
+			}
 		}
 
+		public void setCameraPosition(Camera cam, Rect rect){
+			if (cameras.ContainsKey (rect)) {
+				cameras.Remove(rect);
+			}
+			cameras [rect] = cam;
+			cam.rect = rect;
+		}
+
+		private int getVacuumCamPos(){
+			for (int i = 0; i<camPos.Length; i++) {
+				if(!cameras.ContainsKey(camPos[i]) || cameras[camPos[i]].depth == Drone.PIP_DEPTH_DEACTIVE || cameras[camPos[i]].rect == this.PIPCameraPosition){
+					return i;
+				}
+			}
+			return -1;
+		}
 		private void init(){
-			cameraPositions[0] = new Rect (new Vector2 (0.8f, 0.80f), new Vector2 (0.1f, 0.15f));
-			cameraPositions[1] = new Rect (new Vector2 (0.9f, 0.80f), new Vector2 (0.1f, 0.15f));
-			cameraPositions[2] = new Rect (new Vector2 (0.8f, 0.65f), new Vector2 (0.1f, 0.15f));
-			cameraPositions[3] = new Rect (new Vector2 (0.9f, 0.65f), new Vector2 (0.1f, 0.15f));
-			cameraPositions[4] = new Rect (new Vector2 (0.8f, 0.50f), new Vector2 (0.1f, 0.15f));
-			cameraPositions[5] = new Rect (new Vector2 (0.9f, 0.50f), new Vector2 (0.1f, 0.15f));
+			camPos[0] = new Rect (new Vector2 (0.8f, 0.80f), new Vector2 (0.1f, 0.15f));
+			camPos[1] = new Rect (new Vector2 (0.9f, 0.80f), new Vector2 (0.1f, 0.15f));
+			camPos[2] = new Rect (new Vector2 (0.8f, 0.65f), new Vector2 (0.1f, 0.15f));
+			camPos[3] = new Rect (new Vector2 (0.9f, 0.65f), new Vector2 (0.1f, 0.15f));
+			camPos[4] = new Rect (new Vector2 (0.8f, 0.50f), new Vector2 (0.1f, 0.15f));
+			camPos[5] = new Rect (new Vector2 (0.9f, 0.50f), new Vector2 (0.1f, 0.15f));
 		}
 
 		//Layers
