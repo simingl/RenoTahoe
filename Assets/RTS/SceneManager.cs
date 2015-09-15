@@ -6,9 +6,6 @@ using RTS;
 public class SceneManager : MonoBehaviour {
 	private const int MAX_DRONE = 16;
 
-	public GameObject ground;
-	public GameObject tree;
-	public GameObject fire;
 	public GameObject droneModel;
 	public GameObject helicopterModel;
 	public GameObject humanModel;
@@ -29,11 +26,11 @@ public class SceneManager : MonoBehaviour {
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
 		configManager = ConfigManager.getInstance ();
 
+
 	}
 
 	void Start(){
 		Random.seed = 1;
-
 		InitialScene ();
 	}
 

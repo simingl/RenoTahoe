@@ -119,7 +119,6 @@ public class Drone : WorldObject {
 		}
 
 		this.HandleKeyboardControl ();
-
 		//this.drawRaycastLine ();
 		this.drawRouteLine ();
 
@@ -341,7 +340,6 @@ public class Drone : WorldObject {
 			this.currentBattery += Time.deltaTime * chargingSpeed;
 			return;
 		}
-
 
 		//Battery usage
 		if (this.currentStatus != STATUS.CHARGING && this.currentStatus != STATUS.LANDED && this.currentBattery > 0) {
