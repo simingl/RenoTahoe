@@ -257,10 +257,11 @@ public class Drone : WorldObject {
 
 	private void HandleKeyboardControl(){
 		Vector3 leftaxis = transform.TransformDirection(Vector3.up);
-		transform.RotateAround(transform.position, leftaxis, Input.GetAxis ("Horizontal")*0.5f);
+		if (player.isSelected (this)) {
+			transform.RotateAround (transform.position, leftaxis, Input.GetAxis ("Horizontal") * 0.5f);
+			speed += Input.GetAxis ("Vertical") * acceleration * Time.deltaTime*10;
+		}
 		
-		// Sail
-		speed += Input.GetAxis ("Vertical") * acceleration * Time.deltaTime*10;
 		speed = Mathf.Clamp (speed, minSpeed, maxSpeed);
 
 		//altitude

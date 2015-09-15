@@ -159,7 +159,7 @@ public class UserInput : MonoBehaviour {
 	}
 
 	private void LeftMouseClick() {
-		if (Input.GetKey(KeyCode.LeftShift))
+		if (Input.GetKey(KeyCode.LeftShift) && ConfigManager.getInstance().getShowPIPCameraShift())
 		{
 			GameObject hitObject = FindHitObject();
 			if(hitObject.tag == "Drone"){

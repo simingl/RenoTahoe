@@ -11,14 +11,13 @@
     <ShowDroneSelectionBar>true</ShowDroneSelectionBar>
     <ShowMessageBar>true</ShowMessageBar>
     <ShowOrderBar>true</ShowOrderBar>
-    <ShowPIPCameraBottom>true</ShowPIPCameraBottom>
     <ShowPIPCameraShift>true</ShowPIPCameraShift>
   </hud>
   <scene>
     <DroneCount>15</DroneCount>
-    <PeopleCount>3</PeopleCount>
+    <PeopleCount>30</PeopleCount>
     <CarCount>5</CarCount>
-    <HelicopterCount>40</HelicopterCount>
+    <HelicopterCount>4</HelicopterCount>
     <TreeCount>20</TreeCount>
     <FireCount>4</FireCount>
   </scene>

@@ -17,7 +17,6 @@ public class HUDSettings {
 	public bool ShowMessageBar;
 	public bool ShowOrderBar;
 
-	public bool ShowPIPCameraBottom;
 	public bool ShowPIPCameraShift;
 }
 

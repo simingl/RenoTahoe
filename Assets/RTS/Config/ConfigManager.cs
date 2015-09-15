@@ -58,9 +58,6 @@ namespace RTS {
 		public bool getHUDShowOrderBar(){
 			return settings.hud.ShowOrderBar;
 		}
-		public bool getShowPIPCameraBottom(){
-			return settings.hud.ShowPIPCameraBottom;
-		}
 		public bool getShowPIPCameraShift(){
 			return settings.hud.ShowPIPCameraShift;
 		}
