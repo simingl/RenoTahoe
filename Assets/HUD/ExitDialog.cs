@@ -14,7 +14,6 @@ public class ExitDialog : MonoBehaviour {
 	void Start () {
 		rend = this.GetComponent<Renderer> ();
 
-
 		DialogWidth = 400;;
 		DialogHeight = 300;
 	}
@@ -28,7 +27,6 @@ public class ExitDialog : MonoBehaviour {
 	}
 
 	void OnGUI () {
-		return;
 		if (Input.GetKey (KeyCode.Escape)) {
 			this.GuiOn = true;
 		}

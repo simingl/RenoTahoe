@@ -72,7 +72,7 @@ public class CarNavMeshAI : MonoBehaviour {
 	public void OnTriggerEnter (Collider other)
 	{
 		needsNewTarget = true;
-		if (other.tag == "Waypoint" && other.name == target.name) {
+		if (other.tag == "Waypoint" && target != null && other.name == target.name) {
 			StartCoroutine (GetNewTarget (other));
 			Debug.Log("Reached desired waypoint");
 		}
