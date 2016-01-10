@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <hud>
+    <ShowScore>true</ShowScore>
+    <ScoreHuman>200</ScoreHuman>
+    <ScoreCar>100</ScoreCar>
+    <ScoreDroneCrash>1000</ScoreDroneCrash>
+    <ScoreDroneDead>500</ScoreDroneDead>
+    <ScoreHelicopterCrash>3000</ScoreHelicopterCrash>
+    <ShowResourceBar>true</ShowResourceBar>
+    <ShowDroneSelectionBar>true</ShowDroneSelectionBar>
+    <ShowMessageBar>true</ShowMessageBar>
+    <ShowOrderBar>true</ShowOrderBar>
+    <ShowPIPCameraShift>true</ShowPIPCameraShift>
+  </hud>
+  <scene>
+    <DroneCount>15</DroneCount>
+    <PeopleCount>30</PeopleCount>
+    <CarCount>5</CarCount>
+    <HelicopterCount>4</HelicopterCount>
+    <TreeCount>20</TreeCount>
+    <FireCount>4</FireCount>
+  </scene>
+</Settings>
