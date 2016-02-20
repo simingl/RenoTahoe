@@ -7,8 +7,6 @@ Project("{26CF1800-F31B-3B2A-FF07-6F0DF17BEE83}") = "RenoTahoe", "Assembly-CShar
 EndProject
 Project("{26CF1800-F31B-3B2A-FF07-6F0DF17BEE83}") = "RenoTahoe", "Assembly-CSharp-Editor.csproj", "{4A5116C5-F07A-87AF-25EF-7ED4645FF657}"
 EndProject
-Project("{26CF1800-F31B-3B2A-FF07-6F0DF17BEE83}") = "RenoTahoe", "Assembly-UnityScript.unityproj", "{FBEF1B53-A90C-22E3-87C5-6B418114AD40}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,10 +25,6 @@ Global
 		{4A5116C5-F07A-87AF-25EF-7ED4645FF657}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A5116C5-F07A-87AF-25EF-7ED4645FF657}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A5116C5-F07A-87AF-25EF-7ED4645FF657}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FBEF1B53-A90C-22E3-87C5-6B418114AD40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FBEF1B53-A90C-22E3-87C5-6B418114AD40}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FBEF1B53-A90C-22E3-87C5-6B418114AD40}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FBEF1B53-A90C-22E3-87C5-6B418114AD40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,5 +50,4 @@ Global
 		$3.inheritsScope = text/plain
 		$3.scope = text/plain
 	EndGlobalSection
-
 EndGlobal

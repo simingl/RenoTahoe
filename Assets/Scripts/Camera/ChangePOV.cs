@@ -19,8 +19,8 @@ public class ChangePOV : MonoBehaviour {
 		this.camMainRotation=this.inValidQuaternion;
 	}
 
-	public void switchCamera(CameraType type){
-		if (type == CameraType.Camera_Main) {
+	public void switchCamera(RTS.CameraType type){
+		if (type == RTS.CameraType.Camera_Main) {
 			if (activeCamera != null) {
 				this.activeCamera = null;
 				this.camMain.transform.position = this.camMainPosition;
@@ -37,13 +37,13 @@ public class ChangePOV : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.F1)) {
-			this.switchCamera(CameraType.Camera_First_View);
+			this.switchCamera(RTS.CameraType.Camera_First_View);
 		} else if (Input.GetKeyDown (KeyCode.F2)) {
-			this.switchCamera(CameraType.Camera_Third_View);
+			this.switchCamera(RTS.CameraType.Camera_Third_View);
 		} else if (Input.GetKeyDown (KeyCode.F3)) {
-			this.switchCamera(CameraType.Camera_Hover_View);
+			this.switchCamera(RTS.CameraType.Camera_Hover_View);
 		} else if (Input.GetKeyDown (KeyCode.F4)) {
-			this.switchCamera(CameraType.Camera_Main);
+			this.switchCamera(RTS.CameraType.Camera_Main);
 		}
 
 		if (this.activeCamera)
@@ -55,14 +55,14 @@ public class ChangePOV : MonoBehaviour {
 		main.gameObject.transform.rotation = target.gameObject.transform.rotation;
 	}
 
-	private Camera getActiveCamera(CameraType ct){
+	private Camera getActiveCamera(RTS.CameraType ct){
 		if (player.getSelectedObjects ().Count > 0) {
 			WorldObject obj = player.getSelectedObjects () [0];
 			Camera[] cameras = obj.gameObject.GetComponentsInChildren<Camera> ();
 			foreach (Camera cam in cameras) {
-				if (ct == CameraType.Camera_First_View && cam.tag == RTS.Tags.CAM_FIRST_VIEW) { 
+				if (ct == RTS.CameraType.Camera_First_View && cam.tag == RTS.Tags.CAM_FIRST_VIEW) { 
 					return cam;
-				} else if (ct == CameraType.Camera_Hover_View && cam.tag == RTS.Tags.CAM_HOVER_VIEW) {
+				} else if (ct == RTS.CameraType.Camera_Hover_View && cam.tag == RTS.Tags.CAM_HOVER_VIEW) {
 					return cam;
 				}
 			}

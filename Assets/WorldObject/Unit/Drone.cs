@@ -7,146 +7,191 @@ using System.Collections.Generic;
 using RTS;
 
 public class Drone : WorldObject {
-	public GameObject routeline;
-	public Texture cameraIcon;
-	public const int PIP_DEPTH_ACTIVE = 2;
-	public const int PIP_DEPTH_DEACTIVE = -1;
-	public Color color;  
+    public Texture cameraIcon;
+    public const int PIP_DEPTH_ACTIVE = 2;
+    public const int PIP_DEPTH_DEACTIVE = -1;
+    public Color color;
 
-	public float speed = 0f;
-	private float minSpeed = 0f;
-	private float maxSpeed = 2f;
-	public float moveSpeed, rotateSpeed;
-	private float acceleration = 0.3f;
-	private float turnSpeed = 0.3f;
+    public float speed = 0f;
+    private float minSpeed = 0f;
+    private float maxSpeed = 2f;
+    public float moveSpeed, rotateSpeed;
+    private float acceleration = 0.3f;
+    private float turnSpeed = 0.3f;
 
-	public float currentBattery = 100;
-	public float batteryUsage = 0.1f;
+    public float currentBattery = 100;
+    public float batteryUsage = 0.1f;
 
-	public int sensingRange = 100;
+    public int sensingRange = 100;
+   
 
-	private Queue<Vector3> routePoints;
-	private Dictionary<Vector3, GameObject> routelines;
-	private Quaternion targetRotation;
-	
-	private LineRenderer lineRaycast;
-	private GameObject lineMoveContainer;
-	private LineRenderer lineMove;
-	
-	private Transform destinationMark;
-	private Image battery;
-	private Canvas canvas;
+    //	private Queue<Vector3> routePoints;
+    private Queue<GameObject> routePointsQueue;
+    public GameObject routePoints;
+    private Dictionary<Vector3, GameObject> routelines;
+    private Quaternion targetRotation;
 
-	public Slider batterySliderfabs;
-	private Slider batterySlider;
+    private LineRenderer lineRaycast;
+    private GameObject lineMoveContainer;
+    private LineRenderer lineMove;
 
-	private Stack<Cellphone> cellphones;
-	private Stack<WaterBottle> waters;
-	private int MAX_CELL = 8;
-	private int MAX_WATER = 5;
+    private Transform destinationMark;
+    private Image battery;
+    private Canvas canvas;
 
-	private Projector projector;
-	private Camera camera_front, camera_down;
+    public Slider batterySliderfabs;
+    private Slider batterySlider;
 
-	private Rigidbody rb;
+    private Stack<Cellphone> cellphones;
+    private Stack<WaterBottle> waters;
+    private int MAX_CELL = 8;
+    private int MAX_WATER = 5;
 
-	private StationCharger charger;
+    private Projector projector;
+    private Camera camera_front, camera_down;
 
-	private GameObject fire;
+    private Rigidbody rb;
 
-	public Drone(){
-		scoreValue = 500;
-		type = WorldObjectType.Unit;
-		cellphones = new Stack<Cellphone>();
-		waters = new Stack<WaterBottle>();
-		this.routePoints = new Queue<Vector3>();
-		routelines = new Dictionary<Vector3, GameObject>();
-	}
+    private StationCharger charger;
 
-	protected override void Awake() {
-		base.Awake();
+    private GameObject fire;
 
-		fire = transform.FindChild ("fire").gameObject;
-		currentBattery = ResourceManager.DroneBatteryLife;
-		rb = this.GetComponent<Rigidbody> ();
+    private List<GameObject> routeLinePointsSelect;
+    public GameObject emptyGameObject;
 
-		this.canvas = GameObject.FindObjectOfType<Canvas> ();
-		//Initialize to random color
-		color = new Color(Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f));  
+    public Drone() {
+        scoreValue = 500;
+        type = WorldObjectType.Unit;
+        cellphones = new Stack<Cellphone>();
+        waters = new Stack<WaterBottle>();
+        this.routePointsQueue = new Queue<GameObject>();
+        routelines = new Dictionary<Vector3, GameObject>();
+    }
 
-		//Create a battery bar from the prefab
-		batterySlider = (Slider)GameObject.Instantiate (batterySliderfabs, new Vector3(-10000f, -10000f, -10000f), transform.localRotation);
-		batterySlider.transform.SetParent (canvas.transform);
-		batterySlider.transform.localScale = Vector3.one;
-		batterySlider.gameObject.SetActive(false);
+    protected override void Awake() {
+        base.Awake();
+        fire = transform.FindChild("fire").gameObject;
+        currentBattery = ResourceManager.DroneBatteryLife;
+        rb = this.GetComponent<Rigidbody>();
 
-		//setup the destination mark
-		destinationMark = this.transform.FindChild("DestinationMark");
+        this.canvas = GameObject.FindObjectOfType<Canvas>();
+        //Initialize to random color
+        color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 
-		this.camera_front = (Camera)(this.transform.FindChild ("camera_1st_view").gameObject).GetComponent<Camera>();
-		this.camera_down = (Camera)(this.transform.FindChild ("camera_hover_view").gameObject).GetComponent<Camera>();
+        //Create a battery bar from the prefab
+        batterySlider = (Slider)GameObject.Instantiate(batterySliderfabs, new Vector3(-10000f, -10000f, -10000f), transform.localRotation);
+        batterySlider.transform.SetParent(canvas.transform);
+        batterySlider.transform.parent = emptyGameObject.transform;
 
-		this.camera_front.depth = PIP_DEPTH_DEACTIVE;
-		this.camera_down.depth = PIP_DEPTH_DEACTIVE;
-	}
+        batterySlider.transform.localScale = Vector3.one;
+        batterySlider.gameObject.SetActive(false);
 
-	protected override void Start () {
-		base.Start();
+        //setup the destination mark
+        destinationMark = this.transform.FindChild("DestinationMark");
 
-		//find the top mesh and render it
-		this.setColor (color);
+        this.camera_front = (Camera)(this.transform.FindChild("camera_1st_view").gameObject).GetComponent<Camera>();
+        this.camera_down = (Camera)(this.transform.FindChild("camera_hover_view").gameObject).GetComponent<Camera>();
 
-		//setup the line from object to the ground
-		lineRaycast = this.GetComponent<LineRenderer> ();
-		lineRaycast.useWorldSpace = true;
-	}
-	
-	protected override void Update () {
-		base.Update();
+        this.camera_front.depth = PIP_DEPTH_DEACTIVE;
+        this.camera_down.depth = PIP_DEPTH_DEACTIVE;
+    }
 
-		if (this.currentStatus == STATUS.DEAD)
-			return;
+    public void FrontCameraBlur()
+    {
+        //		this.camera_front.
+    }
 
-		if (Input.GetMouseButtonUp (0) && !EventSystem.current.IsPointerOverGameObject () && HUD.selection.width * HUD.selection.height > 10) {
-			Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
-			camPos.y = Screen.height - camPos.y;
-			if( HUD.selection.Contains(camPos) ){
-				this.player.addSelectedObject(this);
-			}
-			else {
-				this.player.removeSelectedObject(this);
-			}
-		}
+    protected override void Start() {
+        base.Start();
 
-		this.HandleKeyboardControl ();
-		//this.drawRaycastLine ();
-		this.drawRouteLine ();
+        //hold routLinePoints prefab in an object;
+        //		routLinePointsSelect = GameObject.FindGameObjectsWithTag("RouteLinePoint"); 	
 
-		switch (this.currentTask) {
-		case TASK.RECHARGING:
-			this.Recharging();
-			break;
-		case TASK.ROUTE:
-			this.StartMoveInPath();
-			break;
-		}
+        //find the top mesh and render it
+        this.setColor(color);
 
-		switch (this.currentStatus) {
-		case STATUS.TAKEOFF:
-			this.TakeOffing();
-			break;
-		case STATUS.MOVING:
-			this.MakeRotateMove();
-			break;
-		case STATUS.LANDING:
-			this.Landing();
-			break;
-		}
+        //setup the line from object to the ground
+        lineRaycast = this.GetComponent<LineRenderer>();
+        lineRaycast.useWorldSpace = true;
+    }
 
-		this.CalculateBattery ();
-	}
+    protected override void Update() {
+        base.Update();
+        //select an object------
+        //		if (Input.GetMouseButtonDown(0))
+        //		{
+        //			RaycastHit hitInfo = new RaycastHit();
+        ////			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && 
+        ////				hitInfo.transform.tag == "RouteLinePoint"
+        ////				)
+        //			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.tag == "RouteLinePoint")
+        //			{
+        //				print ("It's working");
+        //			}
+        //		}
+        //-------------
 
-	protected override void OnGUI() {
+        if (this.currentStatus == STATUS.DEAD)
+            return;
+
+        if (Input.GetMouseButtonUp(0) && !EventSystem.current.IsPointerOverGameObject() && HUD.selection.width * HUD.selection.height > 10) {
+            Vector3 camPos = Camera.main.WorldToScreenPoint(transform.position);
+            camPos.y = Screen.height - camPos.y;
+            if (HUD.selection.Contains(camPos)) {
+                this.player.addSelectedObject(this);
+            }
+            else {
+                this.player.removeSelectedObject(this);
+            }
+        }
+
+        this.HandleKeyboardControl();
+        //this.drawRaycastLine ();
+        this.drawRouteLine();
+
+        switch (this.currentTask) {
+            case TASK.RECHARGING:
+                this.Recharging();
+                break;
+            case TASK.ROUTE:
+                this.StartMoveInPath();
+                break;
+        }
+
+        switch (this.currentStatus) {
+            case STATUS.TAKEOFF:
+                this.TakeOffing();
+                break;
+            case STATUS.MOVING:
+                this.MakeRotateMove();
+                break;
+            case STATUS.LANDING:
+                this.Landing();
+                break;
+        }
+
+        this.CalculateBattery();
+    }
+
+    public void blurEnable()
+    {
+        Component myScript = this.GetComponentInChildren<Drone>();
+        Debug.Log(myScript.gameObject);
+    }
+
+    public void blurDisable()
+    {
+       
+        if(this.isSelected() == true)
+        {
+            Debug.Log(this.name);
+        }
+    }
+
+
+
+
+    protected override void OnGUI() {
 		base.OnGUI();
 
 		//reset the width of the battery bar
@@ -192,9 +237,8 @@ public class Drone : WorldObject {
 		return this.camera_down;
 	}
 	public void StartMove() {
-		Vector3 dest = this.routePoints.Peek ();
+		Vector3 dest = this.routePointsQueue.Peek ().transform.position;
 		dest.y = transform.position.y;
-
 		targetRotation = Quaternion.LookRotation (dest - transform.position);
 		if (this.currentStatus == STATUS.LANDED || this.currentStatus == STATUS.CHARGING) {
 			this.currentStatus = STATUS.TAKEOFF;
@@ -203,10 +247,20 @@ public class Drone : WorldObject {
 		}
 	}
 
+	private void SpawnRoutePoints(Vector3 d)
+	{
+		GameObject colon = (GameObject)Instantiate (routePoints, d, new Quaternion(0,0,0,1));
+		colon.GetComponent<Renderer>().material.color = color;
+		colon.layer = ResourceManager.LayerMainCamerea;
+        colon.transform.parent = emptyGameObject.transform;
+        this.routePointsQueue.Enqueue (colon);
+	}
+
 	public void StartMove(Vector3 d) {
 		this.clearDestination ();
-		this.routePoints.Enqueue (d);
-		Vector3 dest = this.routePoints.Peek();
+		SpawnRoutePoints(d);
+//		this.routePointsQueue.Enqueue (d);
+		Vector3 dest = this.routePointsQueue.Peek().transform.position;
 		dest.y = transform.position.y;
 		
 		targetRotation = Quaternion.LookRotation (dest - transform.position);
@@ -223,14 +277,14 @@ public class Drone : WorldObject {
 	}
 
 	private void MakeRotateMove() {
-		if (this.routePoints.Count > 0) {
-			Vector3 dest = this.routePoints.Peek ();
+		if (this.routePointsQueue.Count > 0) {
+			Vector3 dest = this.routePointsQueue.Peek ().transform.position;
 			dest.y = transform.position.y;
 
 			float distance = Vector3.Distance (dest, transform.position);
 			//heading
 			Quaternion targetRotation = Quaternion.LookRotation (dest - transform.position);
-			transform.rotation = Quaternion.RotateTowards (transform.rotation, targetRotation, this.turnSpeed);
+			transform.rotation = Quaternion.RotateTowards (transform.rotation, targetRotation, this.turnSpeed * Time.timeScale);
 
 			//speed
 			if (distance / speed <= speed / acceleration) {
@@ -243,12 +297,22 @@ public class Drone : WorldObject {
 
 			if (this.IsArrivedIn2D (dest)) {
 				speed = 0f;
-				Vector3 d = this.routePoints.Dequeue ();
-				if (this.routelines.ContainsKey (d)) {
-					Object.Destroy (this.routelines [d]);
-					this.routelines.Remove (d);
-				}
-				this.currentStatus = STATUS.IDLE;
+                //                GameObject tmp = this.routePointsQueue.Peek();
+                //                Vector3 d = tmp.transform.position ;
+                //                this.routePointsQueue.Dequeue();
+                //                Object.Destroy(tmp);
+                ////				this.routePoints.Dequeue ();
+                //				if (this.routelines.ContainsKey (d)) {
+                //					Object.Destroy (this.routelines [d]);
+                //					this.routelines.Remove (d);
+                //				}
+
+                GameObject ball = this.routePointsQueue.Dequeue();
+                Vector3 d = ball.transform.position;
+                Object.Destroy(this.routelines[d]);
+                this.routelines.Remove(dest);
+                Object.Destroy(ball);
+                this.currentStatus = STATUS.IDLE;
 			}
 
 			CalculateBounds ();
@@ -279,7 +343,7 @@ public class Drone : WorldObject {
 		}
 
 		//move forward
-		if (this.routePoints.Count <= 0 && speed > 0) {
+		if (this.routePointsQueue.Count <= 0 && speed > 0) {
 			this.currentStatus = STATUS.MOVING;
 			transform.Translate (0, 0, speed * Time.deltaTime);
 			this.CalculateBounds ();
@@ -299,36 +363,64 @@ public class Drone : WorldObject {
 		lineRaycast.SetPosition (1, groundHit);
 	}
 
-	private void drawRouteLine(){
-		if (this.routePoints.Count > 0) {
-			Vector3[] waypoints = this.routePoints.ToArray();
+    private void drawRouteLine()
+    {
+        if (this.routePointsQueue.Count > 0)
+        {
+            //			Vector3[] waypoints = this.routePoints.ToArray();
+            GameObject[] waypoints = this.routePointsQueue.ToArray();
 
-			if(!this.routelines.ContainsKey(waypoints[0])){
-				GameObject line = this.drawLine(transform.position, waypoints[0]);
-				this.routelines[waypoints[0]] = line;				
-			}else{
-				GameObject line = this.routelines[waypoints[0]];
-				LineRenderer lr = line.GetComponent<LineRenderer> ();
-				lr.SetPosition (0, transform.position);
-			}
+            if (!this.routelines.ContainsKey(waypoints[0].transform.position))
+            {
+                GameObject line = this.drawLine(transform.position, waypoints[0].transform.position);
+                this.routelines[waypoints[0].transform.position] = line;
+            }
+            else {
+                GameObject line = this.routelines[waypoints[0].transform.position];
+                LineRenderer lr = line.GetComponent<LineRenderer>();
+                //lr.SetPosition(0, transform.position);
+                lr.SetPosition(0, transform.position);
+            }
 
-			for(int i=1;i<waypoints.Length;i++){
-				if(!this.routelines.ContainsKey(waypoints[i])){
-					GameObject line = this.drawLine(waypoints[i-1], waypoints[i]);
-					this.routelines[waypoints[i]] = line;	
-				}
-			}
-		}
-	}
+            for (int i = 1; i < waypoints.Length; i++)
+            {
+                if (!this.routelines.ContainsKey(waypoints[i].transform.position))
+                {
+                    GameObject line = this.drawLine(waypoints[i - 1].transform.position, waypoints[i].transform.position);
+                    this.routelines[waypoints[i].transform.position] = line;
+                    
+                }
+            }
+        }
+    }
+
+
+//	private GameObject drawLine(Vector3 org, Vector3 dst){
+//		GameObject line = (GameObject)Instantiate (routePoints, dst, new Quaternion(0,0,0,1));
+//
+//		LineRenderer lr = line.GetComponent<LineRenderer> ();
+//		line.GetComponent<Renderer>().material.color=color;
+//		lr.SetPosition (0, org);
+//		lr.SetPosition (1, dst);
+//		lr.material = new Material(Shader.Find("Particles/Additive"));
+//		lr.SetColors(color, color);
+//		line.layer = ResourceManager.LayerMainCamerea;
+//
+//		return line;
+//	}
 
 	private GameObject drawLine(Vector3 org, Vector3 dst){
-		GameObject line = (GameObject)Instantiate (routeline, org, new Quaternion(0,0,0,1));
-		LineRenderer lr = line.GetComponent<LineRenderer> ();
-		lr.SetPosition (0, org);
-		lr.SetPosition (1, dst);
-		line.layer = ResourceManager.LayerMainCamerea;
-		return line;
+		GameObject[] tmpQueue = routePointsQueue.ToArray();
+		//int length = tmpQueue.Length;
+        LineRenderer lr = tmpQueue[tmpQueue.Length-1].GetComponent<LineRenderer>();
+        //LineRenderer lr = tmpQueue[0].GetComponent<LineRenderer>();
+        lr.SetPosition(0, org);
+        lr.SetPosition (1, dst);
+		lr.material = new Material(Shader.Find("Particles/Additive"));
+		lr.SetColors(color, color);
+		return tmpQueue[tmpQueue.Length - 1];
 	}
+
 	private void drawBatteryBar(Rect rect){
 		Vector3 pos = Camera.main.WorldToScreenPoint (transform.position);
 		batterySlider.transform.position = new Vector3 (pos.x,pos.y+rect.height/2,0);
@@ -347,7 +439,11 @@ public class Drone : WorldObject {
 			this.currentBattery -= Time.deltaTime;
 		} else if (this.currentBattery <= 0) {
 			if(this.currentStatus != STATUS.LANDING){
-				this.routePoints.Clear();
+                while(routePointsQueue.Count !=0)
+                { 
+                    Destroy(routePointsQueue.Dequeue());
+                }
+				//this.routePointsQueue.Clear();
 				this.Dieing();
 			}
 		}
@@ -412,17 +508,17 @@ public class Drone : WorldObject {
 			newpos.y += Time.deltaTime;
 			deltaHeight+= Time.deltaTime;
 			this.rb.transform.position = newpos;
-		} else if (this.routePoints.Count > 0 && !IsArrivedIn2D(this.routePoints.Peek())) {
+		} else if (this.routePointsQueue.Count > 0 && !IsArrivedIn2D(this.routePointsQueue.Peek().transform.position)) {
 			this.StartMove();
 			this.deltaHeight = 0;
-		} else if (this.routePoints.Count == 0) {
+		} else if (this.routePointsQueue.Count == 0) {
 			currentStatus = STATUS.IDLE;
 			this.deltaHeight = 0;
 		}
 	}
 
 	private void Recharging(){
-		if (this.routePoints.Count == 0 || IsArrivedIn2D (this.routePoints.Peek())) {
+		if (this.routePointsQueue.Count == 0 || IsArrivedIn2D (this.routePointsQueue.Peek().transform.position)) {
 			if(this.currentStatus == STATUS.IDLE){
 				this.currentStatus = STATUS.LANDING;
 			} else if(this.currentStatus == STATUS.LANDED){
@@ -433,9 +529,9 @@ public class Drone : WorldObject {
 	}
 
 	private void StartMoveInPath(){
-		if (this.routePoints.Count > 0 && this.currentStatus != STATUS.MOVING) {
+		if (this.routePointsQueue.Count > 0 && this.currentStatus != STATUS.MOVING) {
 			StartMove ();
-		} else if(this.routePoints.Count == 0){
+		} else if(this.routePointsQueue.Count == 0){
 			this.currentTask = TASK.NULL;
 		}
 	}
@@ -452,7 +548,12 @@ public class Drone : WorldObject {
 		StationCharger sc = this.player.stationManager.getNearestAvailabeCharger (transform.position);
 		if (sc != null) {
 			this.charger = sc;
-			this.routePoints.Enqueue(sc.transform.position);
+			SpawnRoutePoints(sc.transform.position);
+//			GameObject colon = (GameObject)Instantiate(routePoints,sc.transform.position, new Quaternion(0,0,0,1));
+//			colon.GetComponent<Renderer>().material.color = color;
+//			colon.layer = ResourceManager.LayerMainCamerea;
+//			this.routePointsQueue.Enqueue(sc.transform.position);
+//			this.routePointsQueue.Enqueue(colon);
 			this.currentTask = TASK.RECHARGING;
 			this.currentStatus = STATUS.TAKEOFF;
 			sc.Occupy(this);
@@ -492,20 +593,26 @@ public class Drone : WorldObject {
 	}
 
 	public void addWayPoint(Vector3 point){
-		this.routePoints.Enqueue (point);
+//		GameObject colon = (GameObject)Instantiate(routePoints,point, new Quaternion(0,0,0,1));
+//		colon.GetComponent<Renderer>().material.color = color;
+//		colon.layer = ResourceManager.LayerMainCamerea;
+//		this.routePointsQueue.Enqueue (point);
+//		this.routePointsQueue.Enqueue (colon);
+		SpawnRoutePoints(point);
 	}
 
 	private void clearDestination(){
-		while (this.routePoints.Count >0) {
-			Vector3 dest = this.routePoints.Dequeue();
+		while (this.routePointsQueue.Count >0) {
+			GameObject ball = this.routePointsQueue.Dequeue();
+			Vector3 dest = ball.transform.position;
 			Object.Destroy(this.routelines[dest]);
-
+			Object.Destroy(ball);
 		}
 	}
 
 	public Vector3 getCurrentDestination(){
-		if (this.routePoints.Count > 0) {
-			return this.routePoints.Peek ();
+		if (this.routePointsQueue.Count > 0) {
+			return this.routePointsQueue.Peek ().transform.position;
 		} else {
 			return ResourceManager.InvalidPosition;
 		}
