@@ -36,10 +36,15 @@ namespace UnityStandardAssets.ImageEffects
                 return m_Material;
             }
         }
-        public void buttonFunc()
+        public void disableFunc()
         {
             this.enabled = false;
         }
+
+		public void enableFunc()
+		{
+			this.enabled = true;
+		}
 
         protected void OnDisable() {
             if ( m_Material ) {
@@ -61,6 +66,7 @@ namespace UnityStandardAssets.ImageEffects
                 enabled = false;
                 return;
             }
+			this.enabled = true;
         }
 
         // Performs one blur iteration.

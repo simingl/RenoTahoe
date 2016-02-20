@@ -1,17 +1,68 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\HUD\LocadingScreenSplash.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Standard Assets\Effects\ImageEffects\Scripts\Blur.cs">
     <Files>
-      <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="265" Column="1" />
+      <File FileName="Assets\_DownloadedResources\MAPNAV\Scripts\MapNav.cs" Line="1" Column="1" />
+      <File FileName="Assets\HUD\HUD.cs" Line="304" Column="17" />
+      <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="637" Column="15" />
       <File FileName="Assets\RTS\Config\Settings.cs" Line="1" Column="1" />
       <File FileName="Assets\RTS\Config\ConfigManager.cs" Line="1" Column="1" />
       <File FileName="Assets\RTS\SceneManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\Player.cs" Line="1" Column="1" />
-      <File FileName="Assets\HUD\HUD.cs" Line="1" Column="1" />
-      <File FileName="Assets\RTS\UserInput.cs" Line="1" Column="1" />
-      <File FileName="Assets\HUD\SceneFadeInOut.cs" Line="13" Column="77" />
-      <File FileName="Assets\HUD\LocadingScreenSplash.cs" Line="40" Column="25" />
+      <File FileName="Assets\RTS\Player.cs" Line="87" Column="29" />
+      <File FileName="Assets\RTS\UserInput.cs" Line="204" Column="57" />
+      <File FileName="Assets\HUD\SceneFadeInOut.cs" Line="1" Column="1" />
+      <File FileName="Assets\HUD\LocadingScreenSplash.cs" Line="1" Column="1" />
+      <File FileName="Assets\WorldObject\Unit\MouseDrag.cs" Line="14" Column="1" />
+      <File FileName="Assets\WorldObject\WorldObject.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Camera\MinimapManagement.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\ResourceManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Standard Assets\Effects\ImageEffects\Scripts\Blur.cs" Line="64" Column="45" />
+      <File FileName="Assets\Scripts\EnableDisableBlur.cs" Line="1" Column="1" />
+      <File FileName="Assets\Standard Assets\CrossPlatformInput\Scripts\ButtonHandler.cs" Line="1" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Assembly-CSharp" expanded="True">
+            <Node name="HUD" expanded="True">
+              <Node name="HUD.cs" selected="True" />
+            </Node>
+            <Node name="RTS" expanded="True">
+              <Node name="Config" expanded="True" />
+              <Node name="Player.cs" selected="True" />
+              <Node name="ResourceManager.cs" selected="True" />
+              <Node name="UserInput.cs" selected="True" />
+            </Node>
+            <Node name="Scripts" expanded="True">
+              <Node name="Camera" expanded="True" />
+              <Node name="Drone" expanded="True" />
+              <Node name="EnableDisableBlur.cs" selected="True" />
+            </Node>
+            <Node name="WorldObject" expanded="True">
+              <Node name="Unit" expanded="True">
+                <Node name="Drone.cs" selected="True" />
+                <Node name="MouseDrag.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+          <Node name="Assembly-CSharp-firstpass" expanded="True">
+            <Node name="Standard Assets" expanded="True">
+              <Node name="CrossPlatformInput" expanded="True">
+                <Node name="Scripts" expanded="True" />
+              </Node>
+              <Node name="Effects" expanded="True">
+                <Node name="ImageEffects" expanded="True">
+                  <Node name="Scripts" expanded="True">
+                    <Node name="Blur.cs" selected="True" />
+                  </Node>
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+          <Node name="Assembly-UnityScript" expanded="True" />
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>

@@ -189,28 +189,41 @@ public class UserInput : MonoBehaviour {
 		}
 	}
 	private void RightMouseClick() {
-		if(player.hud.MouseInBounds() && !Input.GetKey(KeyCode.LeftAlt) && player.getSelectedObjects().Count>0) {
+		//click on the main camera
+		if((player.hud.MouseInBounds()|| player.hud.MouseInBoundsMinimap()) && !Input.GetKey(KeyCode.LeftAlt) && player.getSelectedObjects().Count>0) {
 			GameObject hitObject = FindHitObject();
 			Vector3 hitPoint = FindHitPoint();
+
+			if(player.hud.MouseInBoundsMinimap()){
+				hitObject = null;
+				hitPoint = FindHitPointInMinimap();
+			}
+
 			if(player.getSelectedObjects().Count > 0){
 				bool playAudio = false;
 				foreach(WorldObject obj in player.getSelectedObjects()){
 					if(obj is Drone){
 						Drone drone = (Drone)obj;
 						if(drone.isDead()) continue;
+						Vector3 offset = Vector3.zero;
+
+						if(player.getSelectedObjects().Count >=2){
+							offset = player.getOffsetFromCenterOfSelectedObjects(drone.transform.position);
+						}
+
 						if(Input.GetKey(KeyCode.LeftShift)){
-							drone.addWayPoint(hitPoint);
+							drone.addWayPoint(hitPoint+offset);
 							drone.currentTask = WorldObject.TASK.ROUTE;
 						}else{
-							obj.MouseClick(hitObject, hitPoint, player);
+							obj.MouseClick(hitObject, hitPoint+offset, player);
 						}
 						playAudio = true;
 					}
 				}
 				if(playAudio) this.player.audioManager.playUnitMoveToSound();
-
 			}
 		}
+
 	}
 	private GameObject FindHitObject() {
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -225,4 +238,14 @@ public class UserInput : MonoBehaviour {
 		if(Physics.Raycast(ray, out hit)) return hit.point;
 		return ResourceManager.InvalidPosition;
 	}
+
+	private Vector3 FindHitPointInMinimap() {
+		GameObject go = GameObject.FindGameObjectWithTag (ResourceManager.TAG_MINIMAP_CAMERA);
+		Camera minimapCamera = go.GetComponent<Camera>();
+		Ray ray = minimapCamera.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+		if(Physics.Raycast(ray, out hit)) return hit.point;
+		return ResourceManager.InvalidPosition;
+	}
+
 }

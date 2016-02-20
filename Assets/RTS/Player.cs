@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using RTS;
+using UnityStandardAssets.ImageEffects;
 
 public class Player : MonoBehaviour {
 	public string username;
@@ -71,6 +72,28 @@ public class Player : MonoBehaviour {
 
 	public List<WorldObject> getSelectedObjects(){
 		return new List<WorldObject>( selectedObjects);
+	}
+
+	public Vector3 getOffsetFromCenterOfSelectedObjects(Vector3 objPos){
+		Vector3 center = this.getCenterOfSelectedObjects ();
+		if (center == ResourceManager.InvalidPosition)
+			return ResourceManager.InvalidPosition;
+
+		return (objPos - center);
+	}
+
+	private Vector3 getCenterOfSelectedObjects(){
+		if (selectedObjects.Count <= 0)
+			return ResourceManager.InvalidPosition;
+
+		float sumX = 0f;
+		float sumZ = 0f;
+		foreach(WorldObject selectedObj in selectedObjects){
+			sumX +=selectedObj.transform.position.x;
+			sumZ +=selectedObj.transform.position.z;
+		}
+		int size = this.selectedObjects.Count;
+		return new Vector3 (sumX / size, 0, sumZ / size);
 	}
 
 	public bool isSelected(WorldObject obj){

@@ -39,10 +39,10 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>D:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>D:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -51,6 +51,9 @@
      <Compile Include="Assets\HUD\HUD.cs" />
      <Compile Include="Assets\HUD\LocadingScreenSplash.cs" />
      <Compile Include="Assets\HUD\SceneFadeInOut.cs" />
+     <Compile Include="Assets\ImportFromPopUpQuestions\_Scripts\OnOptionsButtonClicked.cs" />
+     <Compile Include="Assets\ImportFromPopUpQuestions\_Scripts\QuizManager.cs" />
+     <Compile Include="Assets\ImportFromPopUpQuestions\_Scripts\QuizSetting.cs" />
      <Compile Include="Assets\MovementScript.cs" />
      <Compile Include="Assets\RTS\AudioManager.cs" />
      <Compile Include="Assets\RTS\Config\ConfigManager.cs" />
@@ -71,12 +74,15 @@
      <Compile Include="Assets\Scripts\Camera\ChangePOV.cs" />
      <Compile Include="Assets\Scripts\Camera\MinimapManagement.cs" />
      <Compile Include="Assets\Scripts\Drone\DroneController.cs" />
+     <Compile Include="Assets\Scripts\EnableDisableBlur.cs" />
+     <Compile Include="Assets\Scripts\PauseScript.cs" />
      <Compile Include="Assets\WorldObject\Building\StationCharger.cs" />
      <Compile Include="Assets\WorldObject\MapItem.cs" />
      <Compile Include="Assets\WorldObject\Resource\Cellphone.cs" />
      <Compile Include="Assets\WorldObject\Resource\WaterBottle.cs" />
      <Compile Include="Assets\WorldObject\Unit\Drone.cs" />
      <Compile Include="Assets\WorldObject\Unit\Helicopter.cs" />
+     <Compile Include="Assets\WorldObject\Unit\MouseDrag.cs" />
      <Compile Include="Assets\WorldObject\Unit\NPC.cs" />
      <Compile Include="Assets\WorldObject\Unit\Vehicle.cs" />
      <Compile Include="Assets\WorldObject\WorldObject.cs" />
@@ -107,6 +113,7 @@
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ScreenSpaceAmbientObscurance.shader" />
      <None Include="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\ReadMe_Volume_1.txt" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_Antialiasing\NFAA.shader" />
+     <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ScreenSpaceRaytrace.cginc" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\SeparableBlurPlus.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_DepthOfField\TiltShiftHdrLensBlur.shader" />
      <None Include="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\VignetteShader.shader" />
@@ -205,16 +212,16 @@
      <None Include="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlurAndFlares.shader" />
      <None Include="Assets\_DownloadedResources\Ultra_Real_Fire_Effects\Standard Assets\Image Effects (Pro Only)\_Sources\Shaders\_BloomAndFlares\BlendForBloom.shader" />
  <Reference Include="UnityEngine.UI">
- <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
- <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Analytics">
- <HintPath>D:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.iOS.Extensions.Xcode">
- <HintPath>D:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+ <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>

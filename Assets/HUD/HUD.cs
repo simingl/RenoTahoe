@@ -325,13 +325,13 @@ public class HUD : MonoBehaviour {
 	}
 
 	private void MouseDragSelection(){
-		if (Input.GetMouseButtonDown (0) && !MouseInBoundsMinimap()) {
+		if (Input.GetMouseButtonDown (0) && !MouseInBoundsMinimap ()) {
 			startClick = Input.mousePosition;
-		} else if(Input.GetMouseButtonUp(0)){
+		}else if(Input.GetMouseButtonUp(0)){
 			startClick = -Vector3.one;
 		}
-		
-		if (Input.GetMouseButton (0)) {
+
+		if (Input.GetMouseButton (0) && startClick != -Vector3.one) {
 			selection = new Rect(startClick.x, InvertMouseY(startClick.y), Input.mousePosition.x - startClick.x, InvertMouseY(Input.mousePosition.y) - InvertMouseY(startClick.y));
 			if(selection.width<0){
 				selection.x += selection.width;

@@ -120,6 +120,6 @@ namespace RTS {
 		public static int DroneBatteryLife {get {return 18*60;}}
 		public static int DroneBatteryCharging {get {return 5*60;}}
 
-
+		public static string TAG_MINIMAP_CAMERA {get {return "Camera_minimap";}}
 	}
 }

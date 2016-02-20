@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using RTS;
+using UnityStandardAssets.ImageEffects;
 
 public class Drone : WorldObject {
     public Texture cameraIcon;
@@ -28,7 +29,7 @@ public class Drone : WorldObject {
     //	private Queue<Vector3> routePoints;
     private Queue<GameObject> routePointsQueue;
     public GameObject routePoints;
-    private Dictionary<Vector3, GameObject> routelines;
+	private Dictionary<GameObject, GameObject> routelines;
     private Quaternion targetRotation;
 
     private LineRenderer lineRaycast;
@@ -65,7 +66,7 @@ public class Drone : WorldObject {
         cellphones = new Stack<Cellphone>();
         waters = new Stack<WaterBottle>();
         this.routePointsQueue = new Queue<GameObject>();
-        routelines = new Dictionary<Vector3, GameObject>();
+		routelines = new Dictionary<GameObject, GameObject>();
     }
 
     protected override void Awake() {
@@ -113,6 +114,8 @@ public class Drone : WorldObject {
         //setup the line from object to the ground
         lineRaycast = this.GetComponent<LineRenderer>();
         lineRaycast.useWorldSpace = true;
+
+		this.malFunction ();
     }
 
     protected override void Update() {
@@ -308,9 +311,8 @@ public class Drone : WorldObject {
                 //				}
 
                 GameObject ball = this.routePointsQueue.Dequeue();
-                Vector3 d = ball.transform.position;
-                Object.Destroy(this.routelines[d]);
-                this.routelines.Remove(dest);
+                Object.Destroy(this.routelines[ball]);
+                this.routelines.Remove(ball);
                 Object.Destroy(ball);
                 this.currentStatus = STATUS.IDLE;
 			}
@@ -370,26 +372,29 @@ public class Drone : WorldObject {
             //			Vector3[] waypoints = this.routePoints.ToArray();
             GameObject[] waypoints = this.routePointsQueue.ToArray();
 
-            if (!this.routelines.ContainsKey(waypoints[0].transform.position))
+            if (!this.routelines.ContainsKey(waypoints[0]))
             {
                 GameObject line = this.drawLine(transform.position, waypoints[0].transform.position);
-                this.routelines[waypoints[0].transform.position] = line;
+                this.routelines[waypoints[0]] = line;
             }
             else {
-                GameObject line = this.routelines[waypoints[0].transform.position];
+                GameObject line = this.routelines[waypoints[0]];
                 LineRenderer lr = line.GetComponent<LineRenderer>();
-                //lr.SetPosition(0, transform.position);
                 lr.SetPosition(0, transform.position);
+				lr.SetPosition(1, waypoints[0].transform.position);
             }
 
             for (int i = 1; i < waypoints.Length; i++)
             {
-                if (!this.routelines.ContainsKey(waypoints[i].transform.position))
+                if (!this.routelines.ContainsKey(waypoints[i]))
                 {
                     GameObject line = this.drawLine(waypoints[i - 1].transform.position, waypoints[i].transform.position);
-                    this.routelines[waypoints[i].transform.position] = line;
-                    
-                }
+                    this.routelines[waypoints[i]] = line;
+				}else{
+					LineRenderer line = this.routelines[waypoints[i]].GetComponent<LineRenderer>();
+					line.SetPosition(0, waypoints[i-1].transform.position);
+					line.SetPosition(1, waypoints[i].transform.position);
+				}
             }
         }
     }
@@ -604,8 +609,7 @@ public class Drone : WorldObject {
 	private void clearDestination(){
 		while (this.routePointsQueue.Count >0) {
 			GameObject ball = this.routePointsQueue.Dequeue();
-			Vector3 dest = ball.transform.position;
-			Object.Destroy(this.routelines[dest]);
+			Object.Destroy(this.routelines[ball]);
 			Object.Destroy(ball);
 		}
 	}
@@ -617,4 +621,25 @@ public class Drone : WorldObject {
 			return ResourceManager.InvalidPosition;
 		}
 	}
+
+	private void malFunction(){
+		Random random = new Random ();
+		int randInt = Random.Range (1, ConfigManager.getInstance ().getSceneDroneCount ());
+		if(randInt == 2) {
+			this.malFunctionCamera ();
+		} else if (randInt == 3){
+			this.malFunctionSpeed();
+		}
+	}
+
+	private void malFunctionCamera(){
+		Blur blur = camera_front.GetComponent<Blur>();
+		blur.enableFunc();
+	}
+
+	private void malFunctionSpeed(){
+		this.maxSpeed /= 2;
+	}
+
+
 }

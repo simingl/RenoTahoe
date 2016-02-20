@@ -14,7 +14,7 @@
     <ShowPIPCameraShift>true</ShowPIPCameraShift>
   </hud>
   <scene>
-    <DroneCount>15</DroneCount>
+    <DroneCount>4</DroneCount>
     <PeopleCount>30</PeopleCount>
     <CarCount>5</CarCount>
     <HelicopterCount>4</HelicopterCount>
