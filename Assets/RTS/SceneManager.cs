@@ -32,6 +32,7 @@ public class SceneManager : MonoBehaviour {
 	void Start(){
 		Random.seed = 1;
 		InitialScene ();
+        
 	}
 
 	void InitialScene (){
@@ -42,7 +43,7 @@ public class SceneManager : MonoBehaviour {
 	}
 
 	private void initialDroneSpawnLocation(){
-		sceneDroneCount = configManager.getSceneDroneCount ();
+        sceneDroneCount = configManager.getSceneDroneCount ();
 		GameObject droneSpawnLocation = GameObject.FindGameObjectWithTag("DroneSpawnLocation");
 		int row = Mathf.RoundToInt(Mathf.Sqrt(sceneDroneCount));
 		int col = Mathf.CeilToInt((float)sceneDroneCount / row);
@@ -129,19 +130,31 @@ public class SceneManager : MonoBehaviour {
 	}
 
 	public Drone[] getAllDrones(){
-		Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+		Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();        
 		return player.GetComponentsInChildren<Drone> ();
 	}
 
 	public void CreateDrone(Vector3 position){
 		Drone[] drones = this.getAllDrones ();
-		if (drones.Length >= MAX_DRONE) {
+        //List<int> droneNum = new List<int>();
+        //int myDroneNum = Random.Range(0, configManager.getSceneDroneCount()+2);
+        //foreach (Drone drone in player.GetComponentsInChildren<Drone>())
+        //{
+        //    while (droneNum.Contains(myDroneNum))
+        //    {
+        //        myDroneNum = Random.Range(0, configManager.getSceneDroneCount());
+        //    }
+        //    droneNum.Add(myDroneNum);
+        //    drone.droneNumber = myDroneNum;
+        //}
+        if (drones.Length >= MAX_DRONE) {
 			return;
 		}
 
 		GameObject newdrone = (GameObject)Instantiate (droneModel, position, new Quaternion(0,0,0,1));
 		newdrone.transform.parent = this.player.transform;
 		newdrone.name = "Drone-" + drones.Length;
+        newdrone.GetComponentInChildren<Drone>().droneNumber = drones.Length;
 		newdrone.SetActive (true);
 	}
 }

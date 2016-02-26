@@ -8,7 +8,7 @@ public enum QuestionType
 {
 	Single,
 	InputNumber,
-	PointOutFromMap
+	Area
 }
 
 public class Question
@@ -17,29 +17,25 @@ public class Question
 	public QuestionType type{get;set;}
 	public Options option{get;set;}
 	public string answer{get;set;}
+    public string userAnswer { get; set; }
+}
+
+public class Opt
+{
+    public string name;
+    public string optDescription;
 }
 	
 public class Options
 {
 	[XmlElement("opt")]
-	public List<string> opt = new List<string>();
-	[XmlElement("description")]
-	public List<string> desc = new List<string>();
-}
-
-public class Student
-{
-	public string usrName{get;set;}
+	public List<Opt> opt = new List<Opt>();
 }
 
 public class Quiz
 {
-	[XmlElement("question")] 
+    [XmlElement("question")] 
 	public List<Question> question = new List<Question>();
-	[XmlElement("student")]
-	public List<Student> student = new List<Student>();
-	[XmlElement("userAnswer")]
-	public List<string> userAnswer = new List<string>();
 }
 
 [XmlRoot("QuizSetting")]
@@ -59,15 +55,25 @@ public class QuizSettingContainer
 		return container;
 	}
 
-	public void writeData(){
-		var serializer = new XmlSerializer(typeof(QuizSettingContainer));
+    //public void writeData(){
+    //	var serializer = new XmlSerializer(typeof(QuizSettingContainer));
 
-		var encoding = Encoding.GetEncoding("UTF-8");
+    //	var encoding = Encoding.GetEncoding("UTF-8");
 
-		using(StreamWriter stream = new StreamWriter( path, false, encoding))
-		{
-			serializer.Serialize(stream, this);
-			stream.Close();
-		}
-	}
+    //	using(StreamWriter stream = new StreamWriter( path, false, encoding))
+    //	{
+    //		serializer.Serialize(stream, this);
+    //		stream.Close();
+    //	}
+    //}
+
+    static public void Serialize(QuizSettingContainer details)
+    {
+        XmlSerializer serializer = new XmlSerializer(typeof(QuizSettingContainer));
+        var encoding = Encoding.GetEncoding("UTF-8");
+        using (TextWriter writer = new StreamWriter(path, false, encoding))
+        {
+            serializer.Serialize(writer, details);
+        }
+    }
 }

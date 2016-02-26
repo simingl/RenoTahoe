@@ -60,6 +60,12 @@ public class Drone : WorldObject {
     private List<GameObject> routeLinePointsSelect;
     public GameObject emptyGameObject;
 
+    public int droneNumber = 0;
+    private List<int> droneNumberList=new List<int>();
+    private Random randomNum = new Random();
+
+    private SceneManager mySceneManager;
+
     public Drone() {
         scoreValue = 500;
         type = WorldObjectType.Unit;
@@ -67,6 +73,7 @@ public class Drone : WorldObject {
         waters = new Stack<WaterBottle>();
         this.routePointsQueue = new Queue<GameObject>();
 		routelines = new Dictionary<GameObject, GameObject>();
+
     }
 
     protected override void Awake() {
@@ -75,10 +82,15 @@ public class Drone : WorldObject {
         currentBattery = ResourceManager.DroneBatteryLife;
         rb = this.GetComponent<Rigidbody>();
 
+        
+
         this.canvas = GameObject.FindObjectOfType<Canvas>();
         //Initialize to random color
-        color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
 
+        //color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
+        
+
+        
         //Create a battery bar from the prefab
         batterySlider = (Slider)GameObject.Instantiate(batterySliderfabs, new Vector3(-10000f, -10000f, -10000f), transform.localRotation);
         batterySlider.transform.SetParent(canvas.transform);
@@ -115,7 +127,9 @@ public class Drone : WorldObject {
         lineRaycast = this.GetComponent<LineRenderer>();
         lineRaycast.useWorldSpace = true;
 
-		this.malFunction ();
+       
+
+        this.malFunction ();
     }
 
     protected override void Update() {
@@ -133,7 +147,17 @@ public class Drone : WorldObject {
         //			}
         //		}
         //-------------
-
+        //for (int i = 0; i < ConfigManager.getInstance().getSceneDroneCount(); ++i)
+        //{
+        //    if (this.droneNumber == mySceneManager.getAllDrones()[i].droneNumber)
+        //        ++this.droneNumber;
+        //}
+        if (this.isSelected())
+        {
+            //player.getSelectedObjects()[0].isSelected()
+            //Debug.Log(this.transform.position);
+            getDroneArea();
+        }
         if (this.currentStatus == STATUS.DEAD)
             return;
 
@@ -192,7 +216,37 @@ public class Drone : WorldObject {
     }
 
 
+    public void testDroneNumberButton()
+    {
+        //Debug.Log(player.getSelectedObjects()[0]);
+        //Debug.Log(ConfigManager.getInstance().getSceneDroneCount());
+    }
 
+
+    public void getDroneArea()
+    {
+        int droneCount = ConfigManager.getInstance().getSceneDroneCount();
+        int rootOfDrone = (int)Mathf.Sqrt(droneCount);
+        float gridSizeOfScene = 200 / rootOfDrone;
+        
+        int dronePostionOffset = 100;
+        int result = 0;
+        for (int i=0; i< rootOfDrone; ++i)
+        {
+            for (int j=0; j< rootOfDrone; ++j )
+            {
+                if(gridSizeOfScene * i<(this.transform.position.x+dronePostionOffset) && 
+                   gridSizeOfScene * (i+1) > (this.transform.position.x+ dronePostionOffset) &&
+                   gridSizeOfScene * j < (this.transform.position.z + dronePostionOffset) &&
+                   gridSizeOfScene * (j + 1) > (this.transform.position.z + dronePostionOffset)
+                   )
+                {
+                    result = i + (j* rootOfDrone);
+                }
+            }
+        }
+        //Debug.Log(this.name + "is in: " + result);
+    }
 
     protected override void OnGUI() {
 		base.OnGUI();
@@ -413,6 +467,9 @@ public class Drone : WorldObject {
 //
 //		return line;
 //	}
+
+    //public 
+
 
 	private GameObject drawLine(Vector3 org, Vector3 dst){
 		GameObject[] tmpQueue = routePointsQueue.ToArray();

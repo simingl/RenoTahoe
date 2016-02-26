@@ -27,7 +27,14 @@ public class QuizManager : MonoBehaviour
 		}
 		return quizSettings;
 	}
-	public Text ques;
+
+    public QuizSettingContainer WriteToXML()
+    {
+        quizSettings = QuizSettingContainer.readData();
+            //quizSettings.writeData();
+        return quizSettings;
+    }
+    public Text ques;
 	public Texture2D btnTexture;
 	public GUIStyle btnGuiStyle;
 	public int juggJ=0;
@@ -38,7 +45,6 @@ public class QuizManager : MonoBehaviour
 	public GameObject OptionsButton;
 	public GameObject startButton;
     private bool displayChoice = false;
-    public int counter;
     public GameObject PlayerFolder;
    // public GameObject backGround;
 
@@ -82,9 +88,8 @@ public class QuizManager : MonoBehaviour
 	public void initiateOptionsButtons()
 	{
         ColonOptionsButton =(GameObject)Instantiate(OptionsButton, ques.transform.position + new Vector3(0,-40*(optionCounter+1),0), Quaternion.identity);
-       
         ColonOptionsButton.transform.parent = ques.transform;
-        ColonOptionsButton.GetComponentInChildren<Text>().text = QuizManager.getInstance().quizSettings.quiz.question[QuizManager.getInstance().questionButtonCounter%QuizManager.getInstance().quizSettings.quiz.question.Count].option.opt[optionCounter]+": "+ quizSettings.quiz.question[QuizManager.getInstance().questionButtonCounter%quizSettings.quiz.question.Count].option.desc[optionCounter];
+        ColonOptionsButton.GetComponentInChildren<Text>().text = QuizManager.getInstance().quizSettings.quiz.question[QuizManager.getInstance().questionButtonCounter%QuizManager.getInstance().quizSettings.quiz.question.Count].option.opt[optionCounter].name+": "+ QuizManager.getInstance().quizSettings.quiz.question[QuizManager.getInstance().questionButtonCounter % QuizManager.getInstance().quizSettings.quiz.question.Count].option.opt[optionCounter].optDescription;
 		QuizManager.getInstance().tmpColonOptionsButton.Add(ColonOptionsButton);
 	}
 
@@ -118,9 +123,24 @@ public class QuizManager : MonoBehaviour
 		QuizManager.getInstance().answered=true;
 	}
 
+    public void testButtion1()
+    {
+        QuizSettingContainer myContainer = getQuizSettings();
+
+        //Debug.Log(QuizManager.getInstance().getQuizSettings().quiz);
+        //Quiz myQuiz = QuizManager.getInstance().getQuizSettings().quiz;
+
+        //Debug.Log(QuizManager.getInstance().quizSettings.quiz);
+        //myQuiz.question[0].option.opt[0].optDescription= "2";
+        //myQuiz.question[0].userAnswer = "姜美花";
+
+        Debug.Log(getQuizSettings().quiz.question[0].option.opt[0].optDescription);
+        myContainer.quiz.question[0].option.opt[0].optDescription = "3";
+        QuizSettingContainer.Serialize(myContainer);
+    }
 
 
-	public void OnPopUpQuestionButtonClick()
+    public void OnPopUpQuestionButtonClick()
 	{
 		if(QuizManager.getInstance().answered || startButton.GetComponentInChildren<Text>().text == "Start")
 		{
@@ -163,7 +183,6 @@ public class QuizManager : MonoBehaviour
         PlayerFolder.SetActive(true);
         displayChoice = false;
        // backGround.SetActive(false);
-        counter =0;
 		QuizManager.getInstance().answered=true;
 	}
 }

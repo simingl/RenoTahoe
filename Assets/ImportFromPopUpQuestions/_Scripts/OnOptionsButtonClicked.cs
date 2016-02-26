@@ -18,7 +18,7 @@ public class OnOptionsButtonClicked : MonoBehaviour {
 			if(this.gameObject == quizManager.tmpColonOptionsButton[i])
 			{
 				//quizManager.questionButtonCounter%quizManager.quizSettings.quiz.question.Count is question counter;
-				if (   quizManager.getQuizSettings().quiz.question[(quizManager.questionButtonCounter)%quizManager.getQuizSettings().quiz.question.Count].option.opt[i]
+				if (   quizManager.getQuizSettings().quiz.question[(quizManager.questionButtonCounter)%quizManager.getQuizSettings().quiz.question.Count].option.opt[i].name
 					== quizManager.getQuizSettings().quiz.question[(quizManager.questionButtonCounter)%quizManager.getQuizSettings().quiz.question.Count].answer)
 					quizManager.answerNum=1;
 				else 

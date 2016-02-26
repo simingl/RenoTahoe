@@ -2,67 +2,47 @@
 <QuizSetting xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <quiz>
     <question>
-        <description>2+4=?</description>
-        <type>Single</type>
-        <option>
-            <opt>D</opt><description>2</description>
-            <opt>C</opt><description>4</description>
-            <opt>B</opt><description>6</description>
-            <opt>A</opt><description>8</description>
-        </option>
-        <answer>B</answer>
+      <description>2+4=?</description>
+      <type>Single</type>
+      <option>
+        <opt>
+          <name>A</name>
+          <optDescription>2</optDescription>
+        </opt>
+        <opt>
+          <name>B</name>
+          <optDescription>4</optDescription>
+        </opt>
+        <opt>
+          <name>C</name>
+          <optDescription>6</optDescription>
+        </opt>
+        <opt>
+          <name>D</name>
+          <optDescription>8</optDescription>
+        </opt>
+      </option>
+      <answer>C</answer>
+      <userAnswer />
     </question>
-    <student>
-        <userName>Tea</userName>
-    </student>
-    <userAnswer></userAnswer>
     <question>
-        <description>How old are you?</description>
-        <type>InputNumber</type>
-        <answer>25</answer>
+      <description>How old are you?</description>
+      <type>InputNumber</type>
+      <answer>25</answer>
+      <userAnswer />
     </question>
-    <student>
-        <userName>Tea</userName>
-    </student>
-    <userAnswer></userAnswer>
-    <question>
-        <description>4*2=?</description>
-        <type>InputNumber</type>
-        <answer>8</answer>
+	 <question>
+      <description>Where is the red drone?</description>
+      <type>InputNumber</type>
+      <answer>25</answer>
+      <userAnswer />
     </question>
-    <student>
-        <userName>Tea</userName>
-    </student>
-    <userAnswer></userAnswer>
-    <question>
-        <description>4+4=?</description>
-        <type>Single</type>
-        <option>
-            <opt>D</opt><description>4</description>
-            <opt>C</opt><description>10</description>
-            <opt>B</opt><description>12</description>
-            <opt>A</opt><description>8</description>
-        </option>
-        <answer>A</answer>
+	
+	<question>
+      <description>Where is the red drone?</description>
+      <type>Area</type>
+      <answer></answer>
+      <userAnswer />
     </question>
-    <student>
-        <userName>Tea</userName>
-    </student>
-    <userAnswer></userAnswer>
-    <question>
-        <description>333+333=?</description>
-        <type>Single</type>
-        <option>
-            <opt>A</opt><description>333</description>
-            <opt>B</opt><description>666</description>
-            <opt>C</opt><description>999</description>
-            <opt>D</opt><description>1332</description>
-        </option>
-        <answer>B</answer>
-    </question>
-    <student>
-        <userName>Tea</userName>
-    </student>
-    <userAnswer></userAnswer>
   </quiz>
 </QuizSetting>
