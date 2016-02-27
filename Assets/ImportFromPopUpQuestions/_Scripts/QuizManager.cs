@@ -123,6 +123,7 @@ public class QuizManager : MonoBehaviour
 		QuizManager.getInstance().answered=true;
 	}
 
+    //write to XML file
     public void testButtion1()
     {
         QuizSettingContainer myContainer = getQuizSettings();

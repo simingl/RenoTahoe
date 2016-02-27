@@ -61,8 +61,8 @@ public class Drone : WorldObject {
     public GameObject emptyGameObject;
 
     public int droneNumber = 0;
-    private List<int> droneNumberList=new List<int>();
     private Random randomNum = new Random();
+    public TextMesh droneNumberText;
 
     private SceneManager mySceneManager;
 
@@ -80,16 +80,36 @@ public class Drone : WorldObject {
         base.Awake();
         fire = transform.FindChild("fire").gameObject;
         currentBattery = ResourceManager.DroneBatteryLife;
-        rb = this.GetComponent<Rigidbody>();
-
-        
-
+        rb = this.GetComponent<Rigidbody>();                
         this.canvas = GameObject.FindObjectOfType<Canvas>();
         //Initialize to random color
 
         //color = new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f));
-        
 
+        switch(this.droneNumber)
+        {
+            case 0:
+                this.color = Color.yellow;
+                break;
+            case 1:
+                this.color = Color.white;
+                break;
+            case 2:
+                this.color = Color.blue;
+                break;
+            case 3:
+                this.color = Color.red;
+                break;
+            case 4:
+                this.color = Color.green;
+                break;
+            case 5:
+                this.color = Color.gray;
+                break;
+            default:
+                this.color = Color.cyan;
+                break;                
+        }
         
         //Create a battery bar from the prefab
         batterySlider = (Slider)GameObject.Instantiate(batterySliderfabs, new Vector3(-10000f, -10000f, -10000f), transform.localRotation);
@@ -104,7 +124,6 @@ public class Drone : WorldObject {
 
         this.camera_front = (Camera)(this.transform.FindChild("camera_1st_view").gameObject).GetComponent<Camera>();
         this.camera_down = (Camera)(this.transform.FindChild("camera_hover_view").gameObject).GetComponent<Camera>();
-
         this.camera_front.depth = PIP_DEPTH_DEACTIVE;
         this.camera_down.depth = PIP_DEPTH_DEACTIVE;
     }
@@ -116,7 +135,7 @@ public class Drone : WorldObject {
 
     protected override void Start() {
         base.Start();
-
+        this.droneNumberText.text = "No. " + this.droneNumber;
         //hold routLinePoints prefab in an object;
         //		routLinePointsSelect = GameObject.FindGameObjectsWithTag("RouteLinePoint"); 	
 
