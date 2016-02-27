@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using RTS;
 using UnityStandardAssets.ImageEffects;
 
+//test for pull
+
 public class Drone : WorldObject {
     public Texture cameraIcon;
     public const int PIP_DEPTH_ACTIVE = 2;
