@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class OnOptionsButtonClicked : MonoBehaviour {
 	private QuizManager quizManager;
@@ -13,18 +14,42 @@ public class OnOptionsButtonClicked : MonoBehaviour {
 
 	public void ButtonClicked()
 	{
-		for(int i=0; i<quizManager.tmpColonOptionsButton.Count; ++i)
-		{
-			if(this.gameObject == quizManager.tmpColonOptionsButton[i])
+        int uswerAnswer = 0;
+        string str = "";
+        for (int i=0; i<quizManager.tmpColonOptionsButton.Count; ++i)
+		{          
+            if (this.gameObject == quizManager.tmpColonOptionsButton[i])
 			{
-				//quizManager.questionButtonCounter%quizManager.quizSettings.quiz.question.Count is question counter;
-				if (   quizManager.getQuizSettings().quiz.question[(quizManager.questionButtonCounter)%quizManager.getQuizSettings().quiz.question.Count].option.opt[i].name
-					== quizManager.getQuizSettings().quiz.question[(quizManager.questionButtonCounter)%quizManager.getQuizSettings().quiz.question.Count].answer)
-					quizManager.answerNum=1;
-				else 
-					quizManager.answerNum=0;
+                uswerAnswer = i;
+                if (quizManager.getQuizSettings().quiz.question[quizManager.questionButtonCounter].type == QuestionType.Area)
+                {
+                    if (quizManager.getQuizSettings().quiz.question[quizManager.questionButtonCounter].answer == i.ToString())
+                    {
+                        quizManager.answerNum = 1;
+                    }
+                    else
+                        quizManager.answerNum = 0;
+                    str = quizManager.tmpColonOptionsButton[uswerAnswer].GetComponentInChildren<Text>().text;
+                }
+
+                //quizManager.questionButtonCounter%quizManager.quizSettings.quiz.question.Count is question counter;
+                 else
+                {
+                    if (quizManager.getQuizSettings().quiz.question[quizManager.questionButtonCounter].option.opt[i].name
+                        == quizManager.getQuizSettings().quiz.question[quizManager.questionButtonCounter].answer)
+                        quizManager.answerNum = 1;
+                    else
+                        quizManager.answerNum = 0;
+                    str = quizManager.getQuizSettings().quiz.question[quizManager.questionButtonCounter].option.opt[i].name;
+                }                
 			}
 		}
-		quizManager.answered=true;
+        
+        
+        quizManager.endAnswerTime = Time.realtimeSinceStartup;
+        string timeConsuming = (quizManager.endAnswerTime - quizManager.startAnswerTime).ToString();
+        quizManager.WriteToXml(str, quizManager.questionButtonCounter, 6);
+        quizManager.WriteToXml(timeConsuming, quizManager.questionButtonCounter, 7);
+        quizManager.answered=true;
 	}
 }

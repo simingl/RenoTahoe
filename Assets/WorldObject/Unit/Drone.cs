@@ -173,12 +173,12 @@ public class Drone : WorldObject {
         //    if (this.droneNumber == mySceneManager.getAllDrones()[i].droneNumber)
         //        ++this.droneNumber;
         //}
-        if (this.isSelected())
-        {
-            //player.getSelectedObjects()[0].isSelected()
-            //Debug.Log(this.transform.position);
-            getDroneArea();
-        }
+        //if (this.isSelected())
+        //{
+        //    //player.getSelectedObjects()[0].isSelected()
+        //    //Debug.Log(this.transform.position);
+        //    getDroneArea();
+        //}
         if (this.currentStatus == STATUS.DEAD)
             return;
 
@@ -244,7 +244,7 @@ public class Drone : WorldObject {
     }
 
 
-    public void getDroneArea()
+    public int getDroneArea()
     {
         int droneCount = ConfigManager.getInstance().getSceneDroneCount();
         int rootOfDrone = (int)Mathf.Sqrt(droneCount);
@@ -262,11 +262,12 @@ public class Drone : WorldObject {
                    gridSizeOfScene * (j + 1) > (this.transform.position.z + dronePostionOffset)
                    )
                 {
-                    result = i + (j* rootOfDrone);
+                    result = i + (rootOfDrone -1-j)*rootOfDrone;
                 }
             }
         }
         //Debug.Log(this.name + "is in: " + result);
+        return result;
     }
 
     protected override void OnGUI() {
@@ -333,6 +334,11 @@ public class Drone : WorldObject {
         colon.transform.parent = emptyGameObject.transform;
         this.routePointsQueue.Enqueue (colon);
 	}
+
+    public void writeDroneAreasToXML()
+    {
+
+    }
 
 	public void StartMove(Vector3 d) {
 		this.clearDestination ();
@@ -674,7 +680,7 @@ public class Drone : WorldObject {
 		//find the top mesh and render it
 		transform.FindChild ("mesh").FindChild ("group_top").GetComponent<Renderer>().material.color = this.color;
 	}
-
+     
 	public void addWayPoint(Vector3 point){
 //		GameObject colon = (GameObject)Instantiate(routePoints,point, new Quaternion(0,0,0,1));
 //		colon.GetComponent<Renderer>().material.color = color;
