@@ -46,10 +46,11 @@ public class OnOptionsButtonClicked : MonoBehaviour {
 		}
         
         
-        quizManager.endAnswerTime = Time.realtimeSinceStartup;
+        quizManager.endAnswerTime = (int)Time.realtimeSinceStartup;
         string timeConsuming = (quizManager.endAnswerTime - quizManager.startAnswerTime).ToString();
         quizManager.WriteToXml(str, quizManager.questionButtonCounter, 6);
         quizManager.WriteToXml(timeConsuming, quizManager.questionButtonCounter, 7);
         quizManager.answered=true;
+        quizManager.displayResultBoard = true;
 	}
 }
