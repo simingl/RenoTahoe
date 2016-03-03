@@ -40,7 +40,6 @@ public class QuizManager : MonoBehaviour
     public InputField InputNumber;
     public GameObject OptionsButton;
     public GameObject startButton;
-    public GameObject PlayerFolder;
     [HideInInspector]
     public bool startQuestion = false;
     private float timeNow = 0f;
@@ -56,6 +55,13 @@ public class QuizManager : MonoBehaviour
     public Text resultTextBoard;
     [HideInInspector]
     public bool displayResultBoard;
+
+    public GameObject ResultBoardPanel;
+
+    public GameObject PlayerFolder;
+    public GameObject BtnChangeScene;
+    public float startQuestionTime = 10.0f;
+
     void Start()
     {
         startAnswerTime = 0;
@@ -65,19 +71,23 @@ public class QuizManager : MonoBehaviour
         AnswerStateButton.SetActive(false);
         startButton.GetComponentInChildren<Text>().text = "Start";
         resultTextBoard.text = "";
+        
         QuizManager.getInstance().displayResultBoard = false;
+
+        BtnChangeScene.SetActive(false);
     }
 
     void Update()
     {
+        GetDronesArea();
         if (QuizManager.getInstance().answered)
         {
             AnswerState(QuizManager.getInstance().answerNum);
         }
         timeNow = Time.realtimeSinceStartup;
-        if (timeNow > 100.0f && QuizManager.getInstance().write)
+        if (timeNow > startQuestionTime && QuizManager.getInstance().write)
         {
-            GetDronesArea();
+          //  GetDronesArea();
             if (QuizManager.getInstance().questionButtonCounter + 1 == QuizManager.getInstance().getQuizSettings().quiz.question.Count)
             {
                 QuizManager.getInstance().write = false;
@@ -259,8 +269,10 @@ public class QuizManager : MonoBehaviour
     {
         //if (QuizManager.getInstance().questionButtonCounter+1 < QuizManager.getInstance().getQuizSettings().quiz.question.Count)
         //{
+
             if (QuizManager.getInstance().answered || startButton.GetComponentInChildren<Text>().text == "Start")
             {
+                BtnChangeScene.SetActive(true);
                 QuizManager.getInstance().startAnswerTime = (int)Time.realtimeSinceStartup;
                 int droneCount = ConfigManager.getInstance().getSceneDroneCount();
                 QuizManager.getInstance().questionButtonCounter = (++QuizManager.getInstance().questionButtonCounter) % QuizManager.getInstance().getQuizSettings().quiz.question.Count; // problem
@@ -285,12 +297,24 @@ public class QuizManager : MonoBehaviour
                     //GetDronesArea(droneCount);
                     InstantiateButtonsInSquare((int)Mathf.Sqrt(droneCount));
                 }
-                //   backGround.SetActive(true);
-                ScoreText.SetActive(false);
-                RenoFolder.SetActive(false);
-                Questions.SetActive(true);
-                PlayerFolder.SetActive(false);
-            }
+            //   backGround.SetActive(true);
+            BackgroundManager backgroundManager = GameObject.FindGameObjectWithTag("AnswerStateButton").GetComponent<BackgroundManager>();
+            //  backgroundManager.reset();
+            backgroundManager.initBackground();
+
+
+            ScoreText.SetActive(false);
+            RenoFolder.SetActive(false);
+            Questions.SetActive(true);
+            PlayerFolder.SetActive(false);
+
+            MinimapManagement mapManagement = GameObject.FindGameObjectWithTag("Camera_minimap").GetComponent<MinimapManagement>();
+            CameraMain cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMain>();
+            mapManagement.cameraTurnOff(true);
+            cameraMain.turnOff(true);
+
+
+        }
             QuizManager.getInstance().answered = false;
         QuizManager.getInstance().displayResultBoard = false;
         //}
@@ -343,12 +367,19 @@ public class QuizManager : MonoBehaviour
 
     public void ResumeSceneButtonClick()
     {
+        BackgroundManager backgroundManager = GameObject.FindGameObjectWithTag("AnswerStateButton").GetComponent<BackgroundManager>();
+        backgroundManager.reset();
+        BtnChangeScene.SetActive(false);
         startButton.GetComponentInChildren<Text>().text = "Start";
         RenoFolder.SetActive(true);
         Questions.SetActive(false);
         ScoreText.SetActive(true);
         PlayerFolder.SetActive(true);
         // backGround.SetActive(false);
+        MinimapManagement mapManagement = GameObject.FindGameObjectWithTag("Camera_minimap").GetComponent<MinimapManagement>();
+        CameraMain cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMain>();
+        mapManagement.cameraTurnOff(false);
+        cameraMain.turnOff(false);
         QuizManager.getInstance().answered = true;
     }
 }

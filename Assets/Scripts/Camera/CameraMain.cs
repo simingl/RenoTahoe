@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+
+
+
 public class CameraMain : MonoBehaviour
 {
 	public GUISkin skin;
@@ -32,6 +35,22 @@ public class CameraMain : MonoBehaviour
 	private Texture2D BorderTexture; //just a small transparent image with a white border
 	
 	private LayerMask MapBackgroundMask;
+	private bool offCamera = false;
+	
+
+
+	public Texture2D backgroundImage;
+
+
+	public void turnOff(bool isOff){
+
+		offCamera = isOff;
+
+	}
+
+	
+
+
 
 
 	void Awake ()
@@ -50,6 +69,7 @@ public class CameraMain : MonoBehaviour
 		ground = player.sceneManager.transform.FindChild("Ground").gameObject;
 	}
 	public void ClampCam(){
+		
 		Transform mymap = ground.transform;
 		
 		Vector3 tmp = cam.position;
@@ -71,6 +91,8 @@ public class CameraMain : MonoBehaviour
 	}
 
 	private void MiniMapRaycastBox(){
+		
+
 		MiniMapOffsetX = 0;
 		MiniMapOffsetY = Screen.height - minimapCam.pixelHeight;
 		
@@ -105,11 +127,16 @@ public class CameraMain : MonoBehaviour
 		
 		MiniMapScreenOffsetX2 = minimapCam.pixelWidth * MiniMapCorner2.x;
 		MiniMapScreenOffsetY2 = minimapCam.pixelHeight * MiniMapCorner2.y;
+
+
+		if (offCamera == false) {
 		
-		
-		Rect MiniMapWindow = new Rect(MiniMapScreenOffsetX1, Screen.height - MiniMapScreenOffsetY1, MiniMapScreenOffsetX2 - MiniMapScreenOffsetX1, MiniMapScreenOffsetY1 - MiniMapScreenOffsetY2);
-		GUI.skin = skin;
-		GUI.Box(MiniMapWindow,"");
+			Rect MiniMapWindow = new Rect (MiniMapScreenOffsetX1, Screen.height - MiniMapScreenOffsetY1, MiniMapScreenOffsetX2 - MiniMapScreenOffsetX1, MiniMapScreenOffsetY1 - MiniMapScreenOffsetY2);
+			GUI.skin = skin;
+			GUI.Box (MiniMapWindow, "");
+		}
+
+
 	}
 
 }
