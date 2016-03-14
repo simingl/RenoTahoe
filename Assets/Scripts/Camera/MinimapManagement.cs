@@ -4,7 +4,6 @@ using System.Collections;
 public class MinimapManagement : MonoBehaviour {
 	private Camera mainCam;
 	private Camera minimapCam;
-	private bool switchOff;
 
 	public GUISkin skin;
 
@@ -12,27 +11,31 @@ public class MinimapManagement : MonoBehaviour {
 	public Vector2 lastMinimapSize;
 
 	private float ratio;
+    private bool switchOff;
 
-	void Awake() {
-
-	}
-
-
-	public void cameraTurnOff(bool status){
-
-		switchOff = status;
-
-		if (switchOff == true) {
-
-			minimapCam.depth = -1;
-		} else {
-			minimapCam.depth = 100;
-		}
+    void Awake() {
 
 	}
 
-	// Use this for initialization
-	void Start () {
+    public void cameraTurnOff(bool status)
+    {
+
+        switchOff = status;
+
+        if (switchOff == true)
+        {
+
+            minimapCam.depth = -1;
+        }
+        else {
+            minimapCam.depth = 100;
+        }
+
+    }
+
+
+    // Use this for initialization
+    void Start () {
 		mainCam = Camera.main;
 		minimapCam = this.GetComponent<Camera> ();
 		ratio = minimapCam.pixelWidth / minimapCam.pixelHeight;
@@ -44,8 +47,6 @@ public class MinimapManagement : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
-
 		if (Input.GetMouseButton (0) && MouseInBoundsMinimap()) {
 			Ray ray = minimapCam.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
@@ -79,11 +80,12 @@ public class MinimapManagement : MonoBehaviour {
 
 	void OnGUI()
 	{
-		if (switchOff) {
-			return;
-		}
+        if (switchOff)
+        {
+            return;
+        }
 
-		GUI.skin = skin;
+        GUI.skin = skin;
 		GUI.Box (new Rect (minimapCam.pixelRect.x, (Screen.height - minimapCam.pixelRect.yMax), minimapCam.pixelWidth, minimapCam.pixelHeight), "");
 	}
 
