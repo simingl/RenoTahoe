@@ -20,5 +20,6 @@
     <HelicopterCount>4</HelicopterCount>
     <TreeCount>20</TreeCount>
     <FireCount>4</FireCount>
+	<QuizStartTime>30</QuizStartTime>
   </scene>
 </Settings>

@@ -39,7 +39,8 @@ public class QuizManager : MonoBehaviour
     public GameObject ScoreText;
     public InputField InputNumber;
     public GameObject OptionsButton;
-    public GameObject startButton;
+    public GameObject StartButton;
+    public GameObject ResumeButton;
     public GameObject PlayerFolder;
     [HideInInspector]
     public bool startQuestion = false;
@@ -57,9 +58,9 @@ public class QuizManager : MonoBehaviour
     public GameObject resultBoard;
     [HideInInspector]
     public bool displayResultBoard;
+    private bool startPopupQuestion = true;
     //    public GameObject btnChangeScene;
-
-    public float startPopupQuestionTime = 30.0f;
+    private ConfigManager configManager;
 
     void Start()
     {
@@ -68,11 +69,12 @@ public class QuizManager : MonoBehaviour
         InputNumber.gameObject.SetActive(false);
         ques.text = "";
         AnswerStateButton.SetActive(false);
-        startButton.GetComponentInChildren<Text>().text = "Start";
+        StartButton.GetComponentInChildren<Text>().text = "Start";
         resultTextBoard.text = "";
         QuizManager.getInstance().displayResultBoard = false;
         resultBoard.gameObject.SetActive(false);
- //       btnChangeScene.SetActive(false);
+        //       btnChangeScene.SetActive(false);
+        configManager = ConfigManager.getInstance();
 
 
     }
@@ -85,9 +87,9 @@ public class QuizManager : MonoBehaviour
             AnswerState(QuizManager.getInstance().answerNum);
         }
         timeNow = Time.realtimeSinceStartup;
-        if (timeNow > startPopupQuestionTime && QuizManager.getInstance().write)
+        if (timeNow > getQuizStartTime() && QuizManager.getInstance().write)
         {
-            
+            Debug.Log(getQuizStartTime());
             if (QuizManager.getInstance().questionButtonCounter + 1 == QuizManager.getInstance().getQuizSettings().quiz.question.Count)
             {
                 QuizManager.getInstance().write = false;
@@ -156,6 +158,12 @@ public class QuizManager : MonoBehaviour
     //        }
     //    }
     //}
+
+    private int getQuizStartTime()
+    {
+        return configManager.getSceneQuizStartTime();
+    }
+
     private void InstantiateButtonsInSquare(int n)
     {
         int num = 0;
@@ -242,14 +250,6 @@ public class QuizManager : MonoBehaviour
     public void WriteToXml(string str, int questionCount, int num)
     {
         QuizSettingContainer myContainer = getQuizSettings();
-        //Debug.Log(QuizManager.getInstance().getQuizSettings().quiz);
-        //Quiz myQuiz = QuizManager.getInstance().getQuizSettings().quiz;
-
-        //Debug.Log(QuizManager.getInstance().quizSettings.quiz);
-        //myQuiz.question[0].option.opt[0].optDescription= "2";
-        //myQuiz.question[0].userAnswer = "姜美花";
-
-        //Debug.Log(getQuizSettings().quiz.question[0].option.opt[0].optDescription);
         if (num == 5)   //writeToXML answer;
         {
             myContainer.quiz.question[questionCount].answer = str;
@@ -269,13 +269,13 @@ public class QuizManager : MonoBehaviour
     {
         //if (QuizManager.getInstance().questionButtonCounter+1 < QuizManager.getInstance().getQuizSettings().quiz.question.Count)
         //{
-            if (QuizManager.getInstance().answered || startButton.GetComponentInChildren<Text>().text == "Start")
-            {
+            if (QuizManager.getInstance().answered || startPopupQuestion)
+            {                
                 QuizManager.getInstance().startAnswerTime = (int)Time.realtimeSinceStartup;
                 int droneCount = ConfigManager.getInstance().getSceneDroneCount();
                 QuizManager.getInstance().questionButtonCounter = (++QuizManager.getInstance().questionButtonCounter) % QuizManager.getInstance().getQuizSettings().quiz.question.Count; // problem
                 showNextQuestion();
-                startButton.GetComponentInChildren<Text>().text = "Next";
+                StartButton.GetComponentInChildren<Text>().text = "Next";
                 AnswerStateButton.SetActive(false);
                 if (getQuizSettings().quiz.question[QuizManager.getInstance().questionButtonCounter].type == QuestionType.Single)
                 {
@@ -318,7 +318,8 @@ public class QuizManager : MonoBehaviour
             //   backGround.SetActive(true);
            
         }
-            QuizManager.getInstance().answered = false;
+        startPopupQuestion = false;
+        QuizManager.getInstance().answered = false;
         QuizManager.getInstance().displayResultBoard = false;
         //}
     }
@@ -371,7 +372,7 @@ public class QuizManager : MonoBehaviour
 
     public void ResumeSceneButtonClick()
     {
-        startButton.GetComponentInChildren<Text>().text = "Start";
+        StartButton.GetComponentInChildren<Text>().text = "Start";
         resultBoard.gameObject.SetActive(false);
         /*    RenoFolder.SetActive(true);
             Questions.SetActive(false);

@@ -27,6 +27,7 @@ public class SceneSettings{
 	public int HelicopterCount;
 	public int TreeCount;
 	public int FireCount;
+    public int QuizStartTime;
 }
 
 [XmlRoot("Settings")]

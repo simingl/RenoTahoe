@@ -81,5 +81,10 @@ namespace RTS {
 		public int getSceneHelicopterCount(){
 			return settings.scene.HelicopterCount;
 		}
-	}
+
+        public int getSceneQuizStartTime()
+        {
+            return settings.scene.QuizStartTime;
+        }
+    }
 }
