@@ -12,25 +12,8 @@ using RTS;
 
 public class QuizManager : MonoBehaviour
 {
-    private QuizSettingContainer quizSettings;
-    private static QuizManager instance = new QuizManager();
 
-    private XmlDocument doc = new XmlDocument();
-
-    public static QuizManager getInstance()
-    {
-        return instance;
-    }
-    public QuizSettingContainer getQuizSettings()
-    {
-        if (quizSettings == null)
-        {
-            quizSettings = QuizSettingContainer.readData();
-            //quizSettings.writeData();
-        }
-        return quizSettings;
-    }
-
+  //  static string studentID;
     public Text ques;
     public Texture2D btnTexture;
     public GUIStyle btnGuiStyle;
@@ -51,9 +34,19 @@ public class QuizManager : MonoBehaviour
     public int startAnswerTime;
     [HideInInspector]
     public int endAnswerTime;
+    //minimapPosition---
+    private Vector3 minimapPosition;
+    private Camera minimapCam;
+    public GameObject ButtonsOnMiniMap;
+    private int HButtonsNum;
+    private int VButtonsNum;
+    private Vector2 minimapSize;
+    public GameObject ButtonsOnMiniMapFolder;
+    //minimapPosition---
+
 
     public GameObject resultTextPrefab;
- //   public Text resultTextInPrefab;
+    //   public Text resultTextInPrefab;
     public Text resultTextBoard;
     public GameObject resultBoard;
     [HideInInspector]
@@ -61,6 +54,9 @@ public class QuizManager : MonoBehaviour
     private bool startPopupQuestion = true;
     //    public GameObject btnChangeScene;
     private ConfigManager configManager;
+    private QuizSettingContainer quizSettings;
+    private QuizSettingContainer writeToStudentID;
+
 
     void Start()
     {
@@ -75,9 +71,15 @@ public class QuizManager : MonoBehaviour
         resultBoard.gameObject.SetActive(false);
         //       btnChangeScene.SetActive(false);
         configManager = ConfigManager.getInstance();
-
-
+        HButtonsNum = configManager.getSceneHorizontalButtonsNum();
+        VButtonsNum = configManager.getSceneVerticalButtonsNum();
+        minimapCam = GameObject.FindGameObjectWithTag("Camera_minimap").GetComponent<Camera>();
+        minimapPosition = new Vector3(minimapCam.pixelRect.x, minimapCam.pixelRect.yMax, 0);
+        minimapSize = GameObject.FindGameObjectWithTag("Camera_minimap").GetComponent<MinimapManagement>().lastMinimapSize;
+  //      writeToStudentID = new QuizSettingContainer();
     }
+
+   
 
     void Update()
     {
@@ -89,7 +91,6 @@ public class QuizManager : MonoBehaviour
         timeNow = Time.realtimeSinceStartup;
         if (timeNow > getQuizStartTime() && QuizManager.getInstance().write)
         {
-            Debug.Log(getQuizStartTime());
             if (QuizManager.getInstance().questionButtonCounter + 1 == QuizManager.getInstance().getQuizSettings().quiz.question.Count)
             {
                 QuizManager.getInstance().write = false;
@@ -106,6 +107,32 @@ public class QuizManager : MonoBehaviour
             DisplayResult();
         }
     }
+
+    private static QuizManager instance = new QuizManager();
+
+    private XmlDocument doc = new XmlDocument();
+
+    public static QuizManager getInstance()
+    {
+        return instance;
+    }
+    public QuizSettingContainer getQuizSettings()
+    {
+        if (quizSettings == null)
+        {
+            quizSettings = QuizSettingContainer.readData();
+            //quizSettings.writeData();
+        }
+        return quizSettings;
+    }
+
+    public void WriteToStudentIDFile()
+    {
+        
+
+    }
+
+
     public GameObject AnswerStateButton;
     [HideInInspector]
     public int answerNum;
@@ -126,38 +153,15 @@ public class QuizManager : MonoBehaviour
     public int optionCounter = 0;
     [HideInInspector]
     public int questionButtonCounter = -1;
-    private GameObject ColonOptionsButton;
-    public List<GameObject> tmpColonOptionsButton = new List<GameObject>();
-    //private void InstantiateOptionsButtons()
-    //{
-    //    ColonOptionsButton = (GameObject)Instantiate(OptionsButton, ques.transform.position + new Vector3(0, -40 * (optionCounter + 1), 0), Quaternion.identity);
-    //    ColonOptionsButton.transform.parent = ques.transform;
+    private GameObject CloneOptionsButton;
+    public List<GameObject> tmpCloneOptionsButton = new List<GameObject>();
 
-    //    ColonOptionsButton.GetComponentInChildren<Text>().text = QuizManager.getInstance().quizSettings.quiz.question[QuizManager.getInstance().questionButtonCounter].option.opt[optionCounter].name + ": " + QuizManager.getInstance().quizSettings.quiz.question[QuizManager.getInstance().questionButtonCounter].option.opt[optionCounter].optDescription;
-    //    QuizManager.getInstance().tmpColonOptionsButton.Add(ColonOptionsButton);
-    //}
     private void InstantiateOptionsButtons()
     {
         Vector3 myVector3 = new Vector3(0, -40 * (optionCounter + 1));
         string str = QuizManager.getInstance().quizSettings.quiz.question[QuizManager.getInstance().questionButtonCounter].option.opt[optionCounter].name + ": " + QuizManager.getInstance().quizSettings.quiz.question[QuizManager.getInstance().questionButtonCounter].option.opt[optionCounter].optDescription;
-        ColonPrefabs(OptionsButton, ques.transform, myVector3, str);
+        ClonePrefabs(OptionsButton, ques.transform, myVector3, str);
     }
-
-    //private void InstantiateButtonsInSquare(int n)
-    //{
-    //    int num = 0;
-    //    for (int i=0; i< n; ++i)
-    //    {
-    //        for(int j=0; j< n; ++j)
-    //        {
-    //            ColonOptionsButton = (GameObject)Instantiate(OptionsButton, ques.transform.position + new Vector3(-50*(n-1)+100*j, -50-40 * (i + 1), 0), Quaternion.identity);
-    //            ColonOptionsButton.transform.parent = ques.transform;
-
-    //            ColonOptionsButton.GetComponentInChildren<Text>().text = num++.ToString();
-    //            QuizManager.getInstance().tmpColonOptionsButton.Add(ColonOptionsButton);
-    //        }
-    //    }
-    //}
 
     private int getQuizStartTime()
     {
@@ -173,7 +177,26 @@ public class QuizManager : MonoBehaviour
             {
                 string str = num++.ToString();
                 Vector3 myVector3 = new Vector3(-50 * (n - 1) + 100 * j, -50 - 40 * (i + 1), 0);
-                ColonPrefabs(OptionsButton, ques.transform, myVector3, str);
+                ClonePrefabs(OptionsButton, ques.transform, myVector3, str);
+            }
+        }
+    }
+
+    private void InstantiateButtonsInMiniMap()
+    {
+        float buttonWidth = minimapSize.x / HButtonsNum;
+        float buttonHeight = minimapSize.y / VButtonsNum;
+        int num = 0;
+        for (int i = 0; i < VButtonsNum; ++i)
+        {
+            for (int j = 0; j < HButtonsNum; ++j)
+            {
+                string str = num++.ToString();
+                Vector3 myVector3 = minimapPosition + new Vector3(buttonWidth * j, -buttonHeight * (i+1), 0);
+                //          Vector3 myVector3 = new Vector3(buttonWidth * j, -buttonHeight * i, 0);
+                //Debug.Log ("minimapPosition is: "+minimapPosition );
+                //Debug.Log("myvector3 is: "+ myVector3);
+                ClonePrefabs(ButtonsOnMiniMap, ButtonsOnMiniMapFolder.transform, myVector3, str);
             }
         }
     }
@@ -190,11 +213,11 @@ public class QuizManager : MonoBehaviour
 
     private void destroyOptions()
     {
-        for (int i = 0; i < QuizManager.getInstance().tmpColonOptionsButton.Count; ++i)
+        for (int i = 0; i < QuizManager.getInstance().tmpCloneOptionsButton.Count; ++i)
         {
-            Destroy(QuizManager.getInstance().tmpColonOptionsButton[i].gameObject);
+            Destroy(QuizManager.getInstance().tmpCloneOptionsButton[i].gameObject);
         }
-        QuizManager.getInstance().tmpColonOptionsButton.Clear();
+        QuizManager.getInstance().tmpCloneOptionsButton.Clear();
     }
 
     private void CheckInputNumber()
@@ -208,11 +231,11 @@ public class QuizManager : MonoBehaviour
             QuizManager.getInstance().answerNum = 0;
         }
         QuizManager.getInstance().endAnswerTime =(int) Time.realtimeSinceStartup;
-        string timeConsuming = (QuizManager.getInstance().endAnswerTime - QuizManager.getInstance().startAnswerTime).ToString();
+        string timeConsumed = (QuizManager.getInstance().endAnswerTime - QuizManager.getInstance().startAnswerTime).ToString();
         string str;
         str = InputNumber.text;
         QuizManager.getInstance().WriteToXml(str, QuizManager.getInstance().questionButtonCounter, 6);
-        QuizManager.getInstance().WriteToXml(timeConsuming, QuizManager.getInstance().questionButtonCounter, 7);
+        QuizManager.getInstance().WriteToXml(timeConsumed, QuizManager.getInstance().questionButtonCounter, 7);
         // quizManager.WriteToXml(str, quizManager.questionButtonCounter % quizManager.getQuizSettings().quiz.question.Count, 6);
         InputNumber.gameObject.SetActive(false);
         QuizManager.getInstance().answered = true;
@@ -221,7 +244,7 @@ public class QuizManager : MonoBehaviour
 
     private void GetDronesArea()  //n is the number of drones
     {
-        int droneCount = ConfigManager.getInstance().getSceneDroneCount();
+        int droneCount = configManager.getSceneDroneCount();
 
         GameObject[] writeTheNumberOfDroneToXML = GameObject.FindGameObjectsWithTag("Drone");
 
@@ -237,11 +260,6 @@ public class QuizManager : MonoBehaviour
                         WriteToXml(obj.GetComponent<Drone>().getDroneArea().ToString(), i, 5);
                     }
                 }
-                //for (int j = 0; j < droneCount; ++j)
-                //{
-                //    if (drone.droneNumber.ToString() == QuizManager.getInstance().getQuizSettings().quiz.question[i].droneNumber)
-                //        WriteToXml(drone.getDroneArea().ToString());
-                //}
             }
         }
     }
@@ -249,7 +267,7 @@ public class QuizManager : MonoBehaviour
     //write to XML file
     public void WriteToXml(string str, int questionCount, int num)
     {
-        QuizSettingContainer myContainer = getQuizSettings();
+        QuizSettingContainer myContainer = QuizManager.getInstance().getQuizSettings();
         if (num == 5)   //writeToXML answer;
         {
             myContainer.quiz.question[questionCount].answer = str;
@@ -260,9 +278,10 @@ public class QuizManager : MonoBehaviour
         }
         if (num == 7) //writeToXML timeConsuming
         {
-            myContainer.quiz.question[questionCount].timeConsuming= str;
+            myContainer.quiz.question[questionCount].timeConsumed= str;
         }
-        QuizSettingContainer.Serialize(myContainer);
+        QuizSettingContainer.Serialize(myContainer, ConfigManager.getInstance().studentID);
+        //QuizSettingContainer.WriteData(myContainer, configManager.studentID);
     }
 
     public void OnPopUpQuestionButtonClick()
@@ -272,8 +291,8 @@ public class QuizManager : MonoBehaviour
             if (QuizManager.getInstance().answered || startPopupQuestion)
             {                
                 QuizManager.getInstance().startAnswerTime = (int)Time.realtimeSinceStartup;
-                int droneCount = ConfigManager.getInstance().getSceneDroneCount();
-                QuizManager.getInstance().questionButtonCounter = (++QuizManager.getInstance().questionButtonCounter) % QuizManager.getInstance().getQuizSettings().quiz.question.Count; // problem
+            int droneCount = configManager.getSceneDroneCount();
+            QuizManager.getInstance().questionButtonCounter = (++QuizManager.getInstance().questionButtonCounter) % QuizManager.getInstance().getQuizSettings().quiz.question.Count; // problem
                 showNextQuestion();
                 StartButton.GetComponentInChildren<Text>().text = "Next";
                 AnswerStateButton.SetActive(false);
@@ -292,8 +311,9 @@ public class QuizManager : MonoBehaviour
                 }
                 if (getQuizSettings().quiz.question[QuizManager.getInstance().questionButtonCounter].type == QuestionType.Area)
                 {
-                    //GetDronesArea(droneCount);
-                    InstantiateButtonsInSquare((int)Mathf.Sqrt(droneCount));
+               //     GetDronesArea(droneCount);
+              //      InstantiateButtonsInSquare((int)Mathf.Sqrt(droneCount));
+                  InstantiateButtonsInMiniMap();
                 }
             //   backGround.SetActive(true);
             /*       ScoreText.SetActive(false);
@@ -313,10 +333,11 @@ public class QuizManager : MonoBehaviour
             //hideShowGameObjects
             MinimapManagement mapManagement = GameObject.FindGameObjectWithTag("Camera_minimap").GetComponent<MinimapManagement>();
             CameraMain cameraMain = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraMain>();
-            mapManagement.cameraTurnOff(true);
+            //   mapManagement.cameraTurnOff(true);
+            mapManagement.cameraTurnOff(false);
             cameraMain.turnOff(true);
             //   backGround.SetActive(true);
-           
+
         }
         startPopupQuestion = false;
         QuizManager.getInstance().answered = false;
@@ -324,13 +345,13 @@ public class QuizManager : MonoBehaviour
         //}
     }
 
-    private void ColonPrefabs(GameObject colonObjs, Transform parrentTransform, Vector3 offSetVect3, string description)
+    private void ClonePrefabs(GameObject CloneObjs, Transform parrentTransform, Vector3 offSetVect3, string description)
     {
-        ColonOptionsButton = (GameObject)Instantiate(colonObjs, parrentTransform.position + offSetVect3, Quaternion.identity);
-        ColonOptionsButton.transform.parent = parrentTransform;
+        CloneOptionsButton = (GameObject)Instantiate(CloneObjs, parrentTransform.position + offSetVect3, Quaternion.identity);
+        CloneOptionsButton.transform.parent = parrentTransform;
 
-        ColonOptionsButton.GetComponentInChildren<Text>().text = description;
-        QuizManager.getInstance().tmpColonOptionsButton.Add(ColonOptionsButton);
+        CloneOptionsButton.GetComponentInChildren<Text>().text = description;
+        QuizManager.getInstance().tmpCloneOptionsButton.Add(CloneOptionsButton);
     }
 
     private void DisplayResult()  //Result board.
@@ -347,12 +368,6 @@ public class QuizManager : MonoBehaviour
         int maxLength = max * 12;
         //       resultTextInPrefab.rectTransform.sizeDelta = new Vector2(maxLength, 25);
         resultTextBoard.rectTransform.sizeDelta = new Vector2(maxLength, 25 * 3 * QuizManager.getInstance().getQuizSettings().quiz.question.Count);
-        /*        string str = QuizManager.getInstance().getQuizSettings().quiz.question[questionButtonCounter].description + "@";
-                str += "Answer: " + QuizManager.getInstance().getQuizSettings().quiz.question[questionButtonCounter].answer
-                         + "  " + "UserAnswer: " + QuizManager.getInstance().getQuizSettings().quiz.question[questionButtonCounter].userAnswer
-                         + "  " + "TimeConsuming: " + QuizManager.getInstance().getQuizSettings().quiz.question[questionButtonCounter].timeConsuming;
-                str.Replace("@", System.Environment.NewLine);
-        */        //  ColonPrefabs(OptionsButton, ques.transform, vect3, str);
         resultTextBoard.text = "Results:\n";
         for (int i = 0; i < QuizManager.getInstance().getQuizSettings().quiz.question.Count; ++i)
         {
@@ -360,14 +375,8 @@ public class QuizManager : MonoBehaviour
                 i+1 + ": " + QuizManager.getInstance().getQuizSettings().quiz.question[i].description + "\n"
                  + "Answer: " + QuizManager.getInstance().getQuizSettings().quiz.question[i].answer
                  + "  " + "UserAnswer: " + QuizManager.getInstance().getQuizSettings().quiz.question[i].userAnswer
-                 + "  " + "TimeConsuming: " + QuizManager.getInstance().getQuizSettings().quiz.question[i].timeConsuming + "sec" + "\n";
+                 + "  " + "TimeConsuming: " + QuizManager.getInstance().getQuizSettings().quiz.question[i].timeConsumed + "sec" + "\n";
         }
-        //resultTextBoard.text.Replace("@", "@" + System.Environment.NewLine);
-        //   resultTextBoard.text = resultTextBoard.text.Replace("@", "@\n");
-        //       resultTextInPrefab.text = str;
-
-        //     Vector3 myVector3 = new Vector3(-50 * (n - 1) + 100 * j, -50 - 40 * (i + 1), 0);
-
     }
 
     public void ResumeSceneButtonClick()

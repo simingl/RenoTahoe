@@ -3,6 +3,7 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using RTS;
 
 public enum QuestionType
 {
@@ -19,7 +20,7 @@ public class Question
     public Options option { get; set; }
     public string answer { get; set; }
     public string userAnswer { get; set; }
-    public string timeConsuming { get; set; }
+    public string timeConsumed { get; set; }
 }
 
 public class Opt
@@ -43,9 +44,9 @@ public class Quiz
 [XmlRoot("QuizSetting")]
 public class QuizSettingContainer
 {
+    ConfigManager configManager = ConfigManager.getInstance();
 
     private const string path = "QuizSetting.xml";
-
     public Quiz quiz = new Quiz();
 
     public static QuizSettingContainer readData()
@@ -57,25 +58,44 @@ public class QuizSettingContainer
         return container;
     }
 
-    //public void writeData(){
-    //	var serializer = new XmlSerializer(typeof(QuizSettingContainer));
+    //public static void WriteData(QuizSettingContainer details,string str)
+    //{
+    //    XmlSerializer serializer = new XmlSerializer(typeof(QuizSettingContainer));
+    //    var encoding = Encoding.GetEncoding("UTF-8");
+    //    string pathStr = str + ".xml";
 
-    //	var encoding = Encoding.GetEncoding("UTF-8");
-
-    //	using(StreamWriter stream = new StreamWriter( path, false, encoding))
-    //	{
-    //		serializer.Serialize(stream, this);
-    //		stream.Close();
-    //	}
+    //    using (TextWriter writer = new StreamWriter(pathStr, false, encoding))
+    //    {
+    //        serializer.Serialize(writer, details);
+    //    }
     //}
 
-    static public void Serialize(QuizSettingContainer details)
+    static public void Serialize(QuizSettingContainer details , string str)
     {
         XmlSerializer serializer = new XmlSerializer(typeof(QuizSettingContainer));
         var encoding = Encoding.GetEncoding("UTF-8");
+
+        string pathStr = str + ".xml";
+
         using (TextWriter writer = new StreamWriter(path, false, encoding))
         {
             serializer.Serialize(writer, details);
         }
+
+        using (TextWriter writer = new StreamWriter(pathStr, false, encoding))
+        {
+            serializer.Serialize(writer, details);
+        }
     }
+
+    //static public void WriteData(QuizSettingContainer details, string str)
+    //{
+    //    string pathStr = str + ".xml";
+    //    XmlSerializer serializer = new XmlSerializer(typeof(QuizSettingContainer));
+    //    var encoding = Encoding.GetEncoding("UTF-8");
+    //    using (TextWriter writer = new StreamWriter(pathStr, false, encoding))
+    //    {
+    //        serializer.Serialize(writer, details);
+    //    }
+    //}
 }

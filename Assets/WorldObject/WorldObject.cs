@@ -24,15 +24,16 @@ public class WorldObject : MonoBehaviour {
 	private Vector3 lastPosition = Vector3.zero;
 	private float lastUpdated = 0.0f;
 
-	protected virtual void Awake() {
+
+    protected virtual void Awake() {
 		currentStatus = STATUS.LANDED;
 		currentTask = TASK.NULL;
 
 		selectionBounds = ResourceManager.InvalidBounds;
 		CalculateBounds();
-	}
-	
-	protected virtual void Start () {
+    }
+
+    protected virtual void Start () {
 		this._isSelectable = true;
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
 		this.playingArea = player.hud.GetPlayingArea ();
@@ -40,38 +41,41 @@ public class WorldObject : MonoBehaviour {
 	
 	protected virtual void Update () {
 
-
-	}
-
+    }
 
 
-	protected virtual void OnGUI() {
+
+    protected virtual void OnGUI() {
 		if (this.isSelected() && this.player.changePOV.activeCamera == null) {
 			DrawSelection ();
 		}
 	}
 
-	public virtual void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller) {
-		//ignore non-selectable objects
-		if (!this._isSelectable)
-			return;
-	}
+    public virtual void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller)
+    {
+        //ignore non-selectable objects
+        if (!this._isSelectable)
+        {
+            player.cleanSelectedObject();
+            return;
+        }
+    }
 
-	public virtual void StopMove(){
+    public virtual void StopMove(){
 
 	}
 
 	public void DrawSelection() {
-		GUI.skin = ResourceManager.SelectBoxSkin;
-		Rect selectBox = WorkManager.CalculateSelectionBox(selectionBounds, playingArea);
-		GUI.BeginGroup(playingArea);
-		DrawSelectionBox(selectBox);
-		GUI.EndGroup();
+        GUI.skin = ResourceManager.SelectBoxSkin;
+        Rect selectBox = WorkManager.CalculateSelectionBox(selectionBounds, playingArea);
+        GUI.BeginGroup(playingArea);
+        DrawSelectionBox(selectBox);
+        GUI.EndGroup();
+    }
 
+   
 
-	}
-
-	public void CalculateBounds() {
+    public void CalculateBounds() {
 		selectionBounds = new Bounds(transform.position, Vector3.zero);
 		foreach(Renderer r in GetComponentsInChildren< Renderer >()) {
 			if(r.GetType().Name == "MeshRenderer" && r.ToString().IndexOf("group_top")>=0){
@@ -122,4 +126,5 @@ public class WorldObject : MonoBehaviour {
 	public bool isDead(){
 		return this.currentStatus == STATUS.DEAD;
 	}
+    
 }

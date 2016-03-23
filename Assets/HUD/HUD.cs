@@ -207,7 +207,7 @@ public class HUD : MonoBehaviour {
 							this.player.setSelectedObject(obj);
 							obj.centerMainCamera();
 						}
-					}
+					}                    
 				}
 			}
 		}
@@ -318,31 +318,38 @@ public class HUD : MonoBehaviour {
 
 	//Render Selection
 	private void DrawMouseDragSelectionBox(){
-		if (startClick != -Vector3.one) {
-			GUI.color = new Color(1,1,1,0.5f);
-			GUI.DrawTexture(selection,selectionHighlight);
-		}
-	}
+        if (startClick != -Vector3.one)
+        {
+            GUI.color = new Color(1, 1, 1, 0.5f);
+            GUI.DrawTexture(selection, selectionHighlight);
+        }
+    }
 
 	private void MouseDragSelection(){
-		if (Input.GetMouseButtonDown (0) && !MouseInBoundsMinimap ()) {
-			startClick = Input.mousePosition;
-		}else if(Input.GetMouseButtonUp(0)){
-			startClick = -Vector3.one;
-		}
+        if (Input.GetMouseButtonDown(0) && !MouseInBoundsMinimap())
+        {
+            startClick = Input.mousePosition;
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            startClick = -Vector3.one;
+        }
 
-		if (Input.GetMouseButton (0) && startClick != -Vector3.one) {
-			selection = new Rect(startClick.x, InvertMouseY(startClick.y), Input.mousePosition.x - startClick.x, InvertMouseY(Input.mousePosition.y) - InvertMouseY(startClick.y));
-			if(selection.width<0){
-				selection.x += selection.width;
-				selection.width = -selection.width;
-			}
-			if(selection.height<0){
-				selection.y += selection.height;
-				selection.height = -selection.height;
-			}
-		}
-	}
+        if (Input.GetMouseButton(0) && startClick != -Vector3.one)
+        {
+            selection = new Rect(startClick.x, InvertMouseY(startClick.y), Input.mousePosition.x - startClick.x, InvertMouseY(Input.mousePosition.y) - InvertMouseY(startClick.y));
+            if (selection.width < 0)
+            {
+                selection.x += selection.width;
+                selection.width = -selection.width;
+            }
+            if (selection.height < 0)
+            {
+                selection.y += selection.height;
+                selection.height = -selection.height;
+            }
+        }
+    }
 
 	private void DrawPIPBar(){
 		if (player.getSelectedObjects ().Count > 0) {
@@ -360,6 +367,7 @@ public class HUD : MonoBehaviour {
 					if (GUI.Button (new Rect (offset_w, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), drone_cam_down)) {
 						drone.togglePIPCamera ();
 					}
+                    
 				}
 			}
 		}

@@ -184,11 +184,23 @@ public class UserInput : MonoBehaviour {
 							player.setSelectedObject(worldObject);
 						}
 					}
+                    else if (hitObject.tag != "drone")
+                    {
+                        player.cleanSelectedObject();
+                    }
+                 //   Debug.Log(hitObject.name);
 				}
-			}
-		}
-	}
-	private void RightMouseClick() {
+                //click on world  except drones--------------
+                else if (hitObject.tag != "drone")
+                {
+                    player.cleanSelectedObject();
+                }
+                //click on world  except drones--------------
+            }
+        }
+
+    }
+    private void RightMouseClick() {
 		//click on the main camera
 		if((player.hud.MouseInBounds()|| player.hud.MouseInBoundsMinimap()) && !Input.GetKey(KeyCode.LeftAlt) && player.getSelectedObjects().Count>0) {
 			GameObject hitObject = FindHitObject();

@@ -56,8 +56,8 @@ namespace RTS {
 		public static void StoreSelectBoxItems(GUISkin skin) {
 			selectBoxSkin = skin;
 		}
-
-		private Rect PIPCameraPosition  = new Rect (new Vector2 (0.8f, 0), new Vector2 (0.2f, 0.33f));
+        
+        private Rect PIPCameraPosition  = new Rect (new Vector2 (0.8f, 0), new Vector2 (0.2f, 0.33f));
 		public Rect getPIPCameraPosition(){
 			return PIPCameraPosition;
 		}

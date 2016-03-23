@@ -25,7 +25,7 @@
       </option>
       <answer>C</answer>
       <userAnswer></userAnswer>
-      <timeConsuming></timeConsuming>
+      <timeConsumed></timeConsumed>
     </question>
     <question>
       <description>How old are you?</description>
@@ -33,7 +33,7 @@
       <droneNumber />
       <answer>25</answer>
       <userAnswer></userAnswer>
-      <timeConsuming></timeConsuming>
+      <timeConsumed></timeConsumed>
     </question>
     <question>
       <description>Where is the No.0 drone?</description>
@@ -41,7 +41,7 @@
       <droneNumber>0</droneNumber>
       <answer />
       <userAnswer></userAnswer>
-      <timeConsuming></timeConsuming>
+      <timeConsumed></timeConsumed>
     </question>
     <question>
       <description>Where is the No.1 drone?</description>
@@ -49,7 +49,7 @@
       <droneNumber>1</droneNumber>
       <answer />
       <userAnswer></userAnswer>
-      <timeConsuming></timeConsuming>
+      <timeConsumed></timeConsumed>
     </question>
     <question>
       <description>Where is the No.2 drone?</description>
@@ -57,7 +57,7 @@
       <droneNumber>2</droneNumber>
       <answer />
       <userAnswer />
-      <timeConsuming />
+      <timeConsumed />
     </question>
     <question>
       <description>Where is the No.3 drone</description>
@@ -65,7 +65,7 @@
       <droneNumber>3</droneNumber>
       <answer />
       <userAnswer />
-      <timeConsuming />
+      <timeConsumed />
     </question>
   </quiz>
 </QuizSetting>

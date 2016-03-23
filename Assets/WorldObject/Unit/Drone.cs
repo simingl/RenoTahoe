@@ -20,13 +20,14 @@ public class Drone : WorldObject {
     private float maxSpeed = 2f;
     public float moveSpeed, rotateSpeed;
     private float acceleration = 0.3f;
-    private float turnSpeed = 0.3f;
+    private float turnSpeed = 3f;
 
     public float currentBattery = 100;
     public float batteryUsage = 0.1f;
 
     public int sensingRange = 100;
-   
+
+    public GameObject selectedCircle;
 
     //	private Queue<Vector3> routePoints;
     private Queue<GameObject> routePointsQueue;
@@ -67,7 +68,6 @@ public class Drone : WorldObject {
     public TextMesh droneNumberText;
 
     private SceneManager mySceneManager;
-
     public Drone() {
         scoreValue = 500;
         type = WorldObjectType.Unit;
@@ -90,7 +90,7 @@ public class Drone : WorldObject {
 
         switch(this.droneNumber)
         {
-            case 0:
+            case 0:          
                 this.color = Color.yellow;
                 break;
             case 1:
@@ -100,7 +100,7 @@ public class Drone : WorldObject {
                 this.color = Color.blue;
                 break;
             case 3:
-                this.color = Color.red;
+                this.color = Color.magenta;
                 break;
             case 4:
                 this.color = Color.green;
@@ -108,8 +108,11 @@ public class Drone : WorldObject {
             case 5:
                 this.color = Color.gray;
                 break;
+            case 6:
+                this.color = Color.black;
+                break;
             default:
-                this.color = Color.cyan;
+                this.color = Color.cyan;                
                 break;                
         }
         
@@ -137,7 +140,11 @@ public class Drone : WorldObject {
 
     protected override void Start() {
         base.Start();
+        this.selectedCircle.SetActive(false);
         this.droneNumberText.text = "No. " + this.droneNumber;
+        transform.FindChild("mesh").FindChild("group_top").GetComponent<Renderer>().material.color = color;
+        droneNumberText.color = color;
+        transform.FindChild("arrow32").FindChild("Mesh_").GetComponent<Renderer>().material.color = color;
         //hold routLinePoints prefab in an object;
         //		routLinePointsSelect = GameObject.FindGameObjectsWithTag("RouteLinePoint"); 	
 
@@ -155,31 +162,39 @@ public class Drone : WorldObject {
 
     protected override void Update() {
         base.Update();
-        //select an object------
-        //		if (Input.GetMouseButtonDown(0))
-        //		{
-        //			RaycastHit hitInfo = new RaycastHit();
-        ////			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && 
-        ////				hitInfo.transform.tag == "RouteLinePoint"
-        ////				)
-        //			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.tag == "RouteLinePoint")
-        //			{
-        //				print ("It's working");
-        //			}
-        //		}
-        //-------------
-        //for (int i = 0; i < ConfigManager.getInstance().getSceneDroneCount(); ++i)
-        //{
-        //    if (this.droneNumber == mySceneManager.getAllDrones()[i].droneNumber)
-        //        ++this.droneNumber;
-        //}
-        //if (this.isSelected())
-        //{
-        //    //player.getSelectedObjects()[0].isSelected()
-        //    //Debug.Log(this.transform.position);
-        //    getDroneArea();
-        //}
-        if (this.currentStatus == STATUS.DEAD)
+        if (this.isSelected() == true)
+        {
+            this.selectedCircle.SetActive(true);
+        }
+        else
+        {
+            this.selectedCircle.SetActive(false);
+        }
+            //select an object------
+            //		if (Input.GetMouseButtonDown(0))
+            //		{
+            //			RaycastHit hitInfo = new RaycastHit();
+            ////			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && 
+            ////				hitInfo.transform.tag == "RouteLinePoint"
+            ////				)
+            //			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo) && hitInfo.transform.tag == "RouteLinePoint")
+            //			{
+            //				print ("It's working");
+            //			}
+            //		}
+            //-------------
+            //for (int i = 0; i < ConfigManager.getInstance().getSceneDroneCount(); ++i)
+            //{
+            //    if (this.droneNumber == mySceneManager.getAllDrones()[i].droneNumber)
+            //        ++this.droneNumber;
+            //}
+            //if (this.isSelected())
+            //{
+            //    //player.getSelectedObjects()[0].isSelected()
+            //    //Debug.Log(this.transform.position);
+            //    getDroneArea();
+            //}
+            if (this.currentStatus == STATUS.DEAD)
             return;
 
         if (Input.GetMouseButtonUp(0) && !EventSystem.current.IsPointerOverGameObject() && HUD.selection.width * HUD.selection.height > 10) {
@@ -243,32 +258,76 @@ public class Drone : WorldObject {
         //Debug.Log(ConfigManager.getInstance().getSceneDroneCount());
     }
 
+    //getDroneArea base on drone num---
+    //public int getDroneArea()
+    //{
+    //    int droneCount = ConfigManager.getInstance().getSceneDroneCount();
+    //    int rootOfDrone = (int)Mathf.Sqrt(droneCount);
+    //    float gridSizeOfScene = 200 / rootOfDrone;
 
+    //    int dronePostionOffset = 100;
+    //    int result = 0;
+    //    for (int i=0; i< rootOfDrone; ++i)
+    //    {
+    //        for (int j=0; j< rootOfDrone; ++j )
+    //        {
+    //            if(gridSizeOfScene * i<(this.transform.position.x+dronePostionOffset) && 
+    //               gridSizeOfScene * (i+1) > (this.transform.position.x+ dronePostionOffset) &&
+    //               gridSizeOfScene * j < (this.transform.position.z + dronePostionOffset) &&
+    //               gridSizeOfScene * (j + 1) > (this.transform.position.z + dronePostionOffset)
+    //               )
+    //            {
+    //                result = i + (rootOfDrone -1-j)*rootOfDrone;
+    //            }
+    //        }
+    //    }
+    //    //Debug.Log(this.name + "is in: " + result);
+    //    return result;
+    //}
+    //getDroneArea base on drone num---
+
+    //getDroneArea base on settring file-----------------------------------
     public int getDroneArea()
     {
         int droneCount = ConfigManager.getInstance().getSceneDroneCount();
-        int rootOfDrone = (int)Mathf.Sqrt(droneCount);
-        float gridSizeOfScene = 200 / rootOfDrone;
+        int HButtonsNum = ConfigManager.getInstance().getSceneHorizontalButtonsNum();
+        int VButtonsNum = ConfigManager.getInstance().getSceneVerticalButtonsNum();
         
+        float gridSizeOfSceneWidth = 200.0f / HButtonsNum;
+        float gridSizeOfSceneHeight = 200.0f / VButtonsNum;
         int dronePostionOffset = 100;
+
+
         int result = 0;
-        for (int i=0; i< rootOfDrone; ++i)
+        for (int i = 0; i < HButtonsNum; ++i)
         {
-            for (int j=0; j< rootOfDrone; ++j )
+            for (int j = 0; j < VButtonsNum; ++j)
             {
-                if(gridSizeOfScene * i<(this.transform.position.x+dronePostionOffset) && 
-                   gridSizeOfScene * (i+1) > (this.transform.position.x+ dronePostionOffset) &&
-                   gridSizeOfScene * j < (this.transform.position.z + dronePostionOffset) &&
-                   gridSizeOfScene * (j + 1) > (this.transform.position.z + dronePostionOffset)
+                //if (gridSizeOfSceneHeight * i < (this.transform.position.z + gridSizeOfSceneHeight) &&
+                //   gridSizeOfSceneHeight * (i + 1) > (this.transform.position.z + gridSizeOfSceneHeight) &&
+                //   gridSizeOfSceneWidth * j < (this.transform.position.x + gridSizeOfSceneWidth) &&
+                //   gridSizeOfSceneWidth * (j + 1) > (this.transform.position.x + gridSizeOfSceneWidth)
+                //   )
+                if (gridSizeOfSceneHeight * i < (this.transform.position.z + dronePostionOffset) &&
+                   gridSizeOfSceneHeight * (i + 1) > (this.transform.position.z + dronePostionOffset) &&
+                   gridSizeOfSceneWidth * j < (this.transform.position.x + dronePostionOffset) &&
+                   gridSizeOfSceneWidth * (j + 1) > (this.transform.position.x + dronePostionOffset)
                    )
                 {
-                    result = i + (rootOfDrone -1-j)*rootOfDrone;
+                    //Debug.Log("gridSizeOfSceneWidth"+ gridSizeOfSceneWidth);
+                    //Debug.Log("gridSizeOfSceneHeight"+ gridSizeOfSceneHeight);
+                    //Debug.Log("this.transform.position.z is: " + this.transform.position.z);
+                    //Debug.Log("this.transform.position.x is: " + this.transform.position.x);
+                    //Debug.Log("i is: " + i);
+                    //Debug.Log("j is: " + j);
+                    result = j + (VButtonsNum-i-1) * HButtonsNum;
                 }
             }
         }
         //Debug.Log(this.name + "is in: " + result);
         return result;
     }
+    //getDroneArea base on settring file-----------------------------------
 
     protected override void OnGUI() {
 		base.OnGUI();
@@ -293,21 +352,24 @@ public class Drone : WorldObject {
 		}
 	}
 
-	public override void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller) {
-		base.MouseClick(hitObject, hitPoint, controller);
-		//only handle input if owned by a human player and currently selected
-		if(player && player.human && base.isSelected() && Input.GetMouseButton(1)) {
-			if(hitPoint != ResourceManager.InvalidPosition) {
-				float x = hitPoint.x;
-				//makes sure that the unit stays on top of the surface it is on
-				float y = transform.position.y;
-				float z = hitPoint.z;
-				Vector3 dest = new Vector3(x, y, z);
-				//this.addWayPoint(dest);
-				StartMove(dest);
-			}
-		}
-	}
+    public override void MouseClick(GameObject hitObject, Vector3 hitPoint, Player controller)
+    {
+        base.MouseClick(hitObject, hitPoint, controller);
+        //only handle input if owned by a human player and currently selected
+        if (player && player.human && base.isSelected() && Input.GetMouseButton(1))
+        {
+            if (hitPoint != ResourceManager.InvalidPosition)
+            {
+                float x = hitPoint.x;
+                //makes sure that the unit stays on top of the surface it is on
+                float y = transform.position.y;
+                float z = hitPoint.z;
+                Vector3 dest = new Vector3(x, y, z);
+                //this.addWayPoint(dest);
+                StartMove(dest);
+            }
+        }
+    }
 
     public Camera getCameraFront() {
         return this.camera_front;
@@ -370,8 +432,10 @@ public class Drone : WorldObject {
 			Quaternion targetRotation = Quaternion.LookRotation (dest - transform.position);
 			transform.rotation = Quaternion.RotateTowards (transform.rotation, targetRotation, this.turnSpeed * Time.timeScale);
 
-			//speed
-			if (distance / speed <= speed / acceleration) {
+            //speed 
+            //check if the point is the last destination
+
+            if (this.routePointsQueue.Count  == 1 && distance / speed <= speed / acceleration) {
 				speed -= acceleration * Time.deltaTime;
 			} else {
 				speed += acceleration * Time.deltaTime;
@@ -380,7 +444,10 @@ public class Drone : WorldObject {
 			transform.Translate (0, 0, speed * Time.deltaTime);
 
 			if (this.IsArrivedIn2D (dest)) {
-				speed = 0f;
+                if (this.routePointsQueue.Count == 1)
+                {
+                    speed = 0f;
+                }
                 //                GameObject tmp = this.routePointsQueue.Peek();
                 //                Vector3 d = tmp.transform.position ;
                 //                this.routePointsQueue.Dequeue();
@@ -724,6 +791,4 @@ public class Drone : WorldObject {
 	private void malFunctionSpeed(){
 		this.maxSpeed /= 2;
 	}
-
-
 }

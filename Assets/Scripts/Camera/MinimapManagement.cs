@@ -14,8 +14,13 @@ public class MinimapManagement : MonoBehaviour {
     private bool switchOff;
 
     void Awake() {
+        mainCam = Camera.main;
+        minimapCam = this.GetComponent<Camera>();
+        ratio = minimapCam.pixelWidth / minimapCam.pixelHeight;
 
-	}
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        lastMinimapSize = new Vector2(minimapCam.pixelWidth, minimapCam.pixelHeight);
+    }
 
     public void cameraTurnOff(bool status)
     {
@@ -35,18 +40,18 @@ public class MinimapManagement : MonoBehaviour {
 
 
     // Use this for initialization
-    void Start () {
-		mainCam = Camera.main;
-		minimapCam = this.GetComponent<Camera> ();
-		ratio = minimapCam.pixelWidth / minimapCam.pixelHeight;
+    //   void Start () {
+    //	mainCam = Camera.main;
+    //	minimapCam = this.GetComponent<Camera> ();
+    //	ratio = minimapCam.pixelWidth / minimapCam.pixelHeight;
 
-		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
-		lastMinimapSize = new Vector2(minimapCam.pixelWidth, minimapCam.pixelHeight);
-	}
+    //	player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player>();
+    //	lastMinimapSize = new Vector2(minimapCam.pixelWidth, minimapCam.pixelHeight);
+    //}
 
 
-	// Update is called once per frame
-	void Update () {
+    // Update is called once per frame
+    void Update () {
 		if (Input.GetMouseButton (0) && MouseInBoundsMinimap()) {
 			Ray ray = minimapCam.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
@@ -95,4 +100,9 @@ public class MinimapManagement : MonoBehaviour {
 		bool insideHeight = mousePos.y >= 0 && mousePos.y < lastMinimapSize.y;
 		return insideWidth && insideHeight;
 	}
+
+    public Vector2 getLastMiniMapSize()
+    {
+        return lastMinimapSize;
+    }
 }

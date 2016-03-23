@@ -19,6 +19,8 @@ namespace RTS {
 			}
 		}
 
+        public string studentID;
+
 		public static ConfigManager getInstance(){
 			return instance;
 		}
@@ -81,10 +83,17 @@ namespace RTS {
 		public int getSceneHelicopterCount(){
 			return settings.scene.HelicopterCount;
 		}
-
         public int getSceneQuizStartTime()
         {
             return settings.scene.QuizStartTime;
+        }
+        public int getSceneVerticalButtonsNum()
+        {
+            return settings.scene.VerticalButtonsNum;
+        }
+        public int getSceneHorizontalButtonsNum()
+        {
+            return settings.scene.HorizontalButtonsNum;
         }
     }
 }

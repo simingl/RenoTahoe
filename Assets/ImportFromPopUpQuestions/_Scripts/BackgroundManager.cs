@@ -92,9 +92,10 @@ public class BackgroundManager : MonoBehaviour {
 			bgPanelForColorBtmSecond.SetActive(false);
             questionWhitePanel.SetActive(true);
             mapManagement.cameraTurnOff(true);
-			
+            //mapManagement.cameraTurnOff(false);
 
-		} else if (this.currentBackground == BackgroundModes.eImage) {
+
+        } else if (this.currentBackground == BackgroundModes.eImage) {
 			
 			bgPanelImage.SetActive(true);
 
@@ -103,9 +104,10 @@ public class BackgroundManager : MonoBehaviour {
 			bgPanelForColorBtmSecond.SetActive(false);
             questionWhitePanel.SetActive(true);
             mapManagement.cameraTurnOff(true);
-			
+            //       mapManagement.cameraTurnOff(false);
 
-		} else if (this.currentBackground == BackgroundModes.eColor) {
+        }
+        else if (this.currentBackground == BackgroundModes.eColor) {
 			bgPanelImage.SetActive(false);
 
 			bgPanelForColorTop.SetActive(true);
@@ -130,8 +132,9 @@ public class BackgroundManager : MonoBehaviour {
 			bgPanelForColorBtmSecond.GetComponent<Image> ().color = Color.gray;
 
 			mapManagement.cameraTurnOff(true);
-			
-		}
+         //   mapManagement.cameraTurnOff(false);
+
+        }
 
 
 

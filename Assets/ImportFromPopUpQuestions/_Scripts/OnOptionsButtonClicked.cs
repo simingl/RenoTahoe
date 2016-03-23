@@ -16,9 +16,9 @@ public class OnOptionsButtonClicked : MonoBehaviour {
 	{
         int uswerAnswer = 0;
         string str = "";
-        for (int i=0; i<quizManager.tmpColonOptionsButton.Count; ++i)
+        for (int i=0; i<quizManager.tmpCloneOptionsButton.Count; ++i)
 		{          
-            if (this.gameObject == quizManager.tmpColonOptionsButton[i])
+            if (this.gameObject == quizManager.tmpCloneOptionsButton[i])
 			{
                 uswerAnswer = i;
                 if (quizManager.getQuizSettings().quiz.question[quizManager.questionButtonCounter].type == QuestionType.Area)
@@ -29,7 +29,7 @@ public class OnOptionsButtonClicked : MonoBehaviour {
                     }
                     else
                         quizManager.answerNum = 0;
-                    str = quizManager.tmpColonOptionsButton[uswerAnswer].GetComponentInChildren<Text>().text;
+                    str = quizManager.tmpCloneOptionsButton[uswerAnswer].GetComponentInChildren<Text>().text;
                 }
 
                 //quizManager.questionButtonCounter%quizManager.quizSettings.quiz.question.Count is question counter;
@@ -47,9 +47,9 @@ public class OnOptionsButtonClicked : MonoBehaviour {
         
         
         quizManager.endAnswerTime = (int)Time.realtimeSinceStartup;
-        string timeConsuming = (quizManager.endAnswerTime - quizManager.startAnswerTime).ToString();
+        string timeConsumed = (quizManager.endAnswerTime - quizManager.startAnswerTime).ToString();
         quizManager.WriteToXml(str, quizManager.questionButtonCounter, 6);
-        quizManager.WriteToXml(timeConsuming, quizManager.questionButtonCounter, 7);
+        quizManager.WriteToXml(timeConsumed, quizManager.questionButtonCounter, 7);
         quizManager.answered=true;
         quizManager.displayResultBoard = true;
 	}
