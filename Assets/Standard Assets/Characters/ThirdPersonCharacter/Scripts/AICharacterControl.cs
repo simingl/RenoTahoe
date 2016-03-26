@@ -7,11 +7,17 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 {
     [RequireComponent(typeof (NavMeshAgent))]
     [RequireComponent(typeof (ThirdPersonCharacter))]
+
     public class AICharacterControl : MonoBehaviour
     {
         public NavMeshAgent agent { get; private set; } // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
         public Transform target; // target to aim for
+
+		public GameObject[] waypoints = null;
+
+		public AudioClip callForHelp;
+		public bool canCallForHelp = true;
 
         // Use this for initialization
         private void Start()
@@ -22,6 +28,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
 	        agent.updateRotation = false;
 	        agent.updatePosition = true;
+
+			waypoints = GameObject.FindGameObjectsWithTag("Waypoint");
+
+			target = waypoints[UnityEngine.Random.Range(0,waypoints.Length)].transform;
         }
 
 		private float timer = 0;
@@ -66,6 +76,30 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			float z = UnityEngine.Random.Range(-1*w, h);
 			
 			return new Vector3 (x,1,z);
+		}
+
+		public void OnTriggerEnter (Collider other)
+		{
+			int delay = 9;
+			StartCoroutine(CallForHelp(delay, other));
+			
+			
+		}
+		public void OnTriggerStay (Collider other)
+		{
+			int delay = 9;
+			StartCoroutine(CallForHelp(delay, other));
+		}
+		public IEnumerator CallForHelp(int delay, Collider other)
+		{
+			if (other.tag == "Drone" && canCallForHelp) 
+			{
+				AudioSource.PlayClipAtPoint(callForHelp, transform.position, 0.3f);
+				canCallForHelp = false;
+				yield return new WaitForSeconds(delay);
+				canCallForHelp = true;
+				
+			}
 		}
     }
 }

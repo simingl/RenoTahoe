@@ -1,30 +1,75 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\WorldObject\Unit\Drone.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Standard Assets\Effects\ImageEffects\Scripts\Blur.cs">
     <Files>
-      <File FileName="Assets\RTS\HUD.cs" Line="340" Column="5" />
-      <File FileName="Assets\RTS\UserInput.cs" Line="12" Column="2" />
-      <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="109" Column="5" />
-      <File FileName="Assets\Scripts\Camera\MinimapManagement.cs" Line="25" Column="3" />
-      <File FileName="Assets\WorldObject\WorldObject.cs" Line="19" Column="21" />
-      <File FileName="Assets\Standard Assets\Characters\ThirdPersonCharacter\Scripts\AICharacterControl.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\Characters\ThirdPersonCharacter\Scripts\ThirdPersonCharacter.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\Characters\ThirdPersonCharacter\Scripts\ThirdPersonUserControl.cs" Line="1" Column="1" />
-      <File FileName="Assets\Standard Assets\Characters\ThirdPersonCharacter\ThirdPersonCharacterGuidelines.txt" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Camera\CameraPIP.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Camera\ChangePOV.cs" Line="29" Column="36" />
-      <File FileName="Assets\RTS\Player.cs" Line="45" Column="1" />
-      <File FileName="Assets\Scripts\Camera\CameraMain.cs" Line="1" Column="1" />
+      <File FileName="Assets\_DownloadedResources\MAPNAV\Scripts\MapNav.cs" Line="1" Column="1" />
+      <File FileName="Assets\HUD\HUD.cs" Line="304" Column="17" />
+      <File FileName="Assets\WorldObject\Unit\Drone.cs" Line="637" Column="15" />
+      <File FileName="Assets\RTS\Config\Settings.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\Config\ConfigManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\SceneManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\RTS\Player.cs" Line="87" Column="29" />
+      <File FileName="Assets\RTS\UserInput.cs" Line="204" Column="57" />
+      <File FileName="Assets\HUD\SceneFadeInOut.cs" Line="1" Column="1" />
+      <File FileName="Assets\HUD\LocadingScreenSplash.cs" Line="1" Column="1" />
+      <File FileName="Assets\WorldObject\Unit\MouseDrag.cs" Line="14" Column="1" />
+      <File FileName="Assets\WorldObject\WorldObject.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Camera\MinimapManagement.cs" Line="1" Column="1" />
       <File FileName="Assets\RTS\ResourceManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\Unit\NPC.cs" Line="1" Column="1" />
-      <File FileName="Assets\WorldObject\MapItem.cs" Line="20" Column="17" />
-      <File FileName="Assets\RTS\SceneManager.cs" Line="6" Column="15" />
-      <File FileName="Assets\RTS\AudioManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Drone\DroneController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Standard Assets\Effects\ImageEffects\Scripts\Blur.cs" Line="64" Column="45" />
+      <File FileName="Assets\Scripts\EnableDisableBlur.cs" Line="1" Column="1" />
+      <File FileName="Assets\Standard Assets\CrossPlatformInput\Scripts\ButtonHandler.cs" Line="1" Column="1" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="Assembly-CSharp" expanded="True">
+            <Node name="HUD" expanded="True">
+              <Node name="HUD.cs" selected="True" />
+            </Node>
+            <Node name="RTS" expanded="True">
+              <Node name="Config" expanded="True" />
+              <Node name="Player.cs" selected="True" />
+              <Node name="ResourceManager.cs" selected="True" />
+              <Node name="UserInput.cs" selected="True" />
+            </Node>
+            <Node name="Scripts" expanded="True">
+              <Node name="Camera" expanded="True" />
+              <Node name="Drone" expanded="True" />
+              <Node name="EnableDisableBlur.cs" selected="True" />
+            </Node>
+            <Node name="WorldObject" expanded="True">
+              <Node name="Unit" expanded="True">
+                <Node name="Drone.cs" selected="True" />
+                <Node name="MouseDrag.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+          <Node name="Assembly-CSharp-firstpass" expanded="True">
+            <Node name="Standard Assets" expanded="True">
+              <Node name="CrossPlatformInput" expanded="True">
+                <Node name="Scripts" expanded="True" />
+              </Node>
+              <Node name="Effects" expanded="True">
+                <Node name="ImageEffects" expanded="True">
+                  <Node name="Scripts" expanded="True">
+                    <Node name="Blur.cs" selected="True" />
+                  </Node>
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+          <Node name="Assembly-UnityScript" expanded="True" />
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\RTS\ConfigManager.cs" line="43" />
+      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\RTS\ConfigManager.cs" line="41" />
+      <Breakpoint file="C:\lsm\MyGitHub\RenoTahoe\Assets\RTS\ConfigManager.cs" line="48" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>

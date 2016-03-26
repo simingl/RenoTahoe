@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuizSetting xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <quiz>
+    <question>
+      <description>2+4=?</description>
+      <type>Single</type>
+      <droneNumber />
+      <option>
+        <opt>
+          <name>A</name>
+          <optDescription>2</optDescription>
+        </opt>
+        <opt>
+          <name>B</name>
+          <optDescription>4</optDescription>
+        </opt>
+        <opt>
+          <name>C</name>
+          <optDescription>6</optDescription>
+        </opt>
+        <opt>
+          <name>D</name>
+          <optDescription>8</optDescription>
+        </opt>
+      </option>
+      <answer>C</answer>
+      <userAnswer></userAnswer>
+      <timeConsumed></timeConsumed>
+    </question>    
+    <question>
+      <description>How old are you?</description>
+      <type>InputNumber</type>
+      <droneNumber />
+      <answer>25</answer>
+      <userAnswer></userAnswer>
+      <timeConsumed></timeConsumed>
+    </question>    
+  </quiz>
+</QuizSetting>

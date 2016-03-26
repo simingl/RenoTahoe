@@ -8,11 +8,13 @@ namespace UnityStandardAssets.ImageEffects
     public class Blur : MonoBehaviour
     {
         /// Blur iterations - larger number means more blur.
+        [Range(0,10)]
         public int iterations = 3;
 
         /// Blur spread for each iteration. Lower values
         /// give better looking blur, but require more iterations to
         /// get large blurs. Value is usually between 0.5 and 1.0.
+        [Range(0.0f,1.0f)]
         public float blurSpread = 0.6f;
 
 
@@ -34,6 +36,15 @@ namespace UnityStandardAssets.ImageEffects
                 return m_Material;
             }
         }
+        public void disableFunc()
+        {
+            this.enabled = false;
+        }
+
+		public void enableFunc()
+		{
+			this.enabled = true;
+		}
 
         protected void OnDisable() {
             if ( m_Material ) {
@@ -55,6 +66,7 @@ namespace UnityStandardAssets.ImageEffects
                 enabled = false;
                 return;
             }
+			this.enabled = true;
         }
 
         // Performs one blur iteration.
