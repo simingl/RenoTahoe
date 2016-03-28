@@ -42,6 +42,9 @@ public class QuizManager : MonoBehaviour
     private int VButtonsNum;
     private Vector2 minimapSize;
     public GameObject ButtonsOnMiniMapFolder;
+    public RectTransform questionPanel;
+    public RectTransform answerPanel;
+
     //minimapPosition---
 
 
@@ -160,7 +163,7 @@ public class QuizManager : MonoBehaviour
     {
         Vector3 myVector3 = new Vector3(0, -40 * (optionCounter + 1));
         string str = QuizManager.getInstance().quizSettings.quiz.question[QuizManager.getInstance().questionButtonCounter].option.opt[optionCounter].name + ": " + QuizManager.getInstance().quizSettings.quiz.question[QuizManager.getInstance().questionButtonCounter].option.opt[optionCounter].optDescription;
-        ClonePrefabs(OptionsButton, ques.transform, myVector3, str);
+        ClonePrefabs(OptionsButton, ques.transform, myVector3, str);// 
     }
 
     private int getQuizStartTime()
@@ -177,7 +180,7 @@ public class QuizManager : MonoBehaviour
             {
                 string str = num++.ToString();
                 Vector3 myVector3 = new Vector3(-50 * (n - 1) + 100 * j, -50 - 40 * (i + 1), 0);
-                ClonePrefabs(OptionsButton, ques.transform, myVector3, str);
+                ClonePrefabs(OptionsButton, ques.transform, myVector3, str);//
             }
         }
     }
@@ -208,6 +211,17 @@ public class QuizManager : MonoBehaviour
         sizeOfStr = (int)QuizManager.getInstance().getQuizSettings().quiz.question[QuizManager.getInstance().questionButtonCounter].description.Length;
         ques.rectTransform.sizeDelta = new Vector2(ques.GetComponent<Text>().fontSize * sizeOfStr, 30);
         ques.text = QuizManager.getInstance().getQuizSettings().quiz.question[QuizManager.getInstance().questionButtonCounter].description;
+        setQuestionToPanel();
+   }
+
+
+    void setQuestionToPanel()
+    {
+
+        Question currentQuestion = QuizManager.getInstance().getQuizSettings().quiz.question[QuizManager.getInstance().questionButtonCounter];
+        QuestionpanelController controller = questionPanel.GetComponent<QuestionpanelController>();
+        controller.setQuestion(currentQuestion);
+
 
     }
 
@@ -284,15 +298,32 @@ public class QuizManager : MonoBehaviour
         //QuizSettingContainer.WriteData(myContainer, configManager.studentID);
     }
 
+
+    void enableQuestionPanel(bool enableStatus)
+    {
+        QuestionpanelController controller = questionPanel.GetComponent<QuestionpanelController>();
+        if (enableStatus)
+        {
+            controller.startQuizMode();
+
+        }
+        else
+        {
+            controller.stopQuizMode();
+        }
+
+    }
+
     public void OnPopUpQuestionButtonClick()
     {
         //if (QuizManager.getInstance().questionButtonCounter+1 < QuizManager.getInstance().getQuizSettings().quiz.question.Count)
         //{
             if (QuizManager.getInstance().answered || startPopupQuestion)
-            {                
+            {
+                enableQuestionPanel(true);
                 QuizManager.getInstance().startAnswerTime = (int)Time.realtimeSinceStartup;
-            int droneCount = configManager.getSceneDroneCount();
-            QuizManager.getInstance().questionButtonCounter = (++QuizManager.getInstance().questionButtonCounter) % QuizManager.getInstance().getQuizSettings().quiz.question.Count; // problem
+                int droneCount = configManager.getSceneDroneCount();
+                QuizManager.getInstance().questionButtonCounter = (++QuizManager.getInstance().questionButtonCounter) % QuizManager.getInstance().getQuizSettings().quiz.question.Count; // problem
                 showNextQuestion();
                 StartButton.GetComponentInChildren<Text>().text = "Next";
                 AnswerStateButton.SetActive(false);
@@ -322,8 +353,7 @@ public class QuizManager : MonoBehaviour
                    PlayerFolder.SetActive(false);
                    */
      //       btnChangeScene.SetActive(true);
-            BackgroundManager backgroundManager = GameObject.FindGameObjectWithTag("AnswerStateButton").GetComponent<BackgroundManager>();
-            backgroundManager.initBackground();
+           
 
             //   backGround.SetActive(true);
             ScoreText.SetActive(false);
@@ -381,6 +411,7 @@ public class QuizManager : MonoBehaviour
 
     public void ResumeSceneButtonClick()
     {
+        enableQuestionPanel(false);
         StartButton.GetComponentInChildren<Text>().text = "Start";
         resultBoard.gameObject.SetActive(false);
         /*    RenoFolder.SetActive(true);
@@ -389,8 +420,8 @@ public class QuizManager : MonoBehaviour
             PlayerFolder.SetActive(true);
             // backGround.SetActive(false);*/
 
-        BackgroundManager backgroundManager = GameObject.FindGameObjectWithTag("AnswerStateButton").GetComponent<BackgroundManager>();
-        backgroundManager.reset();
+        //BackgroundManager backgroundManager = GameObject.FindGameObjectWithTag("AnswerStateButton").GetComponent<BackgroundManager>();
+        //backgroundManager.reset();
 
         //RenoFolder.SetActive(true);
    //     btnChangeScene.SetActive(false);
