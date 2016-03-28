@@ -18,10 +18,11 @@ public class CameraPIP : MonoBehaviour {
 	}
 
 	void Update () {
-		if (cam.tag == "Camera_1st_view") {
-			cam.transform.GetChild (0).gameObject.GetComponent<MeshFilter> ().mesh = CameraExtention.GenerateFrustumMesh (cam);
-		}
-		if (Input.GetMouseButton (0) && player.hud.MouseInBoundsPIP () && cam.depth == Drone.PIP_DEPTH_ACTIVE) {
+        if (cam.tag == "Camera_1st_view")
+        {
+            cam.transform.GetChild(0).gameObject.GetComponent<MeshFilter>().mesh = CameraExtention.GenerateFrustumMesh(cam);
+        }
+        if (Input.GetMouseButton (0) && player.hud.MouseInBoundsPIP () && cam.depth == Drone.PIP_DEPTH_ACTIVE) {
 			GameObject hitObject = FindHitObject ();
 			if (hitObject) {
 				if (hitObject.name != "Ground") {
@@ -58,10 +59,11 @@ public class CameraPIP : MonoBehaviour {
 
 			//draw drone icon on the top right of the camera
 			if(cam.rect != ResourceManager.getInstance().getPIPCameraPosition()){
-				if(GUI.Button(new Rect (cam.pixelRect.x + cam.pixelWidth-20, (Screen.height - cam.pixelRect.yMax), 20, 20), "x")){
-					cam.depth = Drone.PIP_DEPTH_DEACTIVE;
-				}
-			}
+                if (GUI.Button(new Rect(cam.pixelRect.x + cam.pixelWidth - 20, (Screen.height - cam.pixelRect.yMax), 20, 20), "x"))
+                {
+                    cam.depth = Drone.PIP_DEPTH_DEACTIVE;
+                }
+            }
 
 			//draw drone icon on the top right of the camera
 			Color color = drone.color;

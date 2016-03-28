@@ -108,9 +108,6 @@ public class Drone : WorldObject {
             case 5:
                 this.color = Color.gray;
                 break;
-            case 6:
-                this.color = Color.black;
-                break;
             default:
                 this.color = Color.cyan;                
                 break;                

@@ -25,7 +25,7 @@
       </option>
       <answer>C</answer>
       <userAnswer>C</userAnswer>
-      <timeConsumed>3</timeConsumed>
+      <timeConsumed>1</timeConsumed>
     </question>
     <question>
       <description>How old are you?</description>
@@ -33,39 +33,39 @@
       <droneNumber />
       <answer>25</answer>
       <userAnswer />
-      <timeConsumed>0</timeConsumed>
+      <timeConsumed>1</timeConsumed>
     </question>
     <question>
       <description>Where is the No.0 drone?</description>
       <type>Area</type>
       <droneNumber>0</droneNumber>
       <answer>8</answer>
-      <userAnswer>11</userAnswer>
-      <timeConsumed>2</timeConsumed>
+      <userAnswer>18</userAnswer>
+      <timeConsumed>4</timeConsumed>
     </question>
     <question>
       <description>Where is the No.1 drone?</description>
       <type>Area</type>
       <droneNumber>1</droneNumber>
       <answer>8</answer>
-      <userAnswer>18</userAnswer>
-      <timeConsumed>0</timeConsumed>
+      <userAnswer>24</userAnswer>
+      <timeConsumed>10</timeConsumed>
     </question>
     <question>
       <description>Where is the No.2 drone?</description>
       <type>Area</type>
       <droneNumber>2</droneNumber>
-      <answer>8</answer>
-      <userAnswer>25</userAnswer>
-      <timeConsumed>1</timeConsumed>
+      <answer>15</answer>
+      <userAnswer>23</userAnswer>
+      <timeConsumed>4</timeConsumed>
     </question>
     <question>
       <description>Where is the No.3 drone</description>
       <type>Area</type>
       <droneNumber>3</droneNumber>
-      <answer>16</answer>
-      <userAnswer>31</userAnswer>
-      <timeConsumed>0</timeConsumed>
+      <answer>9</answer>
+      <userAnswer>17</userAnswer>
+      <timeConsumed>1</timeConsumed>
     </question>
   </quiz>
 </QuizSetting>
