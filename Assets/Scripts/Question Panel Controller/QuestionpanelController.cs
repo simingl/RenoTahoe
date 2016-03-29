@@ -9,6 +9,7 @@ public class QuestionpanelController : MonoBehaviour {
     Question question;
     public GameObject questionPanel;
     public GameObject answerPanel;
+    public GameObject ground;
 
     // Use this for initialization
     void Start() {
@@ -50,8 +51,8 @@ public class QuestionpanelController : MonoBehaviour {
 
         showQuestionPanel(true);
         activeScreenSpaceRender(true);
-
- 
+        MapNav mapNav = ground.GetComponent<MapNav>();
+        mapNav.switchOffToggleButton(true);
     }
 
 
@@ -60,6 +61,8 @@ public class QuestionpanelController : MonoBehaviour {
 
         showQuestionPanel(false);
         activeScreenSpaceRender(false);
+        MapNav mapNav = ground.GetComponent<MapNav>();
+        mapNav.switchOffToggleButton(false);
 
     }
 

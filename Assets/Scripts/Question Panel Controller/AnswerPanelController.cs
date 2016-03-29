@@ -31,14 +31,14 @@ public class AnswerPanelController : MonoBehaviour {
 
     public void setQuestion(Question inQuestion)
     {
-        Debug.Log("answer panel got question");
+      //  Debug.Log("answer panel got question");
          question = inQuestion;
         fillAnswers();
     }
 
     void fillOptions()
     {
-        Debug.Log("answer panel called fillOptions");
+        //Debug.Log("answer panel called fillOptions");
 
         optionDropdown.ClearOptions();
         foreach(Opt option in question.option.opt)
@@ -56,7 +56,7 @@ public class AnswerPanelController : MonoBehaviour {
 
     void fillAnswers()
     {
-        Debug.Log("answer panel called fillAnswers");
+        //Debug.Log("answer panel called fillAnswers");
 
         switch  (question.type)
         {
@@ -70,13 +70,13 @@ public class AnswerPanelController : MonoBehaviour {
 
 
 
-                Debug.Log("answer panel called QuestionType.Single");
+                //Debug.Log("answer panel called QuestionType.Single");
 
                 fillOptions();
                 break;
 
             case QuestionType.InputNumber:
-                Debug.Log("answer panel called QuestionType.InputNumber");
+                //Debug.Log("answer panel called QuestionType.InputNumber");
  
                 optionDropdown.gameObject.SetActive(false);
                 inputPanelText.gameObject.SetActive(true);
@@ -87,7 +87,7 @@ public class AnswerPanelController : MonoBehaviour {
                     break;
 
             case QuestionType.Area:
-                Debug.Log("answer panel called QuestionType.Area");
+                //Debug.Log("answer panel called QuestionType.Area");
 
                 optionDropdown.gameObject.SetActive(false);
                 inputPanelText.gameObject.SetActive(false);
@@ -144,7 +144,7 @@ public class AnswerPanelController : MonoBehaviour {
         quizManager.WriteToXml(str, quizManager.questionButtonCounter, 6);
         quizManager.WriteToXml(timeConsumed, quizManager.questionButtonCounter, 7);
         quizManager.answered = true;
-        quizManager.displayResultBoard = true;
+        quizManager.displayResultBoard = false;
 
     }
 

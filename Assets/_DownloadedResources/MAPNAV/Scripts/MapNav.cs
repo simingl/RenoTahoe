@@ -108,7 +108,12 @@ public class MapNav : MonoBehaviour
     private float targetOrtoSize;
     private Vector2 focusScreenPoint;
     private Vector3 focusWorldPoint;
+    private bool offToggleButton;
 
+    public void switchOffToggleButton(bool status)
+    {
+        offToggleButton = status;
+    }
 
     void Awake()
     {
@@ -684,6 +689,12 @@ public class MapNav : MonoBehaviour
     //SAMPLE USER INTERFACE. MODIFY OR EXTEND IF NECESSARY =============================================================
     void OnGUI()
     {
+
+        if (offToggleButton)
+        {
+            return;
+        }
+
         //Map type toggle button
         if (GUI.Button(new Rect(200, 0, 70, 30), maptype[index]))
         {

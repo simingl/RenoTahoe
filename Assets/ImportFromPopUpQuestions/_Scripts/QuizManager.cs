@@ -104,10 +104,17 @@ public class QuizManager : MonoBehaviour
             }
         }
         if (QuizManager.getInstance().questionButtonCounter+1 == QuizManager.getInstance().getQuizSettings().quiz.question.Count 
-            && QuizManager.getInstance().displayResultBoard)
+            )
         {
-            QuizManager.getInstance().displayResultBoard = false;
-            DisplayResult();
+
+            if (QuizManager.getInstance().displayResultBoard) {
+                QuizManager.getInstance().displayResultBoard = false;
+                DisplayResult();
+            }
+            else
+            {
+                ResumeSceneButtonClick();
+            }
         }
     }
 
