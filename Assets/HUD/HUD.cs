@@ -18,7 +18,7 @@ public class HUD : MonoBehaviour {
 	private const int LINE_HEIGHT = 20;
 
 	private static int SELECT_BAR_BTN_HEIGHT = 30, SELECT_BAR_BTN_WIDTH = 60;
-	private static int ACTION_BTN_WIDTH = 76, ACTION_BTN_HEIGHT = 30;
+	private static int ACTION_BTN_WIDTH = 76 + 16, ACTION_BTN_HEIGHT = 30;
 	private static int MARGIN = 50;
 
 	private static int MINIMAP_WIDTH, MINIMAP_HEIGHT;
@@ -140,7 +140,7 @@ public class HUD : MonoBehaviour {
 			}
 			GUI.DrawTexture(new Rect(offset, 5 ,40,20), this.drone_2d);
 			offset +=40;
-			GUI.Label(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), name);
+	//		GUI.Label(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), name);
 			//DrawOutline(new Rect(offset,5 , Screen.width,ORDERS_BAR_HEIGHT), name, this.resourceSkin.GetStyle("large"), Color.white, Color.black);
 			offset += RESOURCE_NAME_WIDTH;
 
@@ -225,53 +225,91 @@ public class HUD : MonoBehaviour {
 	}
 
 	private void DrawOrdersBar() {
-		int offset = MINIMAP_WIDTH + SELECTION_BAR_WIDTH + INFO_BAR_WIDHT;
+        int offset = MINIMAP_WIDTH + SELECTION_BAR_WIDTH + INFO_BAR_WIDHT;
 
-		GUI.color = Color.white;
-		GUI.skin = ordersSkin;
-		GUI.BeginGroup(new Rect(0, Screen.height - ORDERS_BAR_HEIGHT, Screen.width, ORDERS_BAR_HEIGHT));
+        GUI.color = Color.white;
+        GUI.skin = ordersSkin;
+        GUI.BeginGroup(new Rect(0, Screen.height - ORDERS_BAR_HEIGHT, Screen.width, ORDERS_BAR_HEIGHT));
 
-		int orderWidth = Screen.width;
-		if (player.isPIPActive ()) {
-			orderWidth = ORDERS_BAR_WIDTH;
-		}
+        int orderWidth = Screen.width;
+        if (player.isPIPActive())
+        {
+            orderWidth = ORDERS_BAR_WIDTH;
+        }
 
-		GUI.Box(new Rect(offset,0,orderWidth,ORDERS_BAR_HEIGHT),"");
-		GUI.EndGroup();
+        GUI.Box(new Rect(offset, 0, orderWidth, ORDERS_BAR_HEIGHT), "");
+        GUI.EndGroup();
 
-		if(player.getSelectedObjects().Count>0) {
-			List<WorldObject> objs = player.getSelectedObjects();
-			for(int i =0;i<1;i++){
-				WorldObject obj = objs[i];
-				string text = obj.objectName; 
-				text += "  - loc: ("+obj.transform.position.x +", "+obj.transform.position.z+"), H: " + obj.transform.position.y;
-				if(obj is Drone){
-					Drone unit = (Drone)obj;
-					text += " - battery: "+unit.currentBattery;
-				}
-				if(GUI.Button (new Rect(offset+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Landing")){
-					Drone unit = (Drone)obj;
-					//unit.LoadCell();
-					unit.Land();
-				}
-				if(GUI.Button (new Rect(offset + ACTION_BTN_WIDTH+5+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Take Off")){
-					Drone unit = (Drone)obj;
-					unit.TakeOff();
-				}
+        if (player.getSelectedObjects().Count > 0)
+        {
+            List<WorldObject> objs = player.getSelectedObjects();
+            for (int i = 0; i < 1; i++)
+            {
+                WorldObject obj = objs[i];
+                string text = obj.objectName;
+                text += "  - loc: (" + obj.transform.position.x + ", " + obj.transform.position.z + "), H: " + obj.transform.position.y;
+                if (obj is Drone)
+                {
+                    Drone unit = (Drone)obj;
+                    text += " - battery: " + unit.currentBattery;
+                }
+                if (GUI.Button(new Rect(offset + 5, Screen.height - ORDERS_BAR_HEIGHT + i * LINE_HEIGHT + 5, ACTION_BTN_WIDTH, ACTION_BTN_HEIGHT), "Landing"))
+                {
+                    Drone unit = (Drone)obj;
+                    //unit.LoadCell();
+                    unit.Land();
+                }
+                if (GUI.Button(new Rect(offset + ACTION_BTN_WIDTH + 5 + 5, Screen.height - ORDERS_BAR_HEIGHT + i * LINE_HEIGHT + 5, ACTION_BTN_WIDTH, ACTION_BTN_HEIGHT), "Take Off"))
+                {
+                    Drone unit = (Drone)obj;
+                    unit.TakeOff();
+                }
 
-				if(GUI.Button (new Rect(offset+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5+ACTION_BTN_HEIGHT,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Recharge")){
-					Drone unit = (Drone)obj;
-					unit.Recharge();
-				}
-//				if(GUI.Button (new Rect(offset + ACTION_BTN_WIDTH+5+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5+ACTION_BTN_HEIGHT,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Drop Water")){
-//					Drone unit = (Drone)obj;
-//					unit.DropWater();
-//				}
-			}
-		}
-	}
+                if (GUI.Button(new Rect(offset + 5, Screen.height - ORDERS_BAR_HEIGHT + i * LINE_HEIGHT + 5 + ACTION_BTN_HEIGHT, ACTION_BTN_WIDTH, ACTION_BTN_HEIGHT), "Recharge"))
+                {
+                    Drone unit = (Drone)obj;
+                    unit.Recharge();
+                }
+                
+                
 
-	public bool MouseInBounds() {
+                //				if(GUI.Button (new Rect(offset + ACTION_BTN_WIDTH+5+5,Screen.height - ORDERS_BAR_HEIGHT + i*LINE_HEIGHT +5+ACTION_BTN_HEIGHT,ACTION_BTN_WIDTH,ACTION_BTN_HEIGHT), "Drop Water")){
+                //					Drone unit = (Drone)obj;
+                //					unit.DropWater();
+                //				}
+            }
+        }
+
+        //show all cameras-------------
+        if (GUI.Button(new Rect(offset + 5, Screen.height - ORDERS_BAR_HEIGHT + 0 * LINE_HEIGHT + 5 + ACTION_BTN_HEIGHT * 2, ACTION_BTN_WIDTH, ACTION_BTN_HEIGHT), "Show All Cam"))
+        {
+            Drone[] allEntities = this.player.sceneManager.getAllDrones();
+            foreach (Drone drone in allEntities)
+            {
+                Camera cam = drone.getCameraFront();
+                if (cam.depth != Drone.PIP_DEPTH_ACTIVE)
+                {
+                    cam.rect = ResourceManager.getInstance().getAvailableCameraPosition(cam);
+                    cam.depth = Drone.PIP_DEPTH_ACTIVE;
+                }
+            }
+        }
+        //show all cameras-------------
+
+        //clear all cameras-------------
+        if (GUI.Button(new Rect(offset + ACTION_BTN_WIDTH + 5 + 5, Screen.height - ORDERS_BAR_HEIGHT + 0 * LINE_HEIGHT + 5 + ACTION_BTN_HEIGHT * 2, ACTION_BTN_WIDTH, ACTION_BTN_HEIGHT), "Clear All Cam"))
+        {
+            Drone[] allEntities = this.player.sceneManager.getAllDrones();
+            foreach (Drone drone in allEntities)
+            {
+                Camera cam = drone.getCameraFront();
+                cam.depth = -1;
+            }
+        }
+        //clear all cameras-------------
+    }
+
+    public bool MouseInBounds() {
 		//Screen coordinates start in the lower-left corner of the screen
 		//not the top-left of the screen like the drawing coordinates do
 		Vector3 mousePos = Input.mousePosition;
@@ -366,8 +404,7 @@ public class HUD : MonoBehaviour {
 				} else if (drone.getCameraDown ().depth == Drone.PIP_DEPTH_ACTIVE) {
 					if (GUI.Button (new Rect (offset_w, offset_h, PIP_BTN_WIDTH, PIP_BTN_HEIGHT), drone_cam_down)) {
 						drone.togglePIPCamera ();
-					}
-                    
+					}                    
 				}
 			}
 		}
@@ -378,21 +415,21 @@ public class HUD : MonoBehaviour {
 	}
 
 	public static void DrawOutline(Rect position, string text, GUIStyle style, Color outColor, Color inColor){
-		GUIStyle backupStyle = style;
-		style.normal.textColor = outColor;
-		position.x--;
-		GUI.Label(position, text, style);
-		position.x +=2;
-		GUI.Label(position, text, style);
-		position.x--;
-		position.y--;
-		GUI.Label(position, text, style);
-		position.y +=2;
-		GUI.Label(position, text, style);
-		position.y--;
-		style.normal.textColor = inColor;
-		GUI.Label(position, text, style);
-		style = backupStyle;
-	}
+        GUIStyle backupStyle = style;
+        style.normal.textColor = outColor;
+        position.x--;
+        GUI.Label(position, text, style);
+        position.x += 2;
+        GUI.Label(position, text, style);
+        position.x--;
+        position.y--;
+        GUI.Label(position, text, style);
+        position.y += 2;
+        GUI.Label(position, text, style);
+        position.y--;
+        style.normal.textColor = inColor;
+        GUI.Label(position, text, style);
+        style = backupStyle;
+    }
 
 }
